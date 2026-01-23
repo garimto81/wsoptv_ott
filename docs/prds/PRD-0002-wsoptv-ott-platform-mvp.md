@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 5.7 |
+| **Version** | 5.8 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -339,29 +339,89 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 6. 메인 스트리밍 UI - 7단 레이아웃
+## 6. 전체 페이지 레이아웃
 
 > **레퍼런스**: NBA TV League Pass 1:1 대응
+>
+> **구조**: 메인 스트리밍 UI (상단) + Info Tabs (하단)
 
-### 6.1 레이아웃 와이어프레임
+### 6.1 전체 페이지 와이어프레임
+
+![전체 페이지 레이아웃](../images/PRD-0002/09-full-page-layout.png)
+
+[HTML 원본](../mockups/PRD-0002/09-full-page-layout.html)
+
+### 6.2 페이지 구조
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   상단: 메인 스트리밍 UI                      │
+├─────────────────────────────────────────────────────────────┤
+│  PAGE AREA (①②③)                                           │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │ ① Tournament Ticker                                 │   │
+│  │ ② Ad Banner                                         │   │
+│  │ ③ Tournament Header                                 │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  VIDEO PLAYER AREA (④⑤⑥⑦)                                 │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │ ④ Video Player + POT/BOARD                          │   │
+│  │ ⑤ Stream Tabs                                       │   │
+│  │ ⑥ Timeline                                          │   │
+│  │ ⑦ Controls                                          │   │
+│  └─────────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────┤
+│                   하단: Info Tabs                           │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────┬─────────┬─────────┬─────────┐                 │
+│  │ Summary │ Player  │  Hand   │  Hand   │                 │
+│  │         │  Stats  │ Charts  │ History │                 │
+│  └─────────┴─────────┴─────────┴─────────┘                 │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                   Tab Content                        │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 6.3 영역 분류
+
+| 영역 | 레이어 | 설명 |
+|------|:------:|------|
+| **Page Area** | ①②③ | 페이지 레벨 컴포넌트 (헤더, 네비게이션) |
+| **Video Player Area** | ④⑤⑥⑦ | 비디오 플레이어 컴포넌트 (재생 관련) |
+| **Info Tabs Area** | - | 하단 정보 탭 (스크롤 시 표시) |
+
+---
+
+## 7. 메인 스트리밍 UI (상단)
+
+> **7단 레이아웃**: Page Area (①②③) + Video Player Area (④⑤⑥⑦)
+
+### 7.1 레이아웃 와이어프레임
 
 ![7단 레이아웃 와이어프레임](../images/PRD-0002/06-main-layout.png)
 
 [HTML 원본](../mockups/PRD-0002/06-main-layout.html)
 
-### 6.2 레이아웃 구조
+### 7.2 Page Area (①②③)
 
 | 레이어 | NBA TV 컴포넌트 | WSOP TV 컴포넌트 |
 |:------:|-----------------|------------------|
 | ① | Scoreboard Ticker | Tournament Ticker |
 | ② | Ad Banner | Ad Banner |
 | ③ | Game Header | Tournament Header |
+
+### 7.3 Video Player Area (④⑤⑥⑦)
+
+| 레이어 | NBA TV 컴포넌트 | WSOP TV 컴포넌트 |
+|:------:|-----------------|------------------|
 | ④ | Video Player | Video Player + POT/BOARD |
 | ⑤ | Stream Tabs | Stream Tabs |
 | ⑥ | Timeline | Timeline |
 | ⑦ | Controls | Controls |
 
-### 6.3 용어 매핑
+### 7.4 용어 매핑
 
 | NBA TV | WSOP TV | 비고 |
 |--------|---------|------|
@@ -374,15 +434,17 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 7. Info Tabs
+## 8. Info Tabs (하단)
 
-### 7.1 탭 와이어프레임
+> **위치**: 메인 스트리밍 UI 하단, 스크롤 시 표시
+
+### 8.1 탭 와이어프레임
 
 ![Info Tabs 와이어프레임](../images/PRD-0002/07-info-tabs.png)
 
 [HTML 원본](../mockups/PRD-0002/07-info-tabs.html)
 
-### 7.2 탭 구조
+### 8.2 탭 구조
 
 | 탭 | NBA TV | WSOP TV |
 |----|--------|---------|
@@ -391,7 +453,9 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | 3 | Game Charts | Hand Charts |
 | 4 | Play-By-Play | Hand History |
 
-### 7.3 Player Stats 컬럼 매핑
+### 8.3 Player Stats 컬럼 매핑 (StatsView Option A)
+
+> StatsView NBA TV 방식: 시청에 방해되지 않도록 Info Tabs에서 제공
 
 | NBA TV | WSOP TV | 설명 |
 |--------|---------|------|
@@ -403,15 +467,15 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 8. Player Controls
+## 9. Player Controls
 
-### 8.1 Controls 와이어프레임
+### 9.1 Controls 와이어프레임
 
 ![Player Controls 와이어프레임](../images/PRD-0002/08-player-controls.png)
 
 [HTML 원본](../mockups/PRD-0002/08-player-controls.html)
 
-### 8.2 Core 컨트롤
+### 9.2 Core 컨트롤
 
 | 컨트롤 | 툴팁 | 단축키 |
 |--------|------|--------|
@@ -427,9 +491,9 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 9. 플랫폼 요구사항
+## 10. 플랫폼 요구사항
 
-### 9.1 필수 요구사항
+### 10.1 필수 요구사항
 
 | 요구사항 | 상세 |
 |----------|------|
@@ -440,7 +504,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | **Web 제공** | WSOP.TV 도메인 |
 | **View Mode 전환** | Normal ↔ Advanced Mode |
 
-### 9.2 제외 항목
+### 10.2 제외 항목
 
 | 항목 | 사유 |
 |------|------|
@@ -449,9 +513,9 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 10. 기술 요구사항
+## 11. 기술 요구사항
 
-### 10.1 스트리밍 프로토콜
+### 11.1 스트리밍 프로토콜
 
 | 항목 | 스펙 |
 |------|------|
@@ -460,7 +524,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | 비트레이트 | 3-15 Mbps 어댑티브 |
 | 지연 | 30초 (라이브), 30분 (홀카드) |
 
-### 10.2 비기능 요구사항
+### 11.2 비기능 요구사항
 
 | 항목 | 목표치 |
 |------|-------|
@@ -472,7 +536,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 11. 구현 우선순위 (Phase)
+## 12. 구현 우선순위 (Phase)
 
 > **설계 원칙**: NBA TV League Pass 1:1 대응
 
@@ -513,7 +577,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 12. Scope
+## 13. Scope
 
 ### In Scope (MVP)
 
@@ -539,9 +603,9 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 13. 앱 배포 계획
+## 14. 앱 배포 계획
 
-### 13.1 배포 앱 목록
+### 14.1 배포 앱 목록
 
 | 앱 | 설명 | 마감 |
 |----|------|------|
@@ -550,7 +614,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | WSOP Academy | 교육 콘텐츠 | TBD |
 | PokerStake | 스테이킹 서비스 | TBD |
 
-### 13.2 배포 스토어
+### 14.2 배포 스토어
 
 - Apple App Store
 - Google Play Store
@@ -560,7 +624,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 14. Open Questions
+## 15. Open Questions
 
 1. TV 미러링/캐스팅 지원 여부
 2. 블랙아웃 정책 (사이트 단위 vs 영상 단위)
@@ -568,7 +632,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 15. References
+## 16. References
 
 ### 3대 원천 문서
 - 📜 **VIBLE**: [michael_note.md](../vible/michael_note.md) - 운영 계획의 근간
@@ -600,4 +664,5 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | 5.4 | 2026-01-23 | Claude Code | 본문에서 VIBLE/MOSES/KORAN 제거: 섹션 0에서만 정의 유지, 본문 전체에서 원천 표기/라벨/인용 삭제 |
 | 5.5 | 2026-01-23 | Claude Code | ASCII 와이어프레임 → HTML 목업 교체: 8개 ASCII 다이어그램을 HTML 목업 + PNG 스크린샷으로 대체 |
 | 5.6 | 2026-01-23 | Claude Code | Advanced Mode 재정의 및 콘텐츠 소싱 아키텍처: Multi-view(NBA TV) vs Player Cam(아이돌 직캠) 분리, StatsView VIBLE 해석, 3-Tier 대회 구조 및 프로덕션 파트너 정의 (STRAT-0008) |
-| **5.7** | **2026-01-23** | **Claude Code** | **Advanced Mode 상세 스펙**: Multi-view(Feature Table)/Player Cam(플레이어 캠+GFX) 완전 분리, StatsView 두 가지 방식(NBA TV Info Tabs vs GGM$ 오버레이) 제안, Featured Hands=Key Plays 동일 레이아웃 |
+| 5.7 | 2026-01-23 | Claude Code | Advanced Mode 상세 스펙: Multi-view(Feature Table)/Player Cam(플레이어 캠+GFX) 완전 분리, StatsView 두 가지 방식(NBA TV Info Tabs vs GGM$ 오버레이) 제안, Featured Hands=Key Plays 동일 레이아웃 |
+| **5.8** | **2026-01-23** | **Claude Code** | **전체 페이지 레이아웃 재구성**: 메인 스트리밍 UI(상단) + Info Tabs(하단) 통합 구조, Page Area(①②③) vs Video Player Area(④⑤⑥⑦) 분리, 전체 페이지 와이어프레임 추가 |
