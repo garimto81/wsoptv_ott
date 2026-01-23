@@ -288,34 +288,6 @@
             text-align: center;
         }
 
-        /* Comparison */
-        .comparison {
-            display: flex;
-            gap: 10px;
-        }
-        .comp-box {
-            flex: 1;
-            border: 2px solid #000;
-            padding: 8px;
-        }
-        .comp-title {
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #ccc;
-        }
-        .comp-title.wrong {
-            color: #c00;
-        }
-        .comp-title.correct {
-            color: #080;
-        }
-        .comp-flow {
-            font-size: 8px;
-            line-height: 1.6;
-        }
-
         /* Notes */
         .notes {
             padding: 8px;
@@ -350,38 +322,9 @@
         <div class="title">MULTI-VIEW WORKFLOW (NBA TV STYLE)</div>
         <div class="subtitle">Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가</div>
 
-        <!-- Section 1: Correct vs Wrong Flow -->
+        <!-- Section 1: Step-by-Step Flow -->
         <div class="section">
-            <div class="section-title">① NBA TV 방식 워크플로우 비교</div>
-            <div class="comparison">
-                <div class="comp-box">
-                    <div class="comp-title correct">✓ 올바른 플로우 (NBA TV)</div>
-                    <div class="comp-flow">
-                        <strong>1.</strong> Tournament Ticker에서 테이블 클릭<br/>
-                        <strong>2.</strong> → <u>즉시 Single View 시청 시작</u><br/>
-                        <strong>3.</strong> 비디오 플레이어 내 [MultiView] 버튼 클릭<br/>
-                        <strong>4.</strong> → MultiView 모드 활성화<br/>
-                        <strong>5.</strong> Ticker에서 추가 테이블 선택<br/>
-                        <strong>6.</strong> → 2 VIEW / 4 VIEW 자동 전환
-                    </div>
-                </div>
-                <div class="comp-box">
-                    <div class="comp-title wrong">✗ 잘못된 플로우</div>
-                    <div class="comp-flow">
-                        <strong>1.</strong> Tournament Ticker에서 복수 테이블 선택<br/>
-                        <strong>2.</strong> Stream Tabs에서 MultiView 탭 클릭<br/>
-                        <strong>3.</strong> View Mode 선택<br/>
-                        <strong>4.</strong> → Multi-view 시청<br/>
-                        <br/>
-                        <span style="color: #c00;">문제: 테이블 선택해도 바로 시청 안됨</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 2: Step-by-Step Flow -->
-        <div class="section">
-            <div class="section-title">② 단계별 진입 플로우</div>
+            <div class="section-title">① 단계별 진입 플로우</div>
 
             <!-- Step 1: Initial Selection -->
             <div class="flow-container">
@@ -506,9 +449,9 @@
             </div>
         </div>
 
-        <!-- Section 3: Spec Table -->
+        <!-- Section 2: Spec Table -->
         <div class="section">
-            <div class="section-title">③ 진입 플로우 명세</div>
+            <div class="section-title">② 진입 플로우 명세</div>
             <table class="spec-table">
                 <tr>
                     <th class="step-num">#</th>
@@ -549,9 +492,9 @@
             </table>
         </div>
 
-        <!-- Section 4: View Modes -->
+        <!-- Section 3: View Modes -->
         <div class="section">
-            <div class="section-title">④ View Mode 레이아웃</div>
+            <div class="section-title">③ View Mode 레이아웃</div>
             <div class="two-col">
                 <div class="col">
                     <div class="multiview-panel">
