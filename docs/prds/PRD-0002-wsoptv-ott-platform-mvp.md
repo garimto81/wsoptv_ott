@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 5.6 |
+| **Version** | 5.7 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -176,11 +176,13 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
 ## 4. Advanced Mode
 
-Advanced Mode는 두 가지 독립적인 기능으로 구성됩니다.
+Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니다.
 
-### 4.1 Multi-view (NBA TV 방식)
+### 4.1 Multi-view (여러 Feature Table 동시 시청)
 
-> **설계 원칙**: NBA TV MultiView 1:1 대응 - 여러 테이블/대회 동시 시청
+> **설계 원칙**: NBA TV MultiView 1:1 대응
+>
+> **정의**: 하나의 이벤트 내 여러 Feature Table을 동시에 시청하는 방식. 간혹 다른 이벤트 테이블도 포함 가능.
 
 ![Multi-view 와이어프레임](../images/PRD-0002/04-multiview.png)
 
@@ -188,37 +190,102 @@ Advanced Mode는 두 가지 독립적인 기능으로 구성됩니다.
 
 | 기능 | 설명 | NBA TV 대응 |
 |------|------|-------------|
-| 멀티 테이블 동시 시청 | 여러 Feature Table을 동시에 시청 | MultiView |
+| Feature Table 동시 시청 | 같은 이벤트의 여러 Feature Table | MultiView |
 | 레이아웃 옵션 | 1x1, 1:2, 2x2 | 동일 |
 | 테이블 추가 | Tournament Ticker에서 추가 | 동일 |
 | 오디오 선택 | 한 테이블의 오디오만 활성화 | 동일 |
+| 다른 이벤트 추가 | 간혹 다른 이벤트 테이블 추가 가능 | 동일 (다른 경기 추가) |
+
+**프로덕션 특성**:
+- 하나의 이벤트(예: Main Event)에서 여러 Feature Table이 동시 진행
+- 시청자가 관심 테이블을 선택하여 동시 모니터링
+- 각 테이블은 독립적인 스트림으로 제공
 
 ### 4.2 Player Cam Mode (아이돌 직캠 방식)
 
 > **설계 원칙**: VIBLE 원문 - "메인화면이 중앙에 있고, 각 유저들의 얼굴을 잡고 있는 화면이 옆에 또 있는 방식 (아이돌 직캠 카메라)"
 >
-> **주의**: NBA TV에는 없는 WSOP TV 고유 기능. 별도 UI 설계 필요.
+> **정의**: 특정 Feature Table의 개별 플레이어 카메라를 제공하는 방식. **모든 테이블에서 제공되지 않음**.
 
 | 기능 | 설명 |
 |------|------|
-| 메인 화면 | Feature Table 메인 방송 (중앙) |
-| Player Cam | 각 플레이어 얼굴을 잡는 개별 카메라 (주변) |
+| 메인 화면 | Feature Table 메인 방송 (중앙 대형) |
+| Player Cam | 각 플레이어 얼굴을 잡는 개별 카메라 (주변 소형) |
 | 선택적 전환 | 특정 플레이어 캠을 메인으로 전환 가능 |
 
-**Multi-view vs Player Cam 차이**:
+**소스 구성**:
+```
+Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
+                  │                      │
+                  ▼                      ▼
+              얼굴 클로즈업         플레이어명, 칩 카운트,
+                                   홀카드 표시 등
+```
+
+**가용성 제한**:
+
+| 항목 | 설명 |
+|------|------|
+| **제공 테이블** | Player Cam 가능 테이블만 (별도 지정) |
+| **미제공 테이블** | 일반 Feature Table (메인 방송만) |
+| **결정 요소** | 프로덕션 장비 구성, 테이블 중요도 |
+
+**Multi-view vs Player Cam 완전 분리**:
 
 | 구분 | Multi-view | Player Cam |
 |------|-----------|------------|
-| **대상** | 여러 테이블/대회 | 한 테이블의 여러 플레이어 |
+| **대상** | 여러 Feature Table | 한 테이블의 여러 플레이어 |
+| **소스** | 테이블별 메인 방송 | 플레이어 캠 + GFX 오버레이 |
+| **가용성** | 모든 Feature Table | Player Cam 지원 테이블만 |
 | **NBA TV 대응** | ✅ 1:1 대응 | ❌ WSOP TV 고유 |
 | **레이아웃** | 2x2 그리드 (동등 크기) | 메인 + 주변 캠 (비대칭) |
-| **용도** | 여러 대회 동시 시청 | 특정 플레이어 집중 시청 |
+| **용도** | 여러 테이블 동시 모니터링 | 특정 플레이어 집중 시청 |
 
-### 4.3 StatsView (HUD 오버레이)
+### 4.3 StatsView (통계 표시)
 
 > **설계 원칙**: VIBLE 원문 - "허드같이 그 유저의 수치라든가, 플랍에서 베팅할 확률같은거, 이런게 띄어져있는 영상"
->
-> **레이아웃**: NBA TV Info Tabs 구조 1:1 대응
+
+**두 가지 구현 방식 제안**:
+
+#### Option A: NBA TV 방식 (Info Tabs)
+
+> 시청에 방해되지 않도록 **별도 하단 패널**에 표시
+
+| 특징 | 설명 |
+|------|------|
+| **위치** | 영상 하단 Info Tabs 영역 |
+| **표시 방식** | Player Stats 탭 선택 시 표시 |
+| **장점** | 시청 방해 없음, NBA TV 1:1 대응 |
+| **처리 주체** | OTT (WSOP TV) |
+
+| 탭 | NBA TV | WSOP TV |
+|----|--------|---------|
+| Summary | Summary | Summary |
+| Box Score | Box Score | **Player Stats** |
+| Game Charts | Game Charts | Hand Charts |
+| Play-By-Play | Play-By-Play | Hand History |
+
+#### Option B: GGM$ 방식 (영상 오버레이)
+
+> 시청에 **직접적인 역할**을 하도록 영상 위에 오버레이
+
+| 특징 | 설명 |
+|------|------|
+| **위치** | 영상 내 플레이어 옆 |
+| **표시 방식** | HUD 스타일 상시 표시 |
+| **장점** | 즉각적인 정보 확인 |
+| **처리 주체** | **Production** (GG Production) |
+
+**Option B 처리 위치 결정**:
+
+| 처리 위치 | 장점 | 단점 |
+|----------|------|------|
+| **Production (권장)** | GGM$ 동일 프로세스, 직관적 | 영상에 고정됨 |
+| OTT | 동적 on/off 가능 | Production 클론 TF 구성 필요 |
+
+> **권장**: Option B 선택 시 GGM$와 동일하게 **Production 단계에서 처리**
+
+**StatsView 표시 정보**:
 
 | 요소 | 표시 정보 | VIBLE 원문 대응 |
 |------|----------|----------------|
@@ -226,21 +293,34 @@ Advanced Mode는 두 가지 독립적인 기능으로 구성됩니다.
 | 베팅 확률 | 플랍 베팅 확률, Pot Odds | "플랍에서 베팅할 확률" |
 | 스택 정보 | 칩 카운트, BB 기준 스택 | - |
 
-**StatsView 표시 방식**:
-- 영상 오버레이: 플레이어 옆에 HUD 스타일로 표시
-- Info Tabs: Player Stats 탭에서 상세 통계 제공 (NBA TV Box Score 대응)
-
 ---
 
-## 5. 핸드 태깅 & 검색
+## 5. Featured Hands (핸드 검색)
 
-### 5.1 검색 UI 와이어프레임
+> **설계 원칙**: NBA TV Key Plays 1:1 대응 - **동일 레이아웃으로 처리**
+
+### 5.1 NBA TV Key Plays 매핑
+
+| NBA TV (Key Plays) | WSOP TV (Featured Hands) |
+|--------------------|-------------------------|
+| Key Plays 버튼 | Featured Hands 버튼 |
+| 주요 플레이 목록 | 주요 핸드 목록 |
+| 플레이어, 시간, 설명 | 플레이어, 핸드, 결과 |
+| 클릭 → 해당 시점 이동 | 클릭 → 해당 핸드 시점 이동 |
+
+### 5.2 Featured Hands UI (Key Plays 동일 레이아웃)
 
 ![검색 UI 와이어프레임](../images/PRD-0002/05-hand-search.png)
 
 [HTML 원본](../mockups/PRD-0002/05-hand-search.html)
 
-### 5.2 핸드 단위 태깅
+| 컴포넌트 | NBA TV Key Plays | WSOP TV Featured Hands |
+|----------|-----------------|------------------------|
+| 목록 항목 | 썸네일 + 설명 | 썸네일 + 핸드 설명 |
+| 필터 | 팀, 플레이어, 유형 | **플레이어, 핸드, 결과** |
+| 정렬 | 시간순 | 핸드 번호순 |
+
+### 5.3 핸드 단위 태깅 (메타데이터)
 
 | 태그 항목 | 설명 |
 |----------|------|
@@ -250,7 +330,7 @@ Advanced Mode는 두 가지 독립적인 기능으로 구성됩니다.
 | Community Card | 보드 카드 (플롭/턴/리버) |
 | 최종 Winner | 핸드 승자 |
 
-### 5.3 검색 기능
+### 5.4 검색 기능
 
 **검색 예제**:
 - A 선수와 B 선수가 함께 했던 대회/동영상 검색
@@ -519,4 +599,5 @@ Advanced Mode는 두 가지 독립적인 기능으로 구성됩니다.
 | 5.3 | 2026-01-23 | Claude Code | 구독 모델 NBA League Pass 1:1 대응: 시즌/월간 탭, 광고/오프라인/동시스트리밍/멀티뷰 기능 매핑, 학생 할인(UNiDAYS 40%) 추가 |
 | 5.4 | 2026-01-23 | Claude Code | 본문에서 VIBLE/MOSES/KORAN 제거: 섹션 0에서만 정의 유지, 본문 전체에서 원천 표기/라벨/인용 삭제 |
 | 5.5 | 2026-01-23 | Claude Code | ASCII 와이어프레임 → HTML 목업 교체: 8개 ASCII 다이어그램을 HTML 목업 + PNG 스크린샷으로 대체 |
-| **5.6** | **2026-01-23** | **Claude Code** | **Advanced Mode 재정의 및 콘텐츠 소싱 아키텍처**: Multi-view(NBA TV) vs Player Cam(아이돌 직캠) 분리, StatsView VIBLE 해석, 3-Tier 대회 구조 및 프로덕션 파트너 정의 (STRAT-0008) |
+| 5.6 | 2026-01-23 | Claude Code | Advanced Mode 재정의 및 콘텐츠 소싱 아키텍처: Multi-view(NBA TV) vs Player Cam(아이돌 직캠) 분리, StatsView VIBLE 해석, 3-Tier 대회 구조 및 프로덕션 파트너 정의 (STRAT-0008) |
+| **5.7** | **2026-01-23** | **Claude Code** | **Advanced Mode 상세 스펙**: Multi-view(Feature Table)/Player Cam(플레이어 캠+GFX) 완전 분리, StatsView 두 가지 방식(NBA TV Info Tabs vs GGM$ 오버레이) 제안, Featured Hands=Key Plays 동일 레이아웃 |
