@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 5.3 |
+| **Version** | 5.4 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -85,32 +85,28 @@
 
 ### 1.1 프로젝트 개요
 
-WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계한 프리미엄 포커 방송 서비스.
+WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
-| 항목 | 내용 | 원천 |
-|------|------|:----:|
-| **런칭 목표** | Q3 2026 (2027년 3월 1일 전) | 📜 |
-| **플랫폼** | Web, iOS, Android, Samsung TV, LG TV | 📜 |
-| **구독 모델** | $10 WSOP Plus / $50 WSOP Plus+ | 📜 |
-| **화질** | 1080p Full HD | 📖 |
-| **자막** | 20개국 다국어 지원 | 📖 |
+| 항목 | 내용 |
+|------|------|
+| **런칭 목표** | Q3 2026 (2027년 3월 1일 전) |
+| **플랫폼** | Web, iOS, Android, Samsung TV, LG TV |
+| **구독 모델** | $10 WSOP Plus / $50 WSOP Plus+ |
+| **화질** | 1080p Full HD |
+| **자막** | 20개국 다국어 지원 |
 
 ### 1.2 YouTube 대비 핵심 차별점
 
-> **출처**: 📜 VIBLE - "라이브 설정: 뒤로 가게도 할수 있게 하고, 끝나면 영상 남아있고"
-
-| # | 차별점 | YouTube | WSOPTV | 원천 |
-|:-:|--------|---------|--------|:----:|
-| 1 | **Timeshift** | 뒤로 가기 불가 | 라이브 중 되감기 지원 | 📜 |
-| 2 | **아카이브** | 종료 시 비공개 | 영구 보존 + VOD 전환 | 📜 |
-| 3 | **Advanced Mode** | 없음 | Multi-view + StatsView | 📜 |
-| 4 | **검색** | 없음 | 핸드/선수 기반 정밀 검색 | 📋 |
+| # | 차별점 | YouTube | WSOPTV |
+|:-:|--------|---------|--------|
+| 1 | **Timeshift** | 뒤로 가기 불가 | 라이브 중 되감기 지원 |
+| 2 | **아카이브** | 종료 시 비공개 | 영구 보존 + VOD 전환 |
+| 3 | **Advanced Mode** | 없음 | Multi-view + StatsView |
+| 4 | **검색** | 없음 | 핸드/선수 기반 정밀 검색 |
 
 ---
 
-## 2. 콘텐츠 소싱 전략 `[Core-Vible]`
-
-> **출처**: 📜 VIBLE - "Bracelet 대회가 1년에 대략 200개 있어요. 50개 정도 방송을 할거 같다."
+## 2. 콘텐츠 소싱 전략
 
 ### 2.1 콘텐츠 3단계 구조
 
@@ -159,8 +155,6 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ### 2.2 YouTube vs WSOPTV 설정 비교
 
-> **출처**: 📜 VIBLE - "Youtube 로 라이브 중계 (라이브 설정: 뒤로 스크롤 안되기 + 끝나면 영상 비공개)"
-
 | 설정 | YouTube | WSOPTV |
 |------|---------|--------|
 | DVR (Timeshift) | ❌ 비활성화 | ✅ 활성화 |
@@ -169,12 +163,11 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ---
 
-## 3. 구독 모델 `[Core-Vible]` + `[Core-Koran]`
+## 3. 구독 모델
 
-> **출처**: 📜 VIBLE - "$10, $50 두개 있음. Plus 라는건 구독이름."
-> **레퍼런스**: 📖 KORAN - NBA League Pass 구독 모델 1:1 대응
+> **레퍼런스**: NBA League Pass 구독 모델 1:1 대응
 
-### 3.1 구독 플랜 와이어프레임 (📖 KORAN 1:1)
+### 3.1 구독 플랜 와이어프레임
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
@@ -234,7 +227,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 > **레퍼런스 이미지**: [NBA League Pass 구독 페이지](../images/leaguepass/)
 
-### 3.2 NBA League Pass vs WSOP Plus 매핑 (📖 KORAN 1:1)
+### 3.2 NBA League Pass vs WSOP Plus 매핑
 
 | 항목 | NBA League Pass | NBA League Pass Premium | WSOP Plus | WSOP Plus+ |
 |------|-----------------|------------------------|-----------|------------|
@@ -246,16 +239,14 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | **대체 방송** | 포함 | 포함 | 포함 | 포함 |
 | **멀티뷰** | 최대 4개 경기 | 최대 4개 경기 | 최대 4개 테이블 | 최대 4개 테이블 |
 
-### 3.3 2티어 구독 상세 (📜 VIBLE 가격 + 📖 KORAN 구조)
+### 3.3 2티어 구독 상세
 
 | 티어 | 가격 | 명칭 | 주요 기능 |
 |------|------|------|----------|
 | Basic | **$10/월** | **WSOP Plus** | 1개 기기, 라이브, VOD, Timeshift, 광고 포함, 멀티뷰 4개 |
 | Premium | **$50/월** | **WSOP Plus+** | 최대 3개 기기, 광고 없음, 오프라인 시청, 다운로드, 멀티뷰 4개 |
 
-> **참고** (📜 VIBLE): "Exclusive Content (behind-the-scenes)는 굳이 WSOPTV 용으로 따로 제작하지 말자."
-
-### 3.4 학생 할인 (📖 KORAN 동일)
+### 3.4 학생 할인
 
 > **레퍼런스**: NBA League Pass UNiDAYS 학생 40% 할인
 
@@ -264,7 +255,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | 일반 | 0% | $10/월 | $50/월 |
 | 학생 (UNiDAYS) | 40% | $6/월 | $30/월 |
 
-### 3.5 프로모션 전략 (📜 VIBLE)
+### 3.5 프로모션 전략
 
 | Flow | 설명 |
 |------|------|
@@ -273,11 +264,9 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ---
 
-## 4. Advanced Mode `[Core-Vible]`
+## 4. Advanced Mode
 
-> **출처**: 📜 VIBLE - "Multi-view 영상: 메인화면이 중앙에 있고, 각 유저들의 얼굴을 잡고 있는 화면이 옆에 또 있는 방식 (아이돌 직캠 카메라)"
-
-### 4.1 Multi-view (📜 VIBLE + 📖 KORAN)
+### 4.1 Multi-view
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
@@ -327,15 +316,13 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-| 원천 | 기능 |
-|:----:|------|
-| 📜 | 메인화면 + 유저별 얼굴 화면 (아이돌 직캠 방식) |
-| 📋 | 한 테이블 각 선수별 화면 재생 + 다른 대회/테이블 재생 |
-| 📖 | 1x1, 1:2, 2x2 레이아웃 (NBA TV 동일) |
+| 기능 | 설명 |
+|------|------|
+| 메인화면 + 유저별 얼굴 화면 | 아이돌 직캠 방식 |
+| 멀티 테이블 재생 | 한 테이블 각 선수별 화면 재생 + 다른 대회/테이블 재생 |
+| 레이아웃 옵션 | 1x1, 1:2, 2x2 (NBA TV 동일) |
 
-### 4.2 StatsView (📜 VIBLE)
-
-> **출처**: 📜 VIBLE - "StatsView 영상: 허드같이 그 유저의 수치라든가, 플랍에서 베팅할 확률같은거, 이런게 띄어져있는 영상"
+### 4.2 StatsView
 
 | 요소 | 표시 정보 |
 |------|----------|
@@ -345,9 +332,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ---
 
-## 5. 핸드 태깅 & 검색 `[Core-Moses]`
-
-> **출처**: 📋 MOSES - "대회 영상이나 Script를 기반으로 영상 태깅"
+## 5. 핸드 태깅 & 검색
 
 ### 5.1 검색 UI 와이어프레임
 
@@ -402,28 +387,26 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ### 5.2 핸드 단위 태깅
 
-| 태그 항목 | 설명 | 원천 |
-|----------|------|:----:|
-| Hand 기준 | 핸드 번호, 타임스탬프 | 📋 |
-| 참여 플레이어 | 해당 핸드에 참여한 선수 목록 | 📋 |
-| 각 플레이어 Hands | 홀카드 정보 | 📋 |
-| Community Card | 보드 카드 (플롭/턴/리버) | 📋 |
-| 최종 Winner | 핸드 승자 | 📋 |
+| 태그 항목 | 설명 |
+|----------|------|
+| Hand 기준 | 핸드 번호, 타임스탬프 |
+| 참여 플레이어 | 해당 핸드에 참여한 선수 목록 |
+| 각 플레이어 Hands | 홀카드 정보 |
+| Community Card | 보드 카드 (플롭/턴/리버) |
+| 최종 Winner | 핸드 승자 |
 
-### 5.2 검색 기능
+### 5.3 검색 기능
 
-> **출처**: 📋 MOSES - "특정 선수가 참여한 Pot 만 재생, 특정 핸드로 이기거나 진 핸드"
-
-**검색 예제** (📋 MOSES):
+**검색 예제**:
 - A 선수와 B 선수가 함께 했던 대회/동영상 검색
 - 포카드(Four of a Kind)를 쥔 플레이어가 로열 스트레이트 플러시에게 패한 핸드
 - 특정 핸드(AA, KK 등)로 이기거나 진 상황
 
 ---
 
-## 6. 메인 스트리밍 UI - 7단 레이아웃 `[Core-Koran]`
+## 6. 메인 스트리밍 UI - 7단 레이아웃
 
-> **출처**: 📖 KORAN - NBA TV League Pass 1:1 대응
+> **레퍼런스**: NBA TV League Pass 1:1 대응
 
 ### 6.1 레이아웃 와이어프레임
 
@@ -495,7 +478,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | ⑥ | Timeline | Timeline |
 | ⑦ | Controls | Controls |
 
-### 6.2 용어 매핑 (📖 KORAN)
+### 6.3 용어 매핑
 
 | NBA TV | WSOP TV | 비고 |
 |--------|---------|------|
@@ -508,7 +491,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ---
 
-## 7. Info Tabs `[Core-Koran]`
+## 7. Info Tabs
 
 ### 7.1 탭 와이어프레임
 
@@ -545,7 +528,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### 7.2 탭 구조 (📖 KORAN 동일)
+### 7.2 탭 구조
 
 | 탭 | NBA TV | WSOP TV |
 |----|--------|---------|
@@ -554,7 +537,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | 3 | Game Charts | Hand Charts |
 | 4 | Play-By-Play | Hand History |
 
-### 7.2 Player Stats 컬럼 매핑
+### 7.3 Player Stats 컬럼 매핑
 
 | NBA TV | WSOP TV | 설명 |
 |--------|---------|------|
@@ -566,7 +549,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ---
 
-## 8. Player Controls `[Core-Koran]`
+## 8. Player Controls
 
 ### 8.1 Controls 와이어프레임
 
@@ -600,7 +583,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### 8.2 Core 컨트롤 (📖 KORAN 동일)
+### 8.2 Core 컨트롤
 
 | 컨트롤 | 툴팁 | 단축키 |
 |--------|------|--------|
@@ -616,27 +599,25 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ---
 
-## 9. 플랫폼 요구사항 `[Core-Vible]`
-
-> **출처**: 📜 VIBLE - "WSOP TV B2B Requirement"
+## 9. 플랫폼 요구사항
 
 ### 9.1 필수 요구사항
 
-| 요구사항 | 상세 | 원천 |
-|----------|------|:----:|
-| **GGPass 로그인** | OAuth2 SSO 연동 | 📜📋 |
-| **구독 모델** | $10 Plus / $50 Plus+ | 📜 |
-| **역대 영상 업로드** | 모든 WSOP 영상 아카이브 | 📜 |
-| **5개 스토어 배포** | App Store, Play Store, Samsung TV, LG TV, Web | 📜 |
-| **Web 제공** | WSOP.TV 도메인 | 📜 |
-| **View Mode 전환** | Normal ↔ Advanced Mode | 📜 |
+| 요구사항 | 상세 |
+|----------|------|
+| **GGPass 로그인** | OAuth2 SSO 연동 |
+| **구독 모델** | $10 Plus / $50 Plus+ |
+| **역대 영상 업로드** | 모든 WSOP 영상 아카이브 |
+| **5개 스토어 배포** | App Store, Play Store, Samsung TV, LG TV, Web |
+| **Web 제공** | WSOP.TV 도메인 |
+| **View Mode 전환** | Normal ↔ Advanced Mode |
 
 ### 9.2 제외 항목
 
-| 항목 | 사유 | 원천 |
-|------|------|:----:|
-| 광고 시스템 | "굳이 고려할 필요없음" | 📜 |
-| Exclusive Content | "따로 제작하지 말자" | 📜 |
+| 항목 | 사유 |
+|------|------|
+| 광고 시스템 | 불필요 |
+| Exclusive Content | 별도 제작 불필요 |
 
 ---
 
@@ -665,42 +646,42 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ## 11. 구현 우선순위 (Phase)
 
-> **설계 원칙**: NBA TV League Pass 1:1 대응 (📖 KORAN)
+> **설계 원칙**: NBA TV League Pass 1:1 대응
 
-### Phase 1: Core MVP (NBA TV 1:1)
+### Phase 1: Core MVP
 
 > **마감**: 2027년 3월 1일 전
 
-| 기능 | NBA TV 대응 | 원천 |
-|------|-------------|:----:|
-| 라이브 스트리밍 플레이어 | Video Player | 📖 |
-| Tournament Ticker | Scoreboard Ticker | 📖 |
-| 기본 컨트롤 바 | Player Controls | 📖 |
-| Stream Tabs | Stream Tabs | 📖 |
-| Timeline | Timeline | 📖 |
-| GGPass SSO 연동 | - | 📜 |
-| $10/$50 구독 모델 | - | 📜 |
+| 기능 | NBA TV 대응 |
+|------|-------------|
+| 라이브 스트리밍 플레이어 | Video Player |
+| Tournament Ticker | Scoreboard Ticker |
+| 기본 컨트롤 바 | Player Controls |
+| Stream Tabs | Stream Tabs |
+| Timeline | Timeline |
+| GGPass SSO 연동 | - |
+| $10/$50 구독 모델 | - |
 
-### Phase 2: Core 확장 (NBA TV 1:1)
+### Phase 2: Core 확장
 
-| 기능 | NBA TV 대응 | 원천 |
-|------|-------------|:----:|
-| MultiView (1x1, 1:2, 2x2) | MultiView | 📖 |
-| Featured Hands 모달 | Key Plays 모달 | 📖 |
-| Featured Hands 플레이어 | Key Plays 플레이어 | 📖 |
-| Streaming Options | Streaming Options | 📖 |
-| 핸드 단위 태깅 시스템 | - | 📋 |
-| 선수/핸드 검색 | - | 📋 |
+| 기능 | NBA TV 대응 |
+|------|-------------|
+| MultiView (1x1, 1:2, 2x2) | MultiView |
+| Featured Hands 모달 | Key Plays 모달 |
+| Featured Hands 플레이어 | Key Plays 플레이어 |
+| Streaming Options | Streaming Options |
+| 핸드 단위 태깅 시스템 | - |
+| 선수/핸드 검색 | - |
 
-### Phase 3: Core 완성 (NBA TV 1:1)
+### Phase 3: Core 완성
 
-| 기능 | NBA TV 대응 | 원천 |
-|------|-------------|:----:|
-| Info - Summary | Summary | 📖 |
-| Info - Player Stats | Box Score | 📖 |
-| Info - Hand Charts | Game Charts | 📖 |
-| Info - Hand History | Play-By-Play | 📖 |
-| 멀티 재생 (다른 대회/테이블) | - | 📋 |
+| 기능 | NBA TV 대응 |
+|------|-------------|
+| Info - Summary | Summary |
+| Info - Player Stats | Box Score |
+| Info - Hand Charts | Game Charts |
+| Info - Hand History | Play-By-Play |
+| 멀티 재생 (다른 대회/테이블) | - |
 
 ---
 
@@ -708,31 +689,29 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ### In Scope (MVP)
 
-| 항목 | 설명 | 원천 |
-|------|------|:----:|
-| 플랫폼 | Web, iOS, Android, Samsung TV, LG TV | 📜 |
-| 화질 | 1080p Full HD | 📖 |
-| Multi-view | 1x1, 1:2, 2x2 | 📜📖 |
-| 자막 | 20개국 | 📖 |
-| 메뉴 | Watch + Collections | - |
+| 항목 | 설명 |
+|------|------|
+| 플랫폼 | Web, iOS, Android, Samsung TV, LG TV |
+| 화질 | 1080p Full HD |
+| Multi-view | 1x1, 1:2, 2x2 |
+| 자막 | 20개국 |
+| 메뉴 | Watch + Collections |
 
 ### Out of Scope
 
 | 항목 | 사유 |
 |------|------|
-| 광고 시스템 | 📜 VIBLE 제외 |
-| Exclusive Content | 📜 VIBLE 제외 |
-| 4K 지원 | 3대 원천 미언급 |
-| Roku/Fire TV | 📜 VIBLE 5개 플랫폼만 명시 |
-| Equity Calculator | 3대 원천 미언급 |
-| Hand Range Display | 3대 원천 미언급 |
-| 3x3 MultiView | 📖 KORAN 미지원 (2x2까지만) |
+| 광고 시스템 | 불필요 |
+| Exclusive Content | 별도 제작 불필요 |
+| 4K 지원 | 미정의 |
+| Roku/Fire TV | 5개 플랫폼만 지원 |
+| Equity Calculator | 미정의 |
+| Hand Range Display | 미정의 |
+| 3x3 MultiView | NBA TV 미지원 (2x2까지만) |
 
 ---
 
-## 13. 앱 배포 계획 `[Core-Vible]`
-
-> **출처**: 📜 VIBLE - "WSOP 회사 애플 계정 (Bracelet IP, Ireland 회사) 으로 앞으로 올릴 것들"
+## 13. 앱 배포 계획
 
 ### 13.1 배포 앱 목록
 
@@ -789,4 +768,5 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | 5.0 | 2026-01-22 | Claude Code | 3대 원천 기반 전면 개편: VIBLE > MOSES > KORAN 우선순위 체계 |
 | 5.1 | 2026-01-23 | Claude Code | B&W 와이어프레임 전면 추가 |
 | 5.2 | 2026-01-23 | Claude Code | 3대 원천 외 기능 제거: Extension 전면 삭제 |
-| **5.3** | **2026-01-23** | **Claude Code** | **구독 모델 NBA League Pass 1:1 대응**: 시즌/월간 탭, 광고/오프라인/동시스트리밍/멀티뷰 기능 매핑, 학생 할인(UNiDAYS 40%) 추가 |
+| 5.3 | 2026-01-23 | Claude Code | 구독 모델 NBA League Pass 1:1 대응: 시즌/월간 탭, 광고/오프라인/동시스트리밍/멀티뷰 기능 매핑, 학생 할인(UNiDAYS 40%) 추가 |
+| **5.4** | **2026-01-23** | **Claude Code** | **본문에서 VIBLE/MOSES/KORAN 제거**: 섹션 0에서만 정의 유지, 본문 전체에서 원천 표기/라벨/인용 삭제 |
