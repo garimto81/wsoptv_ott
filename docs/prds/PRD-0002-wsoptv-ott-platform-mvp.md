@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 5.1 |
+| **Version** | 5.2 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -76,7 +76,8 @@
 | **Core-Vible** | 📜 | VIBLE에서 명시한 필수 기능 | Advanced Mode, GGPass, 구독 모델 |
 | **Core-Moses** | 📋 | MOSES에서 제안한 확장 기능 | 핸드 태깅, 검색, 멀티 재생 |
 | **Core-Koran** | 📖 | KORAN 1:1 대응 기능 | Ticker, MultiView, Info Tabs |
-| **Extension** | - | 3대 원천에 없는 확장 기능 | Equity Calculator, Hand Range |
+
+> **중요**: 3대 원천에 명시되지 않은 기능은 구현 범위에서 **제외**됩니다.
 
 ---
 
@@ -556,17 +557,6 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 ║   │                                                                       │  ║
 ║   └───────────────────────────────────────────────────────────────────────┘  ║
 ║                                                                               ║
-║   ┌───────────────────────────────────────────────────────────────────────┐  ║
-║   │                                                                       │  ║
-║   │   [Extension Controls - Poker Specific]                               │  ║
-║   │                                                                       │  ║
-║   │   ┌─────────┐  ┌─────────┐  ┌─────────┐                              │  ║
-║   │   │ [CARDS] │  │ [STACK] │  │ [EQUITY]│                              │  ║
-║   │   │  Toggle │  │  Toggle │  │  Toggle │                              │  ║
-║   │   └─────────┘  └─────────┘  └─────────┘                              │  ║
-║   │                                                                       │  ║
-║   └───────────────────────────────────────────────────────────────────────┘  ║
-║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -583,14 +573,6 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | PIP | Picture in Picture | p |
 | Fullscreen | Fullscreen | f |
 | Live | Jump to Live | Shift+→ |
-
-### 8.2 Extension 컨트롤 (포커 전용)
-
-| 컨트롤 | 기능 | 비고 |
-|--------|------|------|
-| [CARDS] | 홀카드 표시 토글 | 📜 VIBLE StatsView 확장 |
-| [STACK] | 스택 오버레이 토글 | 📜 VIBLE StatsView 확장 |
-| [EQUITY] | 에퀴티 미터 토글 | Extension |
 
 ---
 
@@ -625,7 +607,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | 항목 | 스펙 |
 |------|------|
 | 프로토콜 | HLS, DASH |
-| 화질 | 1080p (기본), 4K (프리미엄) |
+| 화질 | 1080p Full HD |
 | 비트레이트 | 3-15 Mbps 어댑티브 |
 | 지연 | 30초 (라이브), 30분 (홀카드) |
 
@@ -643,45 +625,42 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ## 11. 구현 우선순위 (Phase)
 
-### Phase 1: Core-Vible (MVP) - 📜 VIBLE 필수
+> **설계 원칙**: NBA TV League Pass 1:1 대응 (📖 KORAN)
+
+### Phase 1: Core MVP (NBA TV 1:1)
 
 > **마감**: 2027년 3월 1일 전
 
-| 기능 | 원천 | 우선순위 |
-|------|:----:|:--------:|
-| GGPass SSO 연동 | 📜 | P0 |
-| $10/$50 구독 모델 | 📜 | P0 |
-| 라이브 스트리밍 + Timeshift | 📜 | P0 |
-| VOD 아카이브 | 📜 | P0 |
-| 5개 플랫폼 배포 | 📜 | P0 |
-| Advanced Mode (Multi-view + StatsView) | 📜 | P0 |
+| 기능 | NBA TV 대응 | 원천 |
+|------|-------------|:----:|
+| 라이브 스트리밍 플레이어 | Video Player | 📖 |
+| Tournament Ticker | Scoreboard Ticker | 📖 |
+| 기본 컨트롤 바 | Player Controls | 📖 |
+| Stream Tabs | Stream Tabs | 📖 |
+| Timeline | Timeline | 📖 |
+| GGPass SSO 연동 | - | 📜 |
+| $10/$50 구독 모델 | - | 📜 |
 
-### Phase 2: Core-Moses (검색 강화) - 📋 MOSES 확장
+### Phase 2: Core 확장 (NBA TV 1:1)
 
-| 기능 | 원천 | 우선순위 |
-|------|:----:|:--------:|
-| 핸드 단위 태깅 시스템 | 📋 | P1 |
-| 선수/핸드 검색 | 📋 | P1 |
-| 멀티 재생 (다른 대회/테이블) | 📋 | P1 |
-| 특수 검색 (배드 비트, 쿨러 등) | 📋 | P2 |
+| 기능 | NBA TV 대응 | 원천 |
+|------|-------------|:----:|
+| MultiView (1x1, 1:2, 2x2) | MultiView | 📖 |
+| Featured Hands 모달 | Key Plays 모달 | 📖 |
+| Featured Hands 플레이어 | Key Plays 플레이어 | 📖 |
+| Streaming Options | Streaming Options | 📖 |
+| 핸드 단위 태깅 시스템 | - | 📋 |
+| 선수/핸드 검색 | - | 📋 |
 
-### Phase 3: Core-Koran (UX 완성) - 📖 KORAN 1:1
+### Phase 3: Core 완성 (NBA TV 1:1)
 
-| 기능 | 원천 | 우선순위 |
-|------|:----:|:--------:|
-| Tournament Ticker | 📖 | P1 |
-| Info Tabs (Summary/Stats/Charts/History) | 📖 | P1 |
-| Featured Hands 모달 | 📖 | P1 |
-| Streaming Options (Camera/Commentary) | 📖 | P2 |
-
-### Phase 4: Extension (확장)
-
-| 기능 | 우선순위 |
-|------|:--------:|
-| Equity Calculator | P3 |
-| Hand Range Display | P3 |
-| 3x3 MultiView (파이널 데이용) | P3 |
-| 4K 화질 | P3 |
+| 기능 | NBA TV 대응 | 원천 |
+|------|-------------|:----:|
+| Info - Summary | Summary | 📖 |
+| Info - Player Stats | Box Score | 📖 |
+| Info - Hand Charts | Game Charts | 📖 |
+| Info - Hand History | Play-By-Play | 📖 |
+| 멀티 재생 (다른 대회/테이블) | - | 📋 |
 
 ---
 
@@ -699,12 +678,15 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 
 ### Out of Scope
 
-| 항목 | 사유 | 원천 |
-|------|------|:----:|
-| 광고 시스템 | VIBLE 제외 | 📜 |
-| Exclusive Content | VIBLE 제외 | 📜 |
-| 4K 지원 | Phase 4 | - |
-| Roku/Fire TV | Phase 4 | - |
+| 항목 | 사유 |
+|------|------|
+| 광고 시스템 | 📜 VIBLE 제외 |
+| Exclusive Content | 📜 VIBLE 제외 |
+| 4K 지원 | 3대 원천 미언급 |
+| Roku/Fire TV | 📜 VIBLE 5개 플랫폼만 명시 |
+| Equity Calculator | 3대 원천 미언급 |
+| Hand Range Display | 3대 원천 미언급 |
+| 3x3 MultiView | 📖 KORAN 미지원 (2x2까지만) |
 
 ---
 
@@ -765,4 +747,5 @@ WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계�
 | 3.0 | 2026-01-19 | Claude Code | STRAT-0001 참조, YouTube 대비 차별점 |
 | 4.0 | 2026-01-22 | Claude Code | NBA TV 1:1 구조로 개편 |
 | 5.0 | 2026-01-22 | Claude Code | 3대 원천 기반 전면 개편: VIBLE > MOSES > KORAN 우선순위 체계 |
-| **5.1** | **2026-01-23** | **Claude Code** | **B&W 와이어프레임 전면 추가**: 3대 원천, 콘텐츠 소싱, MultiView, 7단 레이아웃, Info Tabs, Controls, Search, Subscription 다이어그램 |
+| 5.1 | 2026-01-23 | Claude Code | B&W 와이어프레임 전면 추가 |
+| **5.2** | **2026-01-23** | **Claude Code** | **3대 원천 외 기능 제거**: Extension 기능(Equity Calculator, Hand Range, 3x3 MultiView) 전면 삭제, Phase 구조 NBA TV 1:1 대응으로 재정렬, Out of Scope 명확화 |
