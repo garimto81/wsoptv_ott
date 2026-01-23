@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 5.5 |
+| **Version** | 5.6 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -76,19 +76,46 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
 ## 2. 콘텐츠 소싱 전략
 
-### 2.1 콘텐츠 3단계 구조
+> **상세 문서**: [STRAT-0008 콘텐츠 소싱 전략](../strategies/STRAT-0008-content-sourcing-architecture.md)
+
+### 2.1 WSOP 콘텐츠 Tier 구조
+
+| Tier | 대회 | 설명 |
+|:----:|------|------|
+| **1** | WSOP Vegas | 메인 시리즈 (라스베가스) |
+| **2** | WSOPE / WSOP Paradise | 유럽 시리즈 / 바하마 시리즈 |
+| **3** | Super Circuit | 온라인 시리즈 |
+
+> **범위**: WSOP 공식 대회만 포함. Poker After Dark, Game of Gold 등 예외 콘텐츠 제외.
+
+### 2.2 소스별 프로덕션 파트너
 
 ![콘텐츠 소싱 다이어그램](../images/PRD-0002/02-content-sourcing.png)
 
 [HTML 원본](../mockups/PRD-0002/02-content-sourcing.html)
 
-| 소스 | 수량 | 특징 | 독점 기간 |
-|------|:----:|------|----------|
-| **ESPN** | 10개/년 | Main Event 등 → 1년 후 WSOPTV | 1년 |
-| **PokerGO** | 10개/년 | High Roller 등 → 계약에 따라 | 계약 기간 |
-| **WSOP 직접** | 30개/년 | YouTube + WSOPTV 동시 중계 | 없음 |
+| 프로덕션 파트너 | 담당 대회 | 이벤트 범위 |
+|----------------|----------|------------|
+| **ESPN** | WSOP Vegas | Main Event만 |
+| **PokerGO** | WSOP Vegas | Main Event 외 전체 |
+| **Triton Poker** | WSOP Paradise | 전체 |
+| **PokerCaster** | WSOPE | 유럽 지역 전체 |
 
-### 2.2 YouTube vs WSOPTV 설정 비교
+### 2.3 콘텐츠 플로우
+
+```
+[프로덕션 파트너]          [중앙 처리]           [배포]
+     │                        │                   │
+     ├─ ESPN ────────────────►│                   │
+     ├─ PokerGO ─────────────►│                   │
+     ├─ Triton Poker ────────►├─► GG Production ─►├─► WSOP TV
+     ├─ PokerCaster ─────────►│   (종편 작업)     ├─► YouTube
+     │                        │                   │
+```
+
+**GG Production 역할**: 모든 프로덕션 파트너 소스를 받아 종편(Post-Production) 작업 수행
+
+### 2.4 YouTube vs WSOPTV 설정 비교
 
 | 설정 | YouTube | WSOPTV |
 |------|---------|--------|
@@ -149,25 +176,59 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
 ## 4. Advanced Mode
 
-### 4.1 Multi-view
+Advanced Mode는 두 가지 독립적인 기능으로 구성됩니다.
+
+### 4.1 Multi-view (NBA TV 방식)
+
+> **설계 원칙**: NBA TV MultiView 1:1 대응 - 여러 테이블/대회 동시 시청
 
 ![Multi-view 와이어프레임](../images/PRD-0002/04-multiview.png)
 
 [HTML 원본](../mockups/PRD-0002/04-multiview.html)
 
+| 기능 | 설명 | NBA TV 대응 |
+|------|------|-------------|
+| 멀티 테이블 동시 시청 | 여러 Feature Table을 동시에 시청 | MultiView |
+| 레이아웃 옵션 | 1x1, 1:2, 2x2 | 동일 |
+| 테이블 추가 | Tournament Ticker에서 추가 | 동일 |
+| 오디오 선택 | 한 테이블의 오디오만 활성화 | 동일 |
+
+### 4.2 Player Cam Mode (아이돌 직캠 방식)
+
+> **설계 원칙**: VIBLE 원문 - "메인화면이 중앙에 있고, 각 유저들의 얼굴을 잡고 있는 화면이 옆에 또 있는 방식 (아이돌 직캠 카메라)"
+>
+> **주의**: NBA TV에는 없는 WSOP TV 고유 기능. 별도 UI 설계 필요.
+
 | 기능 | 설명 |
 |------|------|
-| 메인화면 + 유저별 얼굴 화면 | 아이돌 직캠 방식 |
-| 멀티 테이블 재생 | 한 테이블 각 선수별 화면 재생 + 다른 대회/테이블 재생 |
-| 레이아웃 옵션 | 1x1, 1:2, 2x2 (NBA TV 동일) |
+| 메인 화면 | Feature Table 메인 방송 (중앙) |
+| Player Cam | 각 플레이어 얼굴을 잡는 개별 카메라 (주변) |
+| 선택적 전환 | 특정 플레이어 캠을 메인으로 전환 가능 |
 
-### 4.2 StatsView
+**Multi-view vs Player Cam 차이**:
 
-| 요소 | 표시 정보 |
-|------|----------|
-| 플레이어 통계 | VPIP, PFR, 3-Bet%, AF |
-| 베팅 확률 | 플랍 베팅 확률, Pot Odds |
-| 스택 정보 | 칩 카운트, BB 기준 스택 |
+| 구분 | Multi-view | Player Cam |
+|------|-----------|------------|
+| **대상** | 여러 테이블/대회 | 한 테이블의 여러 플레이어 |
+| **NBA TV 대응** | ✅ 1:1 대응 | ❌ WSOP TV 고유 |
+| **레이아웃** | 2x2 그리드 (동등 크기) | 메인 + 주변 캠 (비대칭) |
+| **용도** | 여러 대회 동시 시청 | 특정 플레이어 집중 시청 |
+
+### 4.3 StatsView (HUD 오버레이)
+
+> **설계 원칙**: VIBLE 원문 - "허드같이 그 유저의 수치라든가, 플랍에서 베팅할 확률같은거, 이런게 띄어져있는 영상"
+>
+> **레이아웃**: NBA TV Info Tabs 구조 1:1 대응
+
+| 요소 | 표시 정보 | VIBLE 원문 대응 |
+|------|----------|----------------|
+| 플레이어 HUD | VPIP, PFR, 3-Bet%, AF | "그 유저의 수치" |
+| 베팅 확률 | 플랍 베팅 확률, Pot Odds | "플랍에서 베팅할 확률" |
+| 스택 정보 | 칩 카운트, BB 기준 스택 | - |
+
+**StatsView 표시 방식**:
+- 영상 오버레이: 플레이어 옆에 HUD 스타일로 표시
+- Info Tabs: Player Stats 탭에서 상세 통계 제공 (NBA TV Box Score 대응)
 
 ---
 
@@ -440,7 +501,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
 ### 전략 문서
 - [STRAT-0001 Viewer Experience Vision](../strategies/STRAT-0001-viewer-experience-vision.md) - 시청자 경험 비전
-- [STRAT-0007 Content Sourcing](../strategies/STRAT-0007-content-sourcing.md) - 콘텐츠 소싱
+- [STRAT-0008 Content Sourcing Architecture](../strategies/STRAT-0008-content-sourcing-architecture.md) - 콘텐츠 소싱 아키텍처
 
 ---
 
@@ -457,4 +518,5 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 | 5.2 | 2026-01-23 | Claude Code | 3대 원천 외 기능 제거: Extension 전면 삭제 |
 | 5.3 | 2026-01-23 | Claude Code | 구독 모델 NBA League Pass 1:1 대응: 시즌/월간 탭, 광고/오프라인/동시스트리밍/멀티뷰 기능 매핑, 학생 할인(UNiDAYS 40%) 추가 |
 | 5.4 | 2026-01-23 | Claude Code | 본문에서 VIBLE/MOSES/KORAN 제거: 섹션 0에서만 정의 유지, 본문 전체에서 원천 표기/라벨/인용 삭제 |
-| **5.5** | **2026-01-23** | **Claude Code** | **ASCII 와이어프레임 → HTML 목업 교체**: 8개 ASCII 다이어그램을 HTML 목업 + PNG 스크린샷으로 대체 |
+| 5.5 | 2026-01-23 | Claude Code | ASCII 와이어프레임 → HTML 목업 교체: 8개 ASCII 다이어그램을 HTML 목업 + PNG 스크린샷으로 대체 |
+| **5.6** | **2026-01-23** | **Claude Code** | **Advanced Mode 재정의 및 콘텐츠 소싱 아키텍처**: Multi-view(NBA TV) vs Player Cam(아이돌 직캠) 분리, StatsView VIBLE 해석, 3-Tier 대회 구조 및 프로덕션 파트너 정의 (STRAT-0008) |
