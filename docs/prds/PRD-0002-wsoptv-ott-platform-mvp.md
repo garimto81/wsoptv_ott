@@ -2,136 +2,159 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 3.0 |
+| **Version** | 5.0 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
-| **Updated** | 2026-01-19 |
+| **Updated** | 2026-01-22 |
 | **Author** | Claude Code |
-| **Source** | [STRAT-0001](../strategies/STRAT-0001-viewer-experience-vision.md), michael_note.md, tony_note.md |
+| **Launch Target** | Q3 2026 |
 
 ---
 
-## Executive Summary
+## 0. 3대 원천 기반 설계 원칙
 
-WSOP 공식 OTT 스트리밍 플랫폼. **YouTube 대비 4가지 핵심 차별점**을 제공하는 프리미엄 포커 방송 서비스.
+### 0.1 3대 원천 (Three Pillars)
 
-### YouTube 대비 핵심 차별점
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        WSOP TV 설계 3대 원천                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐           │
+│  │   📜 VIBLE      │   │   📋 MOSES      │   │   📖 KORAN      │           │
+│  │  (Michael Note) │   │  (Tony Note)    │   │   (NBA TV)      │           │
+│  ├─────────────────┤   ├─────────────────┤   ├─────────────────┤           │
+│  │ 운영 계획의 근간 │   │ 첨언 및 확장    │   │ UI/UX 참조      │           │
+│  │ 비즈니스 요구사항│   │ 태깅/검색 기능  │   │ 1:1 복제 대상   │           │
+│  │ 콘텐츠 소싱 전략 │   │ 고급 검색 예시  │   │ 레이아웃 표준   │           │
+│  └─────────────────┘   └─────────────────┘   └─────────────────┘           │
+│                                                                             │
+│  우선순위: VIBLE > MOSES > KORAN (충돌 시 상위 원천 우선)                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
-| # | 차별점 | YouTube | WSOPTV |
-|:-:|--------|---------|--------|
-| 1 | **Timeshift** | 뒤로 가기 불가 | 라이브 중 되감기 지원 |
-| 2 | **아카이브** | 종료 시 비공개 | 영구 보존 + VOD 전환 |
-| 3 | **Advanced Mode** | 없음 | Multi-view + StatsView |
-| 4 | **검색** (Phase 2) | 없음 | 핸드/선수 기반 정밀 검색 |
+| 원천 | 명칭 | 출처 | 역할 | 우선순위 |
+|:----:|------|------|------|:--------:|
+| 📜 | **VIBLE** | michael_note.md | 운영 계획의 근간, 비즈니스 요구사항 | 1 (최고) |
+| 📋 | **MOSES** | tony_note.md | 첨언 및 확장, 태깅/검색 기능 | 2 |
+| 📖 | **KORAN** | NBA TV League Pass | UI/UX 참조, 1:1 복제 대상 | 3 |
 
-> **전략 기준**: [STRAT-0001 시청자 경험 비전](../strategies/STRAT-0001-viewer-experience-vision.md)
+### 0.2 충돌 해결 원칙
 
-### 서비스 개요
+> **VIBLE이 말씀하시면, MOSES가 해석하고, KORAN이 구현한다.**
 
-- **플랫폼**: Web, iOS, Android, Samsung TV, LG TV
-- **구독 모델**: $10 WSOP Plus / $50 WSOP Plus+ (2티어)
-- **화질**: 1080p Full HD
-- **자막**: 20개국 다국어 지원
+| 상황 | 해결 방법 |
+|------|----------|
+| VIBLE ↔ MOSES 충돌 | VIBLE 우선 |
+| VIBLE ↔ KORAN 충돌 | VIBLE 우선 |
+| MOSES ↔ KORAN 충돌 | MOSES 우선 |
+| 모두 언급 없음 | KORAN 기본 패턴 적용 |
 
----
+### 0.3 기능 분류
 
-## Problem Statement
-
-### 현재 상황
-- WSOP 인수로 기존 PokerGo에서 운영하던 WSOP OTT 서비스 이관
-- Michael의 비전(Insight)을 반영한 신규 WSOPTV OTT 서비스 런칭 필요
-- GG POKER 생태계와 통합된 프리미엄 포커 방송 플랫폼 구축
-
-### 해결 방안
-- 통합 OTT 플랫폼 구축
-- GGPass SSO 연동으로 기존 사용자 활용 (인증 + 빌링 통합)
-- YouTube 대비 차별화된 프리미엄 기능 제공
-
-### 프로모션 전략 (양방향 상호 보완)
-
-**Flow 1: GG POKER → WSOPTV**
-- GG POKER $10 칩 구매 → WSOPTV Plus 구독권 자동 발급
-
-**Flow 2: WSOPTV → GG POKER**
-- WSOPTV Plus $10 구독 → GG POKER $10 칩 제공
-- WSOPTV Plus+ $50 구독 → GG POKER $50 칩 제공
-- GGPass SSO 통합으로 GG POKER 접속 시 칩이 이미 생성되어 있음
-
-> **참고 모델**: 쿠팡플레이 (로켓와우 ↔ 쿠팡플레이)
-
-
----
-
-## Target Users
-
-| 사용자 유형 | 설명 | 주요 니즈 |
-|------------|------|----------|
-| **포커 팬** | WSOP 시청자 | 라이브 경기, 하이라이트 |
-| **GGPoker 회원** | 기존 플랫폼 사용자 | 심리스한 로그인, 연계 서비스 |
-| **글로벌 시청자** | 비영어권 사용자 | 다국어 자막, 현지화 |
+| 분류 | 원천 | 정의 | 예시 |
+|------|:----:|------|------|
+| **Core-Vible** | 📜 | VIBLE에서 명시한 필수 기능 | Advanced Mode, GGPass, 구독 모델 |
+| **Core-Moses** | 📋 | MOSES에서 제안한 확장 기능 | 핸드 태깅, 검색, 멀티 재생 |
+| **Core-Koran** | 📖 | KORAN 1:1 대응 기능 | Ticker, MultiView, Info Tabs |
+| **Extension** | - | 3대 원천에 없는 확장 기능 | Equity Calculator, Hand Range |
 
 ---
 
-## Requirements
+## 1. Executive Summary
 
-### Functional Requirements
+### 1.1 프로젝트 개요
 
-#### FR-1: 라이브 스트리밍
-| 요구사항 |
-|---------|
-| 1080p Full HD 라이브 방송 |
-| HLS 프로토콜 기반 스트리밍 |
+WSOP 공식 OTT 스트리밍 플랫폼. **3대 원천을 기반**으로 설계한 프리미엄 포커 방송 서비스.
 
-> **참고**: 지연 처리는 프로덕션 방송에서 담당. TV 솔루션은 받는대로 즉시 송출.
+| 항목 | 내용 | 원천 |
+|------|------|:----:|
+| **런칭 목표** | Q3 2026 (2027년 3월 1일 전) | 📜 |
+| **플랫폼** | Web, iOS, Android, Samsung TV, LG TV | 📜 |
+| **구독 모델** | $10 WSOP Plus / $50 WSOP Plus+ | 📜 |
+| **화질** | 1080p Full HD | 📖 |
+| **자막** | 20개국 다국어 지원 | 📖 |
 
-#### FR-2: VOD & Quick VOD
-| 요구사항 |
-|---------|
-| 라이브→VOD 즉시 전환 (Quick VOD) |
-| 시청 이력 및 이어보기 |
-| 챕터/구간 탐색 |
-| 다운로드 오프라인 시청 |
+### 1.2 YouTube 대비 핵심 차별점
 
-#### FR-3: Timeshift (YouTube 대비 차별화)
+> **출처**: 📜 VIBLE - "라이브 설정: 뒤로 가게도 할수 있게 하고, 끝나면 영상 남아있고"
 
-| 플랫폼 | DVR (Timeshift) | 라이브 종료 후 | 차별화 |
-|--------|:---------------:|:-------------:|--------|
-| **YouTube** | 비활성화 | 비공개 전환 | 맛보기 역할 |
-| **WSOP TV** | **활성화** | **VOD로 보존** | 본 서비스 |
+| # | 차별점 | YouTube | WSOPTV | 원천 |
+|:-:|--------|---------|--------|:----:|
+| 1 | **Timeshift** | 뒤로 가기 불가 | 라이브 중 되감기 지원 | 📜 |
+| 2 | **아카이브** | 종료 시 비공개 | 영구 보존 + VOD 전환 | 📜 |
+| 3 | **Advanced Mode** | 없음 | Multi-view + StatsView | 📜 |
+| 4 | **검색** | 없음 | 핸드/선수 기반 정밀 검색 | 📋 |
 
-| 요구사항 |
-|---------|
-| 라이브 중 되감기 (Timeshift) |
-| 라이브 종료 즉시 VOD 자동 전환 (Quick VOD) |
-| Catchup TV (처음부터 재시청) |
+---
 
-#### FR-4: Advanced Mode (Plus+ 전용) - NBA TV 1:1 매핑
+## 2. 콘텐츠 소싱 전략 `[Core-Vible]`
 
-> **상세 스펙**: [PRD-0006 Advanced Mode](PRD-0006-advanced-mode.md)
->
-> **UX 참조**: [NBA TV 분석 리포트](../reports/REPORT-2026-01-19-nbatv-reference-analysis.md)
+> **출처**: 📜 VIBLE - "Bracelet 대회가 1년에 대략 200개 있어요. 50개 정도 방송을 할거 같다."
 
-##### FR-4.1: Tournament Strip (NBA Score Strip 매핑)
-
-상단 고정 가로 스크롤 바 - 현재 진행 중인 대회/테이블 실시간 표시
+### 2.1 콘텐츠 3단계 구조
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ 🔴 Main Event  │ 🔴 High Roller │ ▶ $1K Daily │ ▶ Super Circuit #12    │
-│ POT: $2.4M     │ POT: $890K     │ POT: $420K  │ Final Table            │
-│ Blinds: 50K/100K│ Blinds: 25K/50K│ Blinds: 5K/10K │ POT: $1.1M         │
+│                    연간 50개 방송 콘텐츠 소싱                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ESPN (10개/년)          PokerGO (10개/년)        WSOP 직접 (30개/년)   │
+│  ┌───────────────┐       ┌───────────────┐       ┌───────────────┐     │
+│  │ ESPN 방영 →   │       │ PokerGO 방영 →│       │ YouTube 라이브 │     │
+│  │ 1년 후 WSOPTV │       │ 계약 후 WSOPTV│       │ + WSOPTV 동시  │     │
+│  └───────────────┘       └───────────────┘       └───────────────┘     │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-| 요구사항 | 우선순위 |
-|---------|:--------:|
-| 상단 Tournament Strip (진행 중 대회/테이블 가로 스크롤) | P0 |
-| 실시간 팟 크기/블라인드 표시 | P0 |
-| LIVE 인디케이터 (라이브/VOD 구분) | P1 |
-| Quick Add to Multiview (클릭으로 슬롯 추가) | P1 |
+| 소스 | 수량 | 특징 | 독점 기간 |
+|------|:----:|------|----------|
+| **ESPN** | 10개/년 | Main Event 등 → 1년 후 WSOPTV | 1년 |
+| **PokerGO** | 10개/년 | High Roller 등 → 계약에 따라 | 계약 기간 |
+| **WSOP 직접** | 30개/년 | YouTube + WSOPTV 동시 중계 | 없음 |
 
-##### FR-4.2: 4분할 Multiview (NBA Multiview 매핑)
+### 2.2 YouTube vs WSOPTV 설정 비교
+
+> **출처**: 📜 VIBLE - "Youtube 로 라이브 중계 (라이브 설정: 뒤로 스크롤 안되기 + 끝나면 영상 비공개)"
+
+| 설정 | YouTube | WSOPTV |
+|------|---------|--------|
+| DVR (Timeshift) | ❌ 비활성화 | ✅ 활성화 |
+| 종료 후 | 비공개 전환 | 영구 보존 |
+| 역할 | 맛보기/유입 채널 | 본 서비스 |
+
+---
+
+## 3. 구독 모델 `[Core-Vible]`
+
+> **출처**: 📜 VIBLE - "$10, $50 두개 있음. Plus 라는건 구독이름."
+
+### 3.1 2티어 구독
+
+| 티어 | 가격 | 명칭 | 주요 기능 |
+|------|------|------|----------|
+| Basic | $10/월 | **WSOP Plus** | 라이브, VOD, Timeshift, 자막 |
+| Premium | $50/월 | **WSOP Plus+** | Plus 기능 + Advanced Mode |
+
+> **참고** (📜 VIBLE): "Exclusive Content (behind-the-scenes)는 굳이 WSOPTV 용으로 따로 제작하지 말자."
+
+### 3.2 프로모션 전략
+
+| Flow | 설명 |
+|------|------|
+| GG POKER → WSOPTV | $10 칩 구매 → WSOPTV Plus 구독권 자동 발급 |
+| WSOPTV → GG POKER | Plus $10 구독 → GG POKER $10 칩 제공 |
+
+---
+
+## 4. Advanced Mode `[Core-Vible]`
+
+> **출처**: 📜 VIBLE - "Multi-view 영상: 메인화면이 중앙에 있고, 각 유저들의 얼굴을 잡고 있는 화면이 옆에 또 있는 방식 (아이돌 직캠 카메라)"
+
+### 4.1 Multi-view (📜 VIBLE + 📖 KORAN)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -142,357 +165,295 @@ WSOP 공식 OTT 스트리밍 플랫폼. **YouTube 대비 4가지 핵심 차별�
 │  │  🔊 AUDIO             │  │                           │   │
 │  └───────────────────────┘  └───────────────────────────┘   │
 │  ┌───────────────────────┐  ┌───────────────────────────┐   │
-│  │  Add Table from       │  │  Super Circuit #12        │   │
-│  │  Tournament Strip     │  │  Heads Up                 │   │
+│  │  Add a Table from     │  │  Super Circuit #12        │   │
+│  │  Tournament Ticker    │  │  Heads Up                 │   │
 │  │                       │  │  POT: $420K               │   │
 │  └───────────────────────┘  └───────────────────────────┘   │
 ├─────────────────────────────────────────────────────────────┤
-│  [Tables] [MultiView] [Key Hands]     [1] [2] [4] Layout    │
+│  [Active Tables] [MultiView] [Featured Hands]  [1][2][4]    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-| 요구사항 | 우선순위 |
-|---------|:--------:|
-| 4분할 그리드 레이아웃 (최대 4개 동시 시청) | P0 |
-| 빈 슬롯 가이드 ("Add Table from Tournament Strip") | P0 |
-| 1/2/4 분할 전환 버튼 | P0 |
-| 오디오 선택 (4개 중 1개만 활성화) | P1 |
-| POT/Blinds Overlay | P1 |
+| 원천 | 기능 |
+|:----:|------|
+| 📜 | 메인화면 + 유저별 얼굴 화면 (아이돌 직캠 방식) |
+| 📋 | 한 테이블 각 선수별 화면 재생 + 다른 대회/테이블 재생 |
+| 📖 | 1x1, 1:2, 2x2 레이아웃 (NBA TV 동일) |
 
-##### FR-4.3: Player Controls (NBA Controls 매핑)
+### 4.2 StatsView (📜 VIBLE)
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        [비디오 플레이어 영역]                             │
-│                                                              🔴 LIVE    │
-├─────────────────────────────────────────────────────────────────────────┤
-│  ▶/⏸  [────────●───────────────────────────────]  🔊  ⬜  ⛶            │
-├─────────────────────────────────────────────────────────────────────────┤
-│  [🎥 Tables (5)] [📺 MultiView] [⭐ Key Hands]        [1] [2] [4]       │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+> **출처**: 📜 VIBLE - "StatsView 영상: 허드같이 그 유저의 수치라든가, 플랍에서 베팅할 확률같은거, 이런게 띄어져있는 영상"
 
-| 요구사항 | 우선순위 |
-|---------|:--------:|
-| Tables 버튼 (사용 가능한 테이블/뷰 선택) | P0 |
-| MultiView 버튼 (멀티뷰 모드 진입) | P0 |
-| Key Hands 버튼 (주요 핸드 목록 모달) | P0 |
-| LIVE 인디케이터 (우측 상단) | P1 |
+| 요소 | 표시 정보 |
+|------|----------|
+| 플레이어 통계 | VPIP, PFR, 3-Bet%, AF |
+| 베팅 확률 | 플랍 베팅 확률, Pot Odds |
+| 스택 정보 | 칩 카운트, BB 기준 스택 |
 
-##### FR-4.4: Key Hands (NBA Key Plays 매핑)
+---
 
-```
-┌─────────────────────────────────────────┐
-│              KEY HANDS                   │
-├─────────────────────────────────────────┤
-│  [썸네일] Phil Ivey 4-bet bluff         │
-│           Hand #47 • Blinds 50K/100K    │
-│           ▶ Jump to this hand           │
-├─────────────────────────────────────────┤
-│  [썸네일] AA cracked by runner-runner   │
-│           Hand #52 • POT $1.2M          │
-│           ▶ Jump to this hand           │
-└─────────────────────────────────────────┘
-```
+## 5. 핸드 태깅 & 검색 `[Core-Moses]`
 
-| 요구사항 | 우선순위 |
-|---------|:--------:|
-| Key Hands 모달 목록 (썸네일 + 핸드 설명 + 타임스탬프) | P0 |
-| 클릭 시 해당 핸드 시점으로 점프 | P0 |
-| 오버레이 네비게이션 ("1 of N Key Hands" + 화살표) | P1 |
-| AI 자동 추출 (주요 핸드 자동 태깅) | P2 |
+> **출처**: 📋 MOSES - "대회 영상이나 Script를 기반으로 영상 태깅"
 
-##### FR-4.5: Hand-by-Hand Log (NBA Play-by-Play 매핑)
+### 5.1 핸드 단위 태깅
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  [Hand #47] [All]  |  Filter: [All Players ▼]               │
-│  ☑ Auto Next Hand   ☐ Latest First                          │
-├─────────────────────────────────────────────────────────────┤
-│  [👤 Ivey]   UTG    RAISE $50,000        │ POT: $75,000     │
-│  [👤 Negreanu]  BTN    3-BET $150,000    │ POT: $225,000    │
-│  ─────────── FLOP: A♥ K♠ 7♦ ───────────                     │
-│  [👤 Ivey]         RAISE $600,000        │ POT: $1,125,000  │
-│  [👤 Negreanu]     FOLD                  │                   │
-│  ─────────── RESULT: Ivey wins $950,000 ───────────         │
-└─────────────────────────────────────────────────────────────┘
-```
+| 태그 항목 | 설명 | 원천 |
+|----------|------|:----:|
+| Hand 기준 | 핸드 번호, 타임스탬프 | 📋 |
+| 참여 플레이어 | 해당 핸드에 참여한 선수 목록 | 📋 |
+| 각 플레이어 Hands | 홀카드 정보 | 📋 |
+| Community Card | 보드 카드 (플롭/턴/리버) | 📋 |
+| 최종 Winner | 핸드 승자 | 📋 |
 
-| 요구사항 | 우선순위 |
-|---------|:--------:|
-| 실시간 액션 로그 (프리플롭/플롭/턴/리버) | P1 |
-| 선수 필터 (특정 선수 액션만 표시) | P1 |
-| Auto Next Hand 토글 | P2 |
-| 타임스탬프 링크 (클릭 시 해당 시점 이동) | P2 |
+### 5.2 검색 기능
 
-##### FR-4.6: StatsView (2가지 구조)
+> **출처**: 📋 MOSES - "특정 선수가 참여한 Pot 만 재생, 특정 핸드로 이기거나 진 핸드"
 
-**구조 1: GGPoker HUD 연동** (MVP)
-- 데이터 소스: GGPoker HUD DB
-- 통계: VPIP, PFR, 3-Bet%, AF, Flop CB%, 칩 카운트
-- 우선순위: P0 (MVP)
+**검색 예제** (📋 MOSES):
+- A 선수와 B 선수가 함께 했던 대회/동영상 검색
+- 포카드(Four of a Kind)를 쥔 플레이어가 로열 스트레이트 플러시에게 패한 핸드
+- 특정 핸드(AA, KK 등)로 이기거나 진 상황
 
-**구조 2: 대회 실시간 연동** (Phase 2)
-- 데이터 소스: 대회 실시간 데이터
-- 정보: 현재 액션, 베팅 금액, Pot Odds, 예상 액션
-- 우선순위: P1 (Phase 2)
+---
 
-| 요구사항 | 우선순위 |
-|---------|:--------:|
-| GGPoker HUD 연동 StatsView | P0 |
-| HUD ON/OFF 토글 | P0 |
-| 대회 실시간 연동 StatsView | P1 |
+## 6. 메인 스트리밍 UI - 7단 레이아웃 `[Core-Koran]`
 
-> **제약사항**: TV 앱에서는 Advanced Mode 미지원 (리모컨 UX 제약)
+> **출처**: 📖 KORAN - NBA TV League Pass 1:1 대응
 
-#### FR-5: 자막
-| 요구사항 |
-|---------|
-| 20개국 언어 자막 지원 |
-| 영어 기반 번역 |
-| VOD 자막 우선 지원 |
-| 라이브 자막 (인력 투입) |
+### 6.1 레이아웃 구조
 
-#### FR-6: 인증 & 결제
-| 요구사항 |
-|---------|
-| GGPass SSO 연동 (인증 + 빌링 통합) |
-| 구독 플랜 관리 (Plus/Plus+) |
-| 결제 필요 시 GGPass로 리다이렉트 |
+| 레이어 | NBA TV 컴포넌트 | WSOP TV 컴포넌트 |
+|:------:|-----------------|------------------|
+| ① | Scoreboard Ticker | Tournament Ticker |
+| ② | Ad Banner | Ad Banner |
+| ③ | Game Header | Tournament Header |
+| ④ | Video Player | Video Player + POT/BOARD |
+| ⑤ | Stream Tabs | Stream Tabs |
+| ⑥ | Timeline | Timeline |
+| ⑦ | Controls | Controls |
 
-#### FR-7: 구독 모델
+### 6.2 용어 매핑 (📖 KORAN)
 
-| 티어 | 가격 | 명칭 | 주요 기능 |
-|------|------|------|----------|
-| Basic | $10/월 | **WSOP Plus** | 라이브, VOD, Timeshift, 자막 |
-| Premium | $50/월 | **WSOP Plus+** | Plus 기능 + Advanced Mode (Multi-view, StatsView) |
+| NBA TV | WSOP TV | 비고 |
+|--------|---------|------|
+| Scoreboard Ticker | Tournament Ticker | 상단 스코어/대회 표시 |
+| Q3 3:05 | L38 LIVE | Quarter→Level |
+| Clippers 77 / Bulls 90 | Negreanu 1.3M | 점수→칩 리더 |
+| Key Plays | Featured Hands | 주요 플레이/핸드 |
+| Box Score | Player Stats | 통계 탭 |
+| Play-By-Play | Hand History | 액션 로그 |
 
-> **참고**: Exclusive Content (behind-the-scenes)는 별도 제작하지 않음 → Advanced Mode가 Plus+의 유일한 차별화 포인트
+---
 
-### Non-Functional Requirements
+## 7. Info Tabs `[Core-Koran]`
 
-#### NFR-1: 성능
-| 요구사항 | 목표치 |
-|---------|-------|
+### 7.1 탭 구조 (📖 KORAN 동일)
+
+| 탭 | NBA TV | WSOP TV |
+|----|--------|---------|
+| 1 | Summary | Summary |
+| 2 | Box Score | Player Stats |
+| 3 | Game Charts | Hand Charts |
+| 4 | Play-By-Play | Hand History |
+
+### 7.2 Player Stats 컬럼 매핑
+
+| NBA TV | WSOP TV | 설명 |
+|--------|---------|------|
+| MIN | HANDS | 플레이 시간/핸드 |
+| FGM | WINS | 성공 횟수 |
+| FG% | WIN% | 성공률 |
+| 3PM | VPIP | 팟 참여율 |
+| REB | CHIPS | 칩 카운트 |
+
+---
+
+## 8. Player Controls `[Core-Koran]`
+
+### 8.1 Core 컨트롤 (📖 KORAN 동일)
+
+| 컨트롤 | 툴팁 | 단축키 |
+|--------|------|--------|
+| Play/Pause | Play/Pause | Space |
+| Rewind | Rewind 10s | ← |
+| Forward | Forward 10s | → |
+| Volume | Volume | - |
+| CC | Subtitles | c |
+| MultiView | MultiView | Shift+m |
+| PIP | Picture in Picture | p |
+| Fullscreen | Fullscreen | f |
+| Live | Jump to Live | Shift+→ |
+
+### 8.2 Extension 컨트롤 (포커 전용)
+
+| 컨트롤 | 기능 | 비고 |
+|--------|------|------|
+| [CARDS] | 홀카드 표시 토글 | 📜 VIBLE StatsView 확장 |
+| [STACK] | 스택 오버레이 토글 | 📜 VIBLE StatsView 확장 |
+| [EQUITY] | 에퀴티 미터 토글 | Extension |
+
+---
+
+## 9. 플랫폼 요구사항 `[Core-Vible]`
+
+> **출처**: 📜 VIBLE - "WSOP TV B2B Requirement"
+
+### 9.1 필수 요구사항
+
+| 요구사항 | 상세 | 원천 |
+|----------|------|:----:|
+| **GGPass 로그인** | OAuth2 SSO 연동 | 📜📋 |
+| **구독 모델** | $10 Plus / $50 Plus+ | 📜 |
+| **역대 영상 업로드** | 모든 WSOP 영상 아카이브 | 📜 |
+| **5개 스토어 배포** | App Store, Play Store, Samsung TV, LG TV, Web | 📜 |
+| **Web 제공** | WSOP.TV 도메인 | 📜 |
+| **View Mode 전환** | Normal ↔ Advanced Mode | 📜 |
+
+### 9.2 제외 항목
+
+| 항목 | 사유 | 원천 |
+|------|------|:----:|
+| 광고 시스템 | "굳이 고려할 필요없음" | 📜 |
+| Exclusive Content | "따로 제작하지 말자" | 📜 |
+
+---
+
+## 10. 기술 요구사항
+
+### 10.1 스트리밍 프로토콜
+
+| 항목 | 스펙 |
+|------|------|
+| 프로토콜 | HLS, DASH |
+| 화질 | 1080p (기본), 4K (프리미엄) |
+| 비트레이트 | 3-15 Mbps 어댑티브 |
+| 지연 | 30초 (라이브), 30분 (홀카드) |
+
+### 10.2 비기능 요구사항
+
+| 항목 | 목표치 |
+|------|-------|
 | 동시접속 | 50만 사용자 |
 | 초기 버퍼링 | < 3초 |
 | 재버퍼링 비율 | < 1% |
-
-#### NFR-2: 보안
-| 요구사항 | 목표치 |
-|---------|-------|
 | DRM | Widevine, FairPlay, PlayReady |
-| VPN 감지 | 80-90% 정확도 |
-| 국가별 블랙아웃 | 지원 |
-
-#### NFR-3: 가용성
-| 요구사항 | 목표치 |
-|---------|-------|
 | 서비스 가용성 | 99.9% |
 
 ---
 
-## Technical Architecture
+## 11. 구현 우선순위 (Phase)
 
-### 플랫폼 구성
+### Phase 1: Core-Vible (MVP) - 📜 VIBLE 필수
 
-![Platform Architecture](../images/PRD-0002/architecture.png)
+> **마감**: 2027년 3월 1일 전
 
-### 시스템 연동
+| 기능 | 원천 | 우선순위 |
+|------|:----:|:--------:|
+| GGPass SSO 연동 | 📜 | P0 |
+| $10/$50 구독 모델 | 📜 | P0 |
+| 라이브 스트리밍 + Timeshift | 📜 | P0 |
+| VOD 아카이브 | 📜 | P0 |
+| 5개 플랫폼 배포 | 📜 | P0 |
+| Advanced Mode (Multi-view + StatsView) | 📜 | P0 |
 
-> **시스템 아키텍처**는 위 다이어그램 참조
+### Phase 2: Core-Moses (검색 강화) - 📋 MOSES 확장
 
-**GGPass SSO 통합**:
-- 로그인: GGPass SSO 처리
-- Billing: GGPass 내부에서 처리
-- 결제 필요 시: GGPass 페이지로 이동하여 처리
+| 기능 | 원천 | 우선순위 |
+|------|:----:|:--------:|
+| 핸드 단위 태깅 시스템 | 📋 | P1 |
+| 선수/핸드 검색 | 📋 | P1 |
+| 멀티 재생 (다른 대회/테이블) | 📋 | P1 |
+| 특수 검색 (배드 비트, 쿨러 등) | 📋 | P2 |
 
-> **참고**: 기술 스택 (CDN, DRM, Database 등)은 향후 협업사 제안에 따라 결정
+### Phase 3: Core-Koran (UX 완성) - 📖 KORAN 1:1
 
----
+| 기능 | 원천 | 우선순위 |
+|------|:----:|:--------:|
+| Tournament Ticker | 📖 | P1 |
+| Info Tabs (Summary/Stats/Charts/History) | 📖 | P1 |
+| Featured Hands 모달 | 📖 | P1 |
+| Streaming Options (Camera/Commentary) | 📖 | P2 |
 
-## UI/UX Design
+### Phase 4: Extension (확장)
 
-### Watch Screen
-
-> **UX 참조**: NBA TV Player Controls 스타일 적용 - [PRD-0006 플레이어 컨트롤](PRD-0006-advanced-mode.md#3-플레이어-컨트롤-ui-nba-player-controls-스타일)
-
-![Watch Screen](../images/PRD-0002/watch-screen.png)
-
-**주요 기능**:
-- 대형 플레이어 (히어로 영역)
-- 라이브 뱃지 표시
-- 3계층 멀티뷰 전환 버튼
-- 20개국 자막 선택
-- Quick VOD 하이라이트 섹션
-
-### Multi-View (3계층 동적 레이아웃)
-
-#### Layer 1: Main PGM
-
-![Layer 1: Main PGM](../images/PRD-0002/multiview-layer1-pgm.png)
-
-**레이아웃**: 메인에 PGM, 우측에 피처 테이블 목록만
-
-#### Layer 2: Feature Table
-
-![Layer 2: Feature Table](../images/PRD-0002/multiview-layer2-table.png)
-
-**레이아웃**: 좌측에 PGM+다른 테이블, 메인에 선택한 테이블, 우측에 PlayerCAM 목록
-
-#### Layer 3: PlayerCAM
-
-![Layer 3: PlayerCAM](../images/PRD-0002/multiview-layer3-playercam.png)
-
-**레이아웃**: 좌측에 PGM+피처 테이블, 메인에 선택한 PlayerCAM, 우측에 다른 PlayerCAM
-
-**주요 기능**:
-- 3계층 동적 레이아웃 (PGM → 피처 테이블 → PlayerCAM)
-- 클릭으로 메인 화면 전환
-- 피처 테이블별 PlayerCAM 지원 여부 표시 (PlayerCAM 뱃지)
-- 동기화 상태 표시
-- Layer 전환 버튼
-
-### Multi-View UX Flow
-
-![Multi-View UX Flow](../images/PRD-0002/multiview-ux-flow.png)
-
-### StatsView Video Player Layout
-
-![StatsView Layout](../images/PRD-0002/player-with-statsview.png)
-
-**레이아웃 구조**:
-- 좌측: 플레이어 통계 HUD (VPIP/PFR/3Bet/AF/Stack)
-- 중앙: 비디오 플레이어
-- 우측: 게임 정보 HUD (Pot/Odds/SPR/Action History)
-- HUD 토글 ON/OFF 지원
-
-### Collections Screen
-
-![Collections Screen](../images/PRD-0002/collections-screen.png)
-
-**주요 기능**:
-- 히어로 배너 (Featured Collection)
-- 필터 탭 (Main Event, Bracelet, High Roller, Classics)
-- 시청 진행률 표시
-- 큐레이티드 플레이리스트
-- 검색 기능 (Elasticsearch 기반 - [STRAT-0007](../strategies/STRAT-0007-content-sourcing.md) 참조)
-
-**검색 기능 상세**:
-- 대회명, 년도, 플레이어명, 게임 타입 등 메타데이터 기반 전문 검색
-- 필터링: 년도, 시리즈, 게임 타입별 필터 지원
-- 50년+ 아카이브 콘텐츠(1973년~현재) 검색 가능
+| 기능 | 우선순위 |
+|------|:--------:|
+| Equity Calculator | P3 |
+| Hand Range Display | P3 |
+| 3x3 MultiView (파이널 데이용) | P3 |
+| 4K 화질 | P3 |
 
 ---
 
-## Scope
+## 12. Scope
 
 ### In Scope (MVP)
-| 항목 | 설명 |
-|------|------|
-| 플랫폼 | Web, iOS, Android, Samsung TV, LG TV |
-| 화질 | 1080p Full HD |
-| 멀티뷰 | 3계층 동적 레이아웃 (Web/Mobile만) |
-| 자막 | 20개국 |
-| 메뉴 | Watch + Collections 2개만 |
+
+| 항목 | 설명 | 원천 |
+|------|------|:----:|
+| 플랫폼 | Web, iOS, Android, Samsung TV, LG TV | 📜 |
+| 화질 | 1080p Full HD | 📖 |
+| Multi-view | 1x1, 1:2, 2x2 | 📜📖 |
+| 자막 | 20개국 | 📖 |
+| 메뉴 | Watch + Collections | - |
 
 ### Out of Scope
-| 항목 | 사유 |
-|------|------|
-| 4K 지원 | 장비/인프라 비용 과다 |
-| VLM (비디오 AI 분석) | 고비용, 별도 업체 필요 |
-| 뉴스 섹션 | 불필요 |
-| 전적/플레이어 정보 | WSOP.com 링크 연결 |
-| 티켓팅 | 온라인 구독만 |
-| Roku/Fire TV | Phase 2 |
+
+| 항목 | 사유 | 원천 |
+|------|------|:----:|
+| 광고 시스템 | VIBLE 제외 | 📜 |
+| Exclusive Content | VIBLE 제외 | 📜 |
+| 4K 지원 | Phase 4 | - |
+| Roku/Fire TV | Phase 4 | - |
 
 ---
 
-## Cost Factors
+## 13. 앱 배포 계획 `[Core-Vible]`
 
-### 비용 절감 포인트
-| 항목 | 내용 | 영향도 |
-|------|------|:------:|
-| GGPass SSO | 로그인/가입 개발 불필요 | 높음 |
-| 빌링 시스템 | GGPass 내부 처리 | 높음 |
-| 스케줄 API | 내부 DB 연동 | 중간 |
-| 사이트 범위 | 2개 메뉴만 | 높음 |
+> **출처**: 📜 VIBLE - "WSOP 회사 애플 계정 (Bracelet IP, Ireland 회사) 으로 앞으로 올릴 것들"
 
-### 비용 증가 요소
-| 항목 | 내용 | 영향도 |
-|------|------|:------:|
-| TV 앱 | 플랫폼별 개발 | 중간 |
+### 13.1 배포 앱 목록
 
----
+| 앱 | 설명 | 마감 |
+|----|------|------|
+| WSOP Live | WSOP+에서 이름 변경 필요 | 2027.03.01 |
+| **WSOP TV** | 본 서비스 | 2027.03.01 |
+| WSOP Academy | 교육 콘텐츠 | TBD |
+| PokerStake | 스테이킹 서비스 | TBD |
 
-## Timeline (Phase) - 시청자 관점 우선순위
+### 13.2 배포 스토어
 
-> **기준**: [STRAT-0001 시청자 경험 비전](../strategies/STRAT-0001-viewer-experience-vision.md)
-
-### Phase 1: 핵심 차별점 확립 (MVP)
-
-YouTube 대비 핵심 차별점 우선 구현:
-
-| 기능 | 차별점 # | 설명 |
-|------|:--------:|------|
-| Web + Mobile 앱 | - | 5개 플랫폼 중 3개 |
-| **Timeshift** | 1 | 라이브 중 되감기 |
-| **아카이브** | 2 | 종료 후 VOD 보존 |
-| **Multi-view 4분할** | 3 | NBA 스타일 |
-| **StatsView (HUD)** | 3 | GGPoker HUD 연동 |
-| GGPass SSO 연동 | - | 인증 + 빌링 통합 |
-
-### Phase 2: 검색 & 탐색 강화
-
-Tony 기획 (Moses Commentary) 기능 구현:
-
-| 기능 | 출처 | 설명 |
-|------|------|------|
-| Key Hands 점프 | Michael | 주요 핸드 탐색 |
-| Hand-by-Hand Log | NBA 매핑 | 액션 로그 |
-| **핸드 태깅 시스템** | Tony | 핸드 단위 메타데이터 |
-| **선수/핸드 검색** | Tony | 차별점 #4 |
-| TV 앱 (Samsung, LG) | - | 5개 플랫폼 완성 |
-| StatsView 구조 2 | Michael | 대회 실시간 연동 |
-
-> **상세 스펙**: [PRD-0009 Hand Tagging & Search](PRD-0009-hand-tagging-search.md)
-
-### Phase 3: 프리미엄 확장
-
-| 기능 | 설명 |
-|------|------|
-| 3계층 Multi-view | PGM → 테이블 → PlayerCAM |
-| Position Analysis | 포지션별 성적 시각화 |
-| AI Key Hands 자동 추출 | VLM 기반 |
-| 4K 화질 | 프리미엄 품질 |
-| Roku/Fire TV | 추가 플랫폼 |
+- Apple App Store
+- Google Play Store
+- Samsung TV Store
+- LG TV Store
+- Web (WSOP.TV)
 
 ---
 
-## Open Questions
+## 14. Open Questions
 
 1. TV 미러링/캐스팅 지원 여부
 2. 블랙아웃 정책 (사이트 단위 vs 영상 단위)
+3. 핸드 태깅 자동화 vs 수동 입력 비율
 
 ---
 
-## References
+## 15. References
+
+### 3대 원천 문서
+- 📜 **VIBLE**: [michael_note.md](../vible/michael_note.md) - 운영 계획의 근간
+- 📋 **MOSES**: [tony_note.md](../vible/tony_note.md) - 첨언 및 확장
+- 📖 **KORAN**: [WSOP-TV-PRD.md](C:\claude\wsoptv_nbatv_clone\docs\guides\WSOP-TV-PRD.md) - NBA TV 1:1 대응
 
 ### 기능 문서
-- [PRD-0006 Advanced Mode](PRD-0006-advanced-mode.md) - Advanced Mode 상세 스펙 (NBA TV 1:1 매핑)
-- [PRD-0009 Hand Tagging & Search](PRD-0009-hand-tagging-search.md) - 핸드 태깅 및 검색 (Phase 2)
-
-### 아키텍처 문서
-- [ADR-0001 Multi-view Rationale](../adrs/ADR-0001-multiview-3layer-rationale.md) - 3계층 Multi-view 설계 근거
-- [ADR-0002 Database Schema](../adrs/ADR-0002-database-schema-design.md) - DB 스키마 설계
+- [PRD-0006 Advanced Mode](PRD-0006-advanced-mode.md) - Advanced Mode 상세 스펙
+- [PRD-0009 Hand Tagging & Search](PRD-0009-hand-tagging-search.md) - 핸드 태깅 및 검색
 
 ### 전략 문서
-- [STRAT-0001 Viewer Experience Vision](../strategies/STRAT-0001-viewer-experience-vision.md) - 시청자 경험 비전 (핵심)
-- [STRAT-0003 Cross-Promotion Strategy](../strategies/STRAT-0003-cross-promotion.md) - 양방향 프로모션
+- [STRAT-0001 Viewer Experience Vision](../strategies/STRAT-0001-viewer-experience-vision.md) - 시청자 경험 비전
 - [STRAT-0007 Content Sourcing](../strategies/STRAT-0007-content-sourcing.md) - 콘텐츠 소싱
-
-### 리포트
-- [REPORT-2026-01-19 NBA TV 분석](../reports/REPORT-2026-01-19-nbatv-reference-analysis.md) - NBA TV/League Pass UX 참조
 
 ---
 
@@ -501,9 +462,7 @@ Tony 기획 (Moses Commentary) 기능 구현:
 | 버전 | 날짜 | 작성자 | 내용 |
 |------|------|--------|------|
 | 1.0 | 2026-01-07 | Claude Code | 최초 작성 |
-| 2.0 | 2026-01-16 | Claude Code | Problem Statement 수정, FR-4 3계층 구조로 재설계, StatsView 2구조 추가, GGPass SSO+Billing 통합 |
-| 2.1 | 2026-01-16 | Claude Code | FANCAM→PlayerCAM 용어 변경, 프로모션 양방향 흐름 추가 |
-| 2.2 | 2026-01-19 | Claude Code | NBA TV 분석 리포트 참조 추가 |
-| 3.0 | 2026-01-19 | Claude Code | STRAT-0001 참조, YouTube 대비 4가지 차별점 명확화, Phase 시청자 관점 재정렬 |
-| **3.1** | **2026-01-19** | **Claude Code** | **FR-4 NBA TV 1:1 매핑 전면 반영: Tournament Strip, 4분할 Multiview, Player Controls, Key Hands, Hand-by-Hand Log 추가** |
-| **2.2** | **2026-01-19** | **Claude Code** | **NBA TV 분석 리포트 참조 추가 (FR-4, Watch Screen, References 섹션)** |
+| 2.0 | 2026-01-16 | Claude Code | Problem Statement 수정, 3계층 구조 |
+| 3.0 | 2026-01-19 | Claude Code | STRAT-0001 참조, YouTube 대비 차별점 |
+| 4.0 | 2026-01-22 | Claude Code | NBA TV 1:1 구조로 개편 |
+| **5.0** | **2026-01-22** | **Claude Code** | **3대 원천 기반 전면 개편**: VIBLE(Michael) > MOSES(Tony) > KORAN(NBA TV) 우선순위 체계, 원천별 기능 분류, Phase 재정렬 |
