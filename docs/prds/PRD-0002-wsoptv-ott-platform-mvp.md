@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 7.4 |
+| **Version** | 7.5 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -92,12 +92,12 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 ### 2.1 WSOP 콘텐츠 Tier 구조
 
-| Tier | 대회 | 개최지 | 설명 |
-|:----:|------|--------|------|
-| **1** | WSOP Vegas | Las Vegas, USA | 메인 시리즈 (본거지) |
-| **2** | WSOPE | Prague, Czech | 유럽 시리즈 |
-| **2** | WSOP Paradise | Bahamas | 바하마 시리즈 |
+| Tier | 카테고리 | 콘텐츠 | 설명 |
+|:----:|----------|--------|------|
+| **1** | WSOP Vegas | WSOP Vegas (Las Vegas) | 메인 시리즈 (본거지) |
+| **2** | WSOP 글로벌 | WSOPE (Prague), WSOP Paradise (Bahamas) | 글로벌 시리즈 |
 | **3** | Super Circuit | 전세계 각지 | 글로벌 라이브 서킷 |
+| **E** | 예능 | Poker After Dark, Game of Gold | 엔터테인먼트 콘텐츠 |
 
 **Super Circuit 개최지 (예시)**:
 
@@ -112,7 +112,14 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 | | SC Buenos Aires | Buenos Aires, Argentina |
 | **오세아니아** | SC Melbourne | Melbourne, Australia |
 
-> **범위**: WSOP 공식 **라이브** 대회만 포함. 온라인 이벤트 및 Poker After Dark, Game of Gold 등 예외 콘텐츠 제외.
+**예능 콘텐츠 (Tier E)**:
+
+| 프로그램 | 설명 | 형식 |
+|----------|------|------|
+| **Poker After Dark** | 심야 포커 예능, 유명 프로 대결 | VOD (에피소드) |
+| **Game of Gold** | 서바이벌 포커 리얼리티 쇼 | VOD (시즌제) |
+
+> **범위**: WSOP 공식 라이브 대회 + 예능 콘텐츠 포함. 온라인 전용 이벤트는 제외.
 
 ### 2.2 소스별 프로덕션 파트너
 
@@ -682,4 +689,5 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 | 7.1 | 2026-01-23 | Claude Code | 콘텐츠 정리: 학생 할인 삭제 (성인 전용 서비스), SC Las Vegas 제거 (WSOP Vegas와 중복), Multi-view 목업 전면 재설계 (A4 세로 크기, Tournament Ticker → View Mode → 레이아웃 비교 포함) |
 | 7.2 | 2026-01-23 | Claude Code | ASCII 아카이브 분리: 섹션 2.3 콘텐츠 플로우 ASCII 다이어그램 복원, PRD-0002-ascii-archive.md 파일로 전체 ASCII 와이어프레임 아카이브 생성 |
 | 7.3 | 2026-01-23 | Claude Code | ASCII 아카이브 참조 완료: 섹션 2.3/6.2/9.1/9.3/4.2에 ASCII 원본 아카이브 참조 링크 추가, 모든 ASCII 목업 → HTML 교체 + 아카이브 참조 처리 완료 |
-| **7.4** | **2026-01-23** | **Claude Code** | **Multi-view 워크플로우 NBA TV 방식으로 수정**: Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가 (점진적 확장 UX), Featured Hands 버튼 위치 명시 (비디오 플레이어 좌측 하단) |
+| 7.4 | 2026-01-23 | Claude Code | Multi-view 워크플로우 NBA TV 방식으로 수정: Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가 (점진적 확장 UX), Featured Hands 버튼 위치 명시 (비디오 플레이어 좌측 하단) |
+| **7.5** | **2026-01-23** | **Claude Code** | **예능 콘텐츠 카테고리 추가**: Tier E (예능) 신설 - Poker After Dark, Game of Gold 포함, 콘텐츠 범위 확장 (라이브 대회 + 예능), 온라인 전용 이벤트만 제외 |
