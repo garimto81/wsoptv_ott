@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 5.8 |
+| **Version** | 7.4 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -49,28 +49,40 @@
 
 ---
 
-## 1. Executive Summary
+## 1. 프로젝트 개요
 
-### 1.1 프로젝트 개요
+### 1.1 WSOP TV란?
 
-WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
+> **"YouTube에서는 맛보기, WSOP TV에서 진짜 경험"**
+
+WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로, 기존 YouTube 라이브의 한계를 넘어선 **전문 시청자를 위한 심층 콘텐츠**를 제공합니다.
+
+### 1.2 왜 WSOP TV인가?
+
+| 문제 (YouTube) | 해결 (WSOP TV) |
+|---------------|----------------|
+| 라이브 중 되감기 불가 | **Timeshift**: 실시간 되감기로 명장면 다시 보기 |
+| 방송 종료 시 비공개 | **아카이브**: 영구 보존, VOD 자동 전환 |
+| 단일 화면만 제공 | **Multi-view**: 여러 테이블 동시 시청 |
+| 검색 불가 | **핸드 검색**: 선수/핸드 기반 정밀 검색 |
+
+### 1.3 타깃 사용자
+
+| 사용자 유형 | 니즈 | WSOP TV 제공 가치 |
+|------------|------|-------------------|
+| **캐주얼 팬** | 주요 경기 시청 | 라이브 스트리밍 + VOD |
+| **포커 플레이어** | 전략 분석 | Player Stats, Hand History |
+| **하드코어 팬** | 멀티 모니터링 | Multi-view, Player Cam |
+
+### 1.4 플랫폼 개요
 
 | 항목 | 내용 |
 |------|------|
-| **런칭 목표** | Q3 2026 (2027년 3월 1일 전) |
+| **런칭 목표** | 2027년 3월 1일 전 |
 | **플랫폼** | Web, iOS, Android, Samsung TV, LG TV |
 | **구독 모델** | $10 WSOP Plus / $50 WSOP Plus+ |
 | **화질** | 1080p Full HD |
 | **자막** | 20개국 다국어 지원 |
-
-### 1.2 YouTube 대비 핵심 차별점
-
-| # | 차별점 | YouTube | WSOPTV |
-|:-:|--------|---------|--------|
-| 1 | **Timeshift** | 뒤로 가기 불가 | 라이브 중 되감기 지원 |
-| 2 | **아카이브** | 종료 시 비공개 | 영구 보존 + VOD 전환 |
-| 3 | **Advanced Mode** | 없음 | Multi-view + StatsView |
-| 4 | **검색** | 없음 | 핸드/선수 기반 정밀 검색 |
 
 ---
 
@@ -80,13 +92,27 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
 ### 2.1 WSOP 콘텐츠 Tier 구조
 
-| Tier | 대회 | 설명 |
-|:----:|------|------|
-| **1** | WSOP Vegas | 메인 시리즈 (라스베가스) |
-| **2** | WSOPE / WSOP Paradise | 유럽 시리즈 / 바하마 시리즈 |
-| **3** | Super Circuit | 온라인 시리즈 |
+| Tier | 대회 | 개최지 | 설명 |
+|:----:|------|--------|------|
+| **1** | WSOP Vegas | Las Vegas, USA | 메인 시리즈 (본거지) |
+| **2** | WSOPE | Prague, Czech | 유럽 시리즈 |
+| **2** | WSOP Paradise | Bahamas | 바하마 시리즈 |
+| **3** | Super Circuit | 전세계 각지 | 글로벌 라이브 서킷 |
 
-> **범위**: WSOP 공식 대회만 포함. Poker After Dark, Game of Gold 등 예외 콘텐츠 제외.
+**Super Circuit 개최지 (예시)**:
+
+| 지역 | 대회명 | 개최지 |
+|------|--------|--------|
+| **유럽** | SC Cyprus | Cyprus |
+| | SC London | London, UK |
+| **북미** | SC Toronto | Toronto, Canada |
+| **아시아** | SC Manila | Manila, Philippines |
+| | SC Macau | Macau |
+| **남미** | SC São Paulo | São Paulo, Brazil |
+| | SC Buenos Aires | Buenos Aires, Argentina |
+| **오세아니아** | SC Melbourne | Melbourne, Australia |
+
+> **범위**: WSOP 공식 **라이브** 대회만 포함. 온라인 이벤트 및 Poker After Dark, Game of Gold 등 예외 콘텐츠 제외.
 
 ### 2.2 소스별 프로덕션 파트너
 
@@ -103,15 +129,9 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 
 ### 2.3 콘텐츠 플로우
 
-```
-[프로덕션 파트너]          [중앙 처리]           [배포]
-     │                        │                   │
-     ├─ ESPN ────────────────►│                   │
-     ├─ PokerGO ─────────────►│                   │
-     ├─ Triton Poker ────────►├─► GG Production ─►├─► WSOP TV
-     ├─ PokerCaster ─────────►│   (종편 작업)     ├─► YouTube
-     │                        │                   │
-```
+> 상세 다이어그램은 [02-content-sourcing.html](../mockups/PRD-0002/02-content-sourcing.html) 참조
+>
+> ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#1-콘텐츠-플로우-섹션-23) 참조
 
 **GG Production 역할**: 모든 프로덕션 파트너 소스를 받아 종편(Post-Production) 작업 수행
 
@@ -156,16 +176,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스.
 | Basic | **$10/월** | **WSOP Plus** | 1개 기기, 라이브, VOD, Timeshift, 광고 포함, 멀티뷰 4개 |
 | Premium | **$50/월** | **WSOP Plus+** | 최대 3개 기기, 광고 없음, 오프라인 시청, 다운로드, 멀티뷰 4개 |
 
-### 3.4 학생 할인
-
-> **레퍼런스**: NBA League Pass UNiDAYS 학생 40% 할인
-
-| 대상 | 할인율 | WSOP Plus | WSOP Plus+ |
-|------|--------|-----------|------------|
-| 일반 | 0% | $10/월 | $50/월 |
-| 학생 (UNiDAYS) | 40% | $6/월 | $30/월 |
-
-### 3.5 프로모션 전략
+### 3.4 프로모션 전략
 
 | Flow | 설명 |
 |------|------|
@@ -184,22 +195,46 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 >
 > **정의**: 하나의 이벤트 내 여러 Feature Table을 동시에 시청하는 방식. 간혹 다른 이벤트 테이블도 포함 가능.
 
-![Multi-view 와이어프레임](../images/PRD-0002/04-multiview.png)
+![Multi-view Workflow (NBA TV Style)](../images/PRD-0002/04-multiview.png)
 
 [HTML 원본](../mockups/PRD-0002/04-multiview.html)
 
+#### 진입 플로우 (NBA TV 방식)
+
+> **핵심 원칙**: Ticker 선택 → **즉시 시청** → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가
+
+| 단계 | 사용자 액션 | 시스템 반응 |
+|:----:|------------|------------|
+| 1 | Tournament Ticker에서 테이블 클릭 | **즉시 Single View 시청 시작** |
+| 2 | 비디오 플레이어 내 [MultiView] 버튼 클릭 | MultiView 모드 활성화, Ticker 추가 가능 상태 |
+| 3 | Ticker에서 추가 테이블 클릭 | 자동으로 2 VIEW / 4 VIEW 전환 |
+| 4 | View 버튼 (1/2/4) 클릭 | 선택한 레이아웃으로 변경 |
+| 5 | 멀티뷰 내 화면 클릭 | 해당 테이블로 오디오 전환 (🔊 표시) |
+
+#### View Mode 옵션
+
+| 모드 | 레이아웃 | 자동 전환 조건 |
+|:----:|:--------:|---------------|
+| **1 VIEW** | 단일 화면 | 기본 (Single View) |
+| **2 VIEW** | 1:2 좌우 분할 | 2개 테이블 선택 시 |
+| **4 VIEW** | 2x2 그리드 | 3~4개 테이블 선택 시 |
+
+#### 기능 명세
+
 | 기능 | 설명 | NBA TV 대응 |
 |------|------|-------------|
-| Feature Table 동시 시청 | 같은 이벤트의 여러 Feature Table | MultiView |
-| 레이아웃 옵션 | 1x1, 1:2, 2x2 | 동일 |
-| 테이블 추가 | Tournament Ticker에서 추가 | 동일 |
-| 오디오 선택 | 한 테이블의 오디오만 활성화 | 동일 |
-| 다른 이벤트 추가 | 간혹 다른 이벤트 테이블 추가 가능 | 동일 (다른 경기 추가) |
+| **즉시 시청** | Ticker 선택 시 바로 시청 시작 | 동일 (핵심 UX) |
+| **점진적 확장** | 테이블 추가 시 자동 뷰 모드 확장 | 동일 |
+| **MultiView 버튼** | 비디오 플레이어 컨트롤 바 내 위치 | 동일 |
+| 오디오 선택 | 화면 클릭으로 오디오 소스 전환 | 동일 |
+| 다른 이벤트 추가 | 간혹 다른 이벤트 테이블 추가 가능 | 동일 |
 
-**프로덕션 특성**:
-- 하나의 이벤트(예: Main Event)에서 여러 Feature Table이 동시 진행
-- 시청자가 관심 테이블을 선택하여 동시 모니터링
-- 각 테이블은 독립적인 스트림으로 제공
+#### NBA TV 방식 핵심 원칙
+
+- **즉시 시청**: Ticker에서 테이블 선택 → 바로 시청 시작 (추가 단계 없음)
+- **선택적 확장**: MultiView는 시청 중 선택적으로 활성화
+- **점진적 추가**: 테이블 추가 시 자동으로 뷰 모드 확장 (1→2→4)
+- **원클릭 오디오**: 화면 클릭만으로 오디오 소스 전환
 
 ### 4.2 Player Cam Mode (아이돌 직캠 방식)
 
@@ -207,22 +242,41 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 >
 > **정의**: 특정 Feature Table의 개별 플레이어 카메라를 제공하는 방식. **모든 테이블에서 제공되지 않음**.
 
+![Player Cam Mode 와이어프레임](../images/PRD-0002/14-player-cam-mode.png)
+
+[HTML 원본](../mockups/PRD-0002/14-player-cam-mode.html)
+
+#### 기능 스펙
+
 | 기능 | 설명 |
 |------|------|
 | 메인 화면 | Feature Table 메인 방송 (중앙 대형) |
 | Player Cam | 각 플레이어 얼굴을 잡는 개별 카메라 (주변 소형) |
 | 선택적 전환 | 특정 플레이어 캠을 메인으로 전환 가능 |
 
-**소스 구성**:
-```
-Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
-                  │                      │
-                  ▼                      ▼
-              얼굴 클로즈업         플레이어명, 칩 카운트,
-                                   홀카드 표시 등
-```
+#### 소스 구성
 
-**가용성 제한**:
+| 컴포넌트 | 소스 | 설명 |
+|----------|------|------|
+| Main Video | Feature Table Feed | 테이블 메인 방송 |
+| Player Cam | Camera + GFX | 플레이어 얼굴 + 오버레이 정보 (이름, 칩, 홀카드) |
+
+> ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#5-player-cam-소스-구성-섹션-42) 참조
+
+#### 진입 플로우
+
+| 단계 | 영역 | 화면 | 주요 액션 |
+|:----:|:----:|------|----------|
+| 1 | Page Area ① | Tournament Ticker | Player Cam 지원 테이블 선택 ([CAM] 표시) |
+| 2 | Video Player Area ⑤ | Stream Tabs | "Player Cam" 탭 선택 |
+| 3 | Video Player Area ④ | Player Cam Mode | 메인 테이블 + 우측 플레이어 캠 사이드바 |
+
+#### 인터랙션
+
+- 플레이어 캠 클릭 → 메인 화면으로 전환
+- "SWITCH TO MAIN" 버튼 → 원래 테이블 방송으로 복귀
+
+#### 가용성 제한
 
 | 항목 | 설명 |
 |------|------|
@@ -230,7 +284,7 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | **미제공 테이블** | 일반 Feature Table (메인 방송만) |
 | **결정 요소** | 프로덕션 장비 구성, 테이블 중요도 |
 
-**Multi-view vs Player Cam 완전 분리**:
+#### Multi-view vs Player Cam 비교
 
 | 구분 | Multi-view | Player Cam |
 |------|-----------|------------|
@@ -301,12 +355,16 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ### 5.1 NBA TV Key Plays 매핑
 
-| NBA TV (Key Plays) | WSOP TV (Featured Hands) |
-|--------------------|-------------------------|
-| Key Plays 버튼 | Featured Hands 버튼 |
-| 주요 플레이 목록 | 주요 핸드 목록 |
-| 플레이어, 시간, 설명 | 플레이어, 핸드, 결과 |
-| 클릭 → 해당 시점 이동 | 클릭 → 해당 핸드 시점 이동 |
+| 항목 | NBA TV (Key Plays) | WSOP TV (Featured Hands) |
+|------|-------------------|-------------------------|
+| **버튼 위치** | 비디오 플레이어 **좌측 하단** | 비디오 플레이어 **좌측 하단** (동일) |
+| 버튼 명칭 | Key Plays | Featured Hands |
+| 목록 콘텐츠 | 주요 플레이 목록 | 주요 핸드 목록 |
+| 항목 정보 | 플레이어, 시간, 설명 | 플레이어, 핸드, 결과 |
+| 인터랙션 | 클릭 → 해당 시점 이동 | 클릭 → 해당 핸드 시점 이동 (동일) |
+| 필터 | 팀, 플레이어, 유형 | 플레이어, 핸드, 결과 |
+
+> **버튼 레이아웃**: 비디오 플레이어 컨트롤 바 **좌측 하단**에 고정 배치 (NBA TV Key Plays 동일)
 
 ### 5.2 Featured Hands UI (Key Plays 동일 레이아웃)
 
@@ -353,36 +411,16 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ### 6.2 페이지 구조
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   상단: 메인 스트리밍 UI                      │
-├─────────────────────────────────────────────────────────────┤
-│  PAGE AREA (①②③)                                           │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │ ① Tournament Ticker                                 │   │
-│  │ ② Ad Banner                                         │   │
-│  │ ③ Tournament Header                                 │   │
-│  └─────────────────────────────────────────────────────┘   │
-│                                                             │
-│  VIDEO PLAYER AREA (④⑤⑥⑦)                                 │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │ ④ Video Player + POT/BOARD                          │   │
-│  │ ⑤ Stream Tabs                                       │   │
-│  │ ⑥ Timeline                                          │   │
-│  │ ⑦ Controls                                          │   │
-│  └─────────────────────────────────────────────────────┘   │
-├─────────────────────────────────────────────────────────────┤
-│                   하단: Info Tabs                           │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────┬─────────┬─────────┬─────────┐                 │
-│  │ Summary │ Player  │  Hand   │  Hand   │                 │
-│  │         │  Stats  │ Charts  │ History │                 │
-│  └─────────┴─────────┴─────────┴─────────┘                 │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │                   Tab Content                        │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-```
+> 상세 와이어프레임은 [09-full-page-layout.html](../mockups/PRD-0002/09-full-page-layout.html) 참조
+>
+> ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#2-페이지-구조-섹션-62) 참조
+
+| 영역 | 레이어 | 컴포넌트 |
+|------|:------:|----------|
+| **상단: 메인 스트리밍 UI** | | |
+| Page Area | ①②③ | Tournament Ticker, Ad Banner, Tournament Header |
+| Video Player Area | ④⑤⑥⑦ | Video Player, Stream Tabs, Timeline, Controls |
+| **하단: Info Tabs** | | Summary, Player Stats, Hand Charts, Hand History |
 
 ### 6.3 영역 분류
 
@@ -467,185 +505,154 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 
 ---
 
-## 9. Player Controls
+## 9. UX 워크플로우
 
-### 9.1 Controls 와이어프레임
+> **설계 원칙**: NBA TV PRD 섹션 14 패턴 적용 - 사용자 여정(User Journey)과 화면 전환 흐름 시각화
 
-![Player Controls 와이어프레임](../images/PRD-0002/08-player-controls.png)
+### 9.1 Entry Flow (랜딩 → 시청)
 
-[HTML 원본](../mockups/PRD-0002/08-player-controls.html)
+> 상세 흐름은 [10-viewing-flow.html](../mockups/PRD-0002/10-viewing-flow.html) 참조
+>
+> ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#3-entry-flow-섹션-91) 참조
 
-### 9.2 Core 컨트롤
+| 단계 | 화면 | 주요 액션 |
+|:----:|------|----------|
+| 1 | Landing | 앱 진입, 로그인 버튼 클릭 |
+| 2 | 구독 확인 | GGPass SSO 인증, WSOP Plus/Plus+ 상태 확인 |
+| 3 | Ticker | Tournament Ticker에서 진행 중인 대회 확인 |
+| 4 | 테이블 선택 | Feature Table 목록에서 시청할 테이블 선택 |
+| 5 | LIVE | 라이브 스트리밍 시작 |
 
-| 컨트롤 | 툴팁 | 단축키 |
-|--------|------|--------|
-| Play/Pause | Play/Pause | Space |
-| Rewind | Rewind 10s | ← |
-| Forward | Forward 10s | → |
-| Volume | Volume | - |
-| CC | Subtitles | c |
-| MultiView | MultiView | Shift+m |
-| PIP | Picture in Picture | p |
-| Fullscreen | Fullscreen | f |
-| Live | Jump to Live | Shift+→ |
+### 9.2 Viewing Flow (시청 중 인터랙션)
 
----
+![Viewing Flow 와이어프레임](../images/PRD-0002/10-viewing-flow.png)
 
-## 10. 플랫폼 요구사항
+[HTML 원본](../mockups/PRD-0002/10-viewing-flow.html)
 
-### 10.1 필수 요구사항
+**Stream Tabs 옵션** (Video Player Area ⑤):
 
-| 요구사항 | 상세 |
-|----------|------|
-| **GGPass 로그인** | OAuth2 SSO 연동 |
-| **구독 모델** | $10 Plus / $50 Plus+ |
-| **역대 영상 업로드** | 모든 WSOP 영상 아카이브 |
-| **5개 스토어 배포** | App Store, Play Store, Samsung TV, LG TV, Web |
-| **Web 제공** | WSOP.TV 도메인 |
-| **View Mode 전환** | Normal ↔ Advanced Mode |
+| 탭 | 기능 | NBA TV 대응 |
+|----|------|-------------|
+| Active Tables | 다른 테이블 추가/전환 | Streams |
+| MultiView | 멀티뷰 레이아웃 선택 (1:2, 2x2) | MultiView |
+| Player Cam | 아이돌 직캠 모드 | WSOP TV 고유 |
+| Featured Hands | 주요 핸드 목록 | Key Plays |
 
-### 10.2 제외 항목
+### 9.3 Featured Hands Flow (핸드 탐색)
 
-| 항목 | 사유 |
+![Featured Hands Flow 와이어프레임](../images/PRD-0002/11-featured-hands-flow.png)
+
+[HTML 원본](../mockups/PRD-0002/11-featured-hands-flow.html)
+
+**필터 옵션**:
+
+| 필터 | 설명 |
 |------|------|
-| 광고 시스템 | 불필요 |
-| Exclusive Content | 별도 제작 불필요 |
+| ALL HANDS | 전체 핸드 |
+| ALL-IN | 올인 핸드 |
+| BIG POTS | 큰 팟 ($500K+) |
+| BLUFFS | 블러프 성공/실패 |
+| ELIMINATIONS | 탈락 핸드 |
+| HERO CALLS | 히어로 콜 |
+
+**Street 타임라인**: PREFLOP → FLOP → TURN → RIVER → SHOWDOWN
+
+> 상세 다이어그램은 [11-featured-hands-flow.html](../mockups/PRD-0002/11-featured-hands-flow.html) 참조
+>
+> ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#4-street-타임라인-섹션-93) 참조
+
+**복귀 경로**:
+- `HAND LIST` 버튼 → 핸드 목록 모달
+- `JUMP TO LIVE` 버튼 → LIVE STREAMING
+
+### 9.4 Info Tabs Flow (하단 정보 탭)
+
+![Info Tabs Flow 와이어프레임](../images/PRD-0002/12-info-tabs-flow.png)
+
+[HTML 원본](../mockups/PRD-0002/12-info-tabs-flow.html)
+
+**탭 콘텐츠**:
+
+| 탭 | 레이아웃 | 콘텐츠 |
+|----|----------|--------|
+| Summary | 7:3 비율 | 토너먼트 기사 + Info 사이드바 |
+| Player Stats | 전체 테이블 | VPIP, PFR, 3BET, AF, CHIPS |
+| Hand Charts | 차트 그리드 | Position Map, Stack Tracker |
+| Hand History | 타임라인 | Level 필터 + 액션 로그 |
+
+### 9.5 상태 전환 다이어그램
+
+![상태 전환 다이어그램](../images/PRD-0002/13-state-transition.png)
+
+[HTML 원본](../mockups/PRD-0002/13-state-transition.html)
+
+**설계 원칙**:
+- 각 상태에서 다른 상태로 자유롭게 전환 가능 (비파괴적)
+- 시청 중 스트림은 백그라운드에서 계속 유지
+
+### 9.6 Player Cam Mode Flow
+
+> Player Cam Mode 상세는 [섹션 4.2](#42-player-cam-mode-아이돌-직캠-방식) 참조
 
 ---
 
-## 11. 기술 요구사항
+## 10. 개발 로드맵
 
-### 11.1 스트리밍 프로토콜
+> **Phase별 점진적 구현** - MVP에서 시작하여 Advanced Mode까지 단계적 확장
 
-| 항목 | 스펙 |
-|------|------|
-| 프로토콜 | HLS, DASH |
-| 화질 | 1080p Full HD |
-| 비트레이트 | 3-15 Mbps 어댑티브 |
-| 지연 | 30초 (라이브), 30분 (홀카드) |
+### 10.1 Phase 개요
 
-### 11.2 비기능 요구사항
+| Phase | 마감 | 핵심 목표 | NBA TV 대응 |
+|:-----:|------|----------|-------------|
+| **MVP (P1)** | 2027.03.01 | 기본 시청 경험 | Video Player, Ticker, Controls |
+| **P2** | TBD | 멀티 시청 + 검색 | MultiView, Key Plays |
+| **P3** | TBD | 정보 탭 확장 | Info Tabs 전체 |
+| **P4** | TBD | 고급 기능 | Player Cam, StatsView |
 
-| 항목 | 목표치 |
-|------|-------|
-| 동시접속 | 50만 사용자 |
-| 초기 버퍼링 | < 3초 |
-| 재버퍼링 비율 | < 1% |
-| DRM | Widevine, FairPlay, PlayReady |
-| 서비스 가용성 | 99.9% |
+### 10.2 Phase별 기능 상세
 
----
+| Phase | 기능 목록 |
+|:-----:|----------|
+| **MVP** | Video Player, Tournament Ticker, Timeline, Stream Tabs, Controls, GGPass SSO, 구독 모델 ($10/$50) |
+| **P2** | MultiView 레이아웃 (1:2, 2x2), Featured Hands 모달/플레이어, Camera/Commentary 선택, 핸드 단위 태깅, 선수/핸드 검색 |
+| **P3** | Summary (7:3 레이아웃), Player Stats (VPIP/PFR), Hand Charts (Position Map), Hand History (Level 필터) |
+| **P4** | Player Cam Mode (아이돌 직캠), StatsView 영상 오버레이, 3x3 MultiView (파이널용), 멀티 재생 |
 
-## 12. 구현 우선순위 (Phase)
+### 10.3 기능 → Phase 매핑
 
-> **설계 원칙**: NBA TV League Pass 1:1 대응
-
-### Phase 1: Core MVP
-
-> **마감**: 2027년 3월 1일 전
-
-| 기능 | NBA TV 대응 |
-|------|-------------|
-| 라이브 스트리밍 플레이어 | Video Player |
-| Tournament Ticker | Scoreboard Ticker |
-| 기본 컨트롤 바 | Player Controls |
-| Stream Tabs | Stream Tabs |
-| Timeline | Timeline |
-| GGPass SSO 연동 | - |
-| $10/$50 구독 모델 | - |
-
-### Phase 2: Core 확장
-
-| 기능 | NBA TV 대응 |
-|------|-------------|
-| MultiView (1x1, 1:2, 2x2) | MultiView |
-| Featured Hands 모달 | Key Plays 모달 |
-| Featured Hands 플레이어 | Key Plays 플레이어 |
-| Streaming Options | Streaming Options |
-| 핸드 단위 태깅 시스템 | - |
-| 선수/핸드 검색 | - |
-
-### Phase 3: Core 완성
-
-| 기능 | NBA TV 대응 |
-|------|-------------|
-| Info - Summary | Summary |
-| Info - Player Stats | Box Score |
-| Info - Hand Charts | Game Charts |
-| Info - Hand History | Play-By-Play |
-| 멀티 재생 (다른 대회/테이블) | - |
+| 기능 카테고리 | MVP | P2 | P3 | P4 |
+|--------------|:---:|:--:|:--:|:--:|
+| 라이브 스트리밍 | ✅ | | | |
+| Tournament Ticker | ✅ | | | |
+| GGPass SSO | ✅ | | | |
+| 구독 모델 | ✅ | | | |
+| Multi-view | | ✅ | | |
+| Featured Hands | | ✅ | | |
+| 핸드 태깅/검색 | | ✅ | | |
+| Info Tabs | | | ✅ | |
+| Player Cam | | | | ✅ |
+| StatsView 오버레이 | | | | ✅ |
 
 ---
 
-## 13. Scope
+## 부록 A. 용어 매핑 (NBA TV → WSOP TV)
 
-### In Scope (MVP)
+> **설계 원칙**: NBA TV 용어를 WSOP TV 도메인에 맞게 1:1 변환
 
-| 항목 | 설명 |
-|------|------|
-| 플랫폼 | Web, iOS, Android, Samsung TV, LG TV |
-| 화질 | 1080p Full HD |
-| Multi-view | 1x1, 1:2, 2x2 |
-| 자막 | 20개국 |
-| 메뉴 | Watch + Collections |
-
-### Out of Scope
-
-| 항목 | 사유 |
-|------|------|
-| 광고 시스템 | 불필요 |
-| Exclusive Content | 별도 제작 불필요 |
-| 4K 지원 | 미정의 |
-| Roku/Fire TV | 5개 플랫폼만 지원 |
-| Equity Calculator | 미정의 |
-| Hand Range Display | 미정의 |
-| 3x3 MultiView | NBA TV 미지원 (2x2까지만) |
-
----
-
-## 14. 앱 배포 계획
-
-### 14.1 배포 앱 목록
-
-| 앱 | 설명 | 마감 |
-|----|------|------|
-| WSOP Live | WSOP+에서 이름 변경 필요 | 2027.03.01 |
-| **WSOP TV** | 본 서비스 | 2027.03.01 |
-| WSOP Academy | 교육 콘텐츠 | TBD |
-| PokerStake | 스테이킹 서비스 | TBD |
-
-### 14.2 배포 스토어
-
-- Apple App Store
-- Google Play Store
-- Samsung TV Store
-- LG TV Store
-- Web (WSOP.TV)
-
----
-
-## 15. Open Questions
-
-1. TV 미러링/캐스팅 지원 여부
-2. 블랙아웃 정책 (사이트 단위 vs 영상 단위)
-3. 핸드 태깅 자동화 vs 수동 입력 비율
-
----
-
-## 16. References
-
-### 3대 원천 문서
-- 📜 **VIBLE**: [michael_note.md](../vible/michael_note.md) - 운영 계획의 근간
-- 📋 **MOSES**: [tony_note.md](../vible/tony_note.md) - 첨언 및 확장
-- 📖 **KORAN**: [WSOP-TV-PRD.md](C:\claude\wsoptv_nbatv_clone\docs\guides\WSOP-TV-PRD.md) - NBA TV 1:1 대응
-
-### 기능 문서
-- [PRD-0006 Advanced Mode](PRD-0006-advanced-mode.md) - Advanced Mode 상세 스펙
-- [PRD-0009 Hand Tagging & Search](PRD-0009-hand-tagging-search.md) - 핸드 태깅 및 검색
-
-### 전략 문서
-- [STRAT-0001 Viewer Experience Vision](../strategies/STRAT-0001-viewer-experience-vision.md) - 시청자 경험 비전
-- [STRAT-0008 Content Sourcing Architecture](../strategies/STRAT-0008-content-sourcing-architecture.md) - 콘텐츠 소싱 아키텍처
+| NBA TV | WSOP TV | 비고 |
+|--------|---------|------|
+| Scoreboard Ticker | Tournament Ticker | 상단 스코어/대회 표시 |
+| Q3 3:05 | L38 LIVE | Quarter → Level |
+| Clippers 77 / Bulls 90 | Negreanu 1.3M | 점수 → 칩 리더 |
+| League Pass | WSOP Plus | 구독 서비스명 |
+| CLIPPERS @ BULLS | [♠] MAIN EVENT 2024 | 팀 → 이벤트 |
+| Bulls (In-Arena) | Main Table Cam | 카메라 옵션 |
+| Streams 9 | Active Tables 45 | 스트림 수 |
+| Key Plays | Featured Hands | 주요 플레이/핸드 |
+| Summary | Summary | 동일 |
+| Box Score | Player Stats | 통계 탭 |
+| Game Charts | Hand Charts | 차트 탭 |
+| Play-By-Play | Hand History | 액션 로그 |
 
 ---
 
@@ -665,4 +672,14 @@ Player Cam 소스 = 플레이어 카메라 영상 + GFX 오버레이
 | 5.5 | 2026-01-23 | Claude Code | ASCII 와이어프레임 → HTML 목업 교체: 8개 ASCII 다이어그램을 HTML 목업 + PNG 스크린샷으로 대체 |
 | 5.6 | 2026-01-23 | Claude Code | Advanced Mode 재정의 및 콘텐츠 소싱 아키텍처: Multi-view(NBA TV) vs Player Cam(아이돌 직캠) 분리, StatsView VIBLE 해석, 3-Tier 대회 구조 및 프로덕션 파트너 정의 (STRAT-0008) |
 | 5.7 | 2026-01-23 | Claude Code | Advanced Mode 상세 스펙: Multi-view(Feature Table)/Player Cam(플레이어 캠+GFX) 완전 분리, StatsView 두 가지 방식(NBA TV Info Tabs vs GGM$ 오버레이) 제안, Featured Hands=Key Plays 동일 레이아웃 |
-| **5.8** | **2026-01-23** | **Claude Code** | **전체 페이지 레이아웃 재구성**: 메인 스트리밍 UI(상단) + Info Tabs(하단) 통합 구조, Page Area(①②③) vs Video Player Area(④⑤⑥⑦) 분리, 전체 페이지 와이어프레임 추가 |
+| 5.8 | 2026-01-23 | Claude Code | 전체 페이지 레이아웃 재구성: 메인 스트리밍 UI(상단) + Info Tabs(하단) 통합 구조, Page Area(①②③) vs Video Player Area(④⑤⑥⑦) 분리, 전체 페이지 와이어프레임 추가 |
+| 6.0 | 2026-01-23 | Claude Code | NBA TV PRD 기반 전면 재설계: 섹션 9~16 제거 (구현 단계 불필요), 섹션 9 UX 워크플로우 신규 작성 (Entry/Viewing/Featured Hands Flow) |
+| 6.1 | 2026-01-23 | Claude Code | 용어 매핑 위치 변경: 섹션 0.4에서 부록 A로 이동 (본문 집중도 향상) |
+| 6.2 | 2026-01-23 | Claude Code | Phase별 로드맵 및 대회 지역 정보 추가: Executive Summary에 MVP/P2/P3/P4 개발 로드맵, 콘텐츠 소싱에 Super Circuit 글로벌 개최지 (유럽/북미/아시아/남미/오세아니아) |
+| 6.3 | 2026-01-23 | Claude Code | UX 워크플로우 HTML 목업 전환: 섹션 9.2~9.5 ASCII 다이어그램 → HTML 와이어프레임으로 교체, 섹션 9.6 Player Cam Mode Flow 신규 추가 (아이돌 직캠 방식 진입 플로우) |
+| 6.4 | 2026-01-23 | Claude Code | ASCII 아카이브 및 중복 통합: 2.3/6.2/9.1 ASCII 다이어그램 → HTML 참조로 교체, 4.2+9.6 Player Cam Mode 통합 (기능 정의+UX 플로우 단일 섹션화) |
+| 7.0 | 2026-01-23 | Claude Code | 문서 구조 재설계: 섹션 1 "프로젝트 개요"로 개편 (Why/What/Who 중심), 개발 로드맵 섹션 10으로 이동 (후반부 배치), 개념적 흐름 → 상세 스펙 → 구현 계획 순서로 재구성 |
+| 7.1 | 2026-01-23 | Claude Code | 콘텐츠 정리: 학생 할인 삭제 (성인 전용 서비스), SC Las Vegas 제거 (WSOP Vegas와 중복), Multi-view 목업 전면 재설계 (A4 세로 크기, Tournament Ticker → View Mode → 레이아웃 비교 포함) |
+| 7.2 | 2026-01-23 | Claude Code | ASCII 아카이브 분리: 섹션 2.3 콘텐츠 플로우 ASCII 다이어그램 복원, PRD-0002-ascii-archive.md 파일로 전체 ASCII 와이어프레임 아카이브 생성 |
+| 7.3 | 2026-01-23 | Claude Code | ASCII 아카이브 참조 완료: 섹션 2.3/6.2/9.1/9.3/4.2에 ASCII 원본 아카이브 참조 링크 추가, 모든 ASCII 목업 → HTML 교체 + 아카이브 참조 처리 완료 |
+| **7.4** | **2026-01-23** | **Claude Code** | **Multi-view 워크플로우 NBA TV 방식으로 수정**: Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가 (점진적 확장 UX), Featured Hands 버튼 위치 명시 (비디오 플레이어 좌측 하단) |

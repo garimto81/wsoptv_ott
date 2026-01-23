@@ -2,176 +2,597 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WSOP TV - MultiView Mode</title>
+    <meta name="viewport" content="width=794">
+    <title>WSOP TV - Multi-view Workflow (NBA TV Style)</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #fff;
             color: #000;
-            padding: 40px;
+            padding: 0;
+            margin: 0;
+            width: 794px;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            border: 2px solid #000;
-            padding: 30px;
+        .page {
+            width: 794px;
+            padding: 25px;
         }
         .title {
             text-align: center;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #000;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 3px solid #000;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .video-slot {
-            border: 2px solid #000;
-            aspect-ratio: 16/9;
-            position: relative;
-        }
-        .video-placeholder {
-            width: 100%;
-            height: 70%;
-            background: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 14px;
-        }
-        .video-info {
-            padding: 10px;
-            border-top: 1px solid #ccc;
-        }
-        .video-info .title-text {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-        .video-info .subtitle {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .video-info .meta {
-            display: flex;
-            gap: 15px;
+        .subtitle {
+            text-align: center;
             font-size: 11px;
-        }
-        .video-info .pot {
-            font-weight: bold;
-        }
-        .empty-slot {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #f9f9f9;
-        }
-        .empty-slot .plus {
-            font-size: 48px;
-            color: #ccc;
-            margin-bottom: 10px;
-        }
-        .empty-slot .text {
-            font-size: 14px;
             color: #666;
-        }
-        .controls {
-            border-top: 2px solid #000;
-            padding-top: 20px;
-        }
-        .tabs {
-            display: flex;
-            gap: 10px;
             margin-bottom: 15px;
         }
-        .tab {
-            padding: 8px 16px;
-            border: 1px solid #000;
-            font-size: 13px;
+        .section {
+            margin-bottom: 15px;
         }
-        .tab.active {
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            padding: 5px 10px;
+            margin-bottom: 8px;
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            border: 2px solid #000;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .flow-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .flow-step {
+            border: 1px solid #000;
+            padding: 6px 10px;
+            font-size: 9px;
+            text-align: center;
+            min-width: 70px;
+            background: #fff;
+        }
+        .flow-step.highlight {
             background: #000;
             color: #fff;
         }
-        .layout-buttons {
+        .flow-step.current {
+            background: #f0f0f0;
+            border: 2px solid #000;
+        }
+        .flow-arrow {
+            font-size: 12px;
+            color: #666;
+        }
+        .flow-note {
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Two Column Layout */
+        .two-col {
+            display: flex;
+            gap: 12px;
+        }
+        .col {
+            flex: 1;
+        }
+
+        /* Video Player Mock */
+        .video-player {
+            border: 2px solid #000;
+            background: #1a1a1a;
+            position: relative;
+        }
+        .video-screen {
+            aspect-ratio: 16/9;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .video-label {
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* Control Bar */
+        .control-bar {
+            display: flex;
+            align-items: center;
+            padding: 6px 8px;
+            background: #000;
+            gap: 8px;
+        }
+        .ctrl-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            font-size: 8px;
+            cursor: pointer;
+        }
+        .ctrl-btn.active {
+            background: #fff;
+            color: #000;
+        }
+        .ctrl-btn.multiview-btn {
+            background: #444;
+            border: 1px solid #666;
+        }
+        .ctrl-btn.multiview-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        .timeline {
+            flex: 1;
+            height: 4px;
+            background: #444;
+            margin: 0 8px;
+        }
+        .timeline-progress {
+            width: 70%;
+            height: 100%;
+            background: #c00;
+        }
+
+        /* Tournament Ticker */
+        .ticker {
+            display: flex;
+            gap: 6px;
+            padding: 8px;
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            overflow-x: auto;
+        }
+        .ticker-item {
+            border: 1px solid #999;
+            padding: 4px 8px;
+            text-align: center;
+            min-width: 60px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 9px;
+        }
+        .ticker-item.watching {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        .ticker-item.added {
+            background: #333;
+            color: #fff;
+            border-color: #333;
+        }
+        .ticker-item .level { font-weight: bold; }
+        .ticker-item .name { font-size: 8px; color: #666; }
+        .ticker-item.watching .name,
+        .ticker-item.added .name { color: #ccc; }
+        .ticker-item .badge {
+            font-size: 7px;
+            background: #c00;
+            color: #fff;
+            padding: 1px 3px;
+            margin-top: 2px;
+            display: inline-block;
+        }
+
+        /* MultiView Layouts */
+        .multiview-panel {
+            border: 2px solid #000;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .multiview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .multiview-title {
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .view-selector {
+            display: flex;
+            gap: 4px;
+        }
+        .view-btn {
+            border: 1px solid #000;
+            padding: 3px 6px;
+            font-size: 8px;
+            background: #fff;
+            cursor: pointer;
+        }
+        .view-btn.active {
+            background: #000;
+            color: #fff;
+        }
+
+        .multiview-grid {
+            display: grid;
+            gap: 4px;
+        }
+        .multiview-grid.view-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .multiview-grid.view-4 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .mv-cell {
+            aspect-ratio: 16/9;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #666;
+            position: relative;
+            border: 1px solid #999;
+        }
+        .mv-cell.active {
+            border: 2px solid #000;
+        }
+        .mv-cell .audio-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #000;
+            color: #fff;
+            font-size: 6px;
+            padding: 1px 3px;
+        }
+
+        /* Feature Table */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+        .spec-table th, .spec-table td {
+            border: 1px solid #ccc;
+            padding: 5px 6px;
+            text-align: left;
+        }
+        .spec-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+        .spec-table .step-num {
+            background: #000;
+            color: #fff;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Comparison */
+        .comparison {
             display: flex;
             gap: 10px;
         }
-        .layout-btn {
-            padding: 8px 20px;
+        .comp-box {
+            flex: 1;
             border: 2px solid #000;
+            padding: 8px;
+        }
+        .comp-title {
+            font-size: 10px;
             font-weight: bold;
-            font-size: 13px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #ccc;
+        }
+        .comp-title.wrong {
+            color: #c00;
+        }
+        .comp-title.correct {
+            color: #080;
+        }
+        .comp-flow {
+            font-size: 8px;
+            line-height: 1.6;
+        }
+
+        /* Notes */
+        .notes {
+            padding: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            font-size: 9px;
+        }
+        .notes-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .notes ul {
+            margin-left: 12px;
+        }
+        .notes li {
+            margin-bottom: 2px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 8px;
+            font-size: 9px;
+            color: #999;
+            border-top: 1px solid #eee;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">MULTIVIEW MODE (2x2)</div>
+    <div class="page">
+        <div class="title">MULTI-VIEW WORKFLOW (NBA TV STYLE)</div>
+        <div class="subtitle">Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가</div>
 
-        <div class="grid">
-            <div class="video-slot">
-                <div class="video-placeholder">[Video Player]</div>
-                <div class="video-info">
-                    <div class="title-text">WSOP Main Event</div>
-                    <div class="subtitle">Final Table</div>
-                    <div class="meta">
-                        <span class="pot">[POT] $2.4M</span>
-                        <span>[Icon: Audio]</span>
+        <!-- Section 1: Correct vs Wrong Flow -->
+        <div class="section">
+            <div class="section-title">① NBA TV 방식 워크플로우 비교</div>
+            <div class="comparison">
+                <div class="comp-box">
+                    <div class="comp-title correct">✓ 올바른 플로우 (NBA TV)</div>
+                    <div class="comp-flow">
+                        <strong>1.</strong> Tournament Ticker에서 테이블 클릭<br/>
+                        <strong>2.</strong> → <u>즉시 Single View 시청 시작</u><br/>
+                        <strong>3.</strong> 비디오 플레이어 내 [MultiView] 버튼 클릭<br/>
+                        <strong>4.</strong> → MultiView 모드 활성화<br/>
+                        <strong>5.</strong> Ticker에서 추가 테이블 선택<br/>
+                        <strong>6.</strong> → 2 VIEW / 4 VIEW 자동 전환
                     </div>
                 </div>
-            </div>
-
-            <div class="video-slot">
-                <div class="video-placeholder">[Video Player]</div>
-                <div class="video-info">
-                    <div class="title-text">$100K High Roller</div>
-                    <div class="subtitle">Day 2</div>
-                    <div class="meta">
-                        <span class="pot">[POT] $890K</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="video-slot empty-slot">
-                <div class="plus">+</div>
-                <div class="text">Add a Table</div>
-                <div class="text" style="font-size: 11px; color: #999; margin-top: 5px;">from Tournament Ticker</div>
-            </div>
-
-            <div class="video-slot">
-                <div class="video-placeholder">[Video Player]</div>
-                <div class="video-info">
-                    <div class="title-text">Super Circuit #12</div>
-                    <div class="subtitle">Heads Up</div>
-                    <div class="meta">
-                        <span class="pot">[POT] $420K</span>
+                <div class="comp-box">
+                    <div class="comp-title wrong">✗ 잘못된 플로우</div>
+                    <div class="comp-flow">
+                        <strong>1.</strong> Tournament Ticker에서 복수 테이블 선택<br/>
+                        <strong>2.</strong> Stream Tabs에서 MultiView 탭 클릭<br/>
+                        <strong>3.</strong> View Mode 선택<br/>
+                        <strong>4.</strong> → Multi-view 시청<br/>
+                        <br/>
+                        <span style="color: #c00;">문제: 테이블 선택해도 바로 시청 안됨</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="controls">
-            <div class="tabs">
-                <div class="tab">Active Tables</div>
-                <div class="tab active">MultiView</div>
-                <div class="tab">Featured Hands</div>
+        <!-- Section 2: Step-by-Step Flow -->
+        <div class="section">
+            <div class="section-title">② 단계별 진입 플로우</div>
+
+            <!-- Step 1: Initial Selection -->
+            <div class="flow-container">
+                <div class="flow-title">STEP 1: Tournament Ticker에서 테이블 선택 → 즉시 시청</div>
+                <div class="ticker">
+                    <div class="ticker-item watching">
+                        <div class="level">L38</div>
+                        <div class="name">Main Event</div>
+                        <div class="badge">WATCHING</div>
+                    </div>
+                    <div class="ticker-item">
+                        <div class="level">L25</div>
+                        <div class="name">$100K High</div>
+                    </div>
+                    <div class="ticker-item">
+                        <div class="level">FINAL</div>
+                        <div class="name">Super Circuit</div>
+                    </div>
+                    <div class="ticker-item">
+                        <div class="level">L12</div>
+                        <div class="name">Online</div>
+                    </div>
+                </div>
+                <div class="flow-note">클릭 즉시 → 해당 테이블 Single View 시청 시작</div>
             </div>
-            <div class="layout-buttons">
-                <div class="layout-btn">1x1</div>
-                <div class="layout-btn">1:2</div>
-                <div class="layout-btn" style="background: #000; color: #fff;">2x2</div>
+
+            <!-- Step 2: Single View Playing -->
+            <div class="flow-container">
+                <div class="flow-title">STEP 2: Single View 시청 중 - 비디오 플레이어</div>
+                <div class="video-player">
+                    <div class="video-screen">
+                        <div class="video-label">[Main Event - Table 1 LIVE]</div>
+                    </div>
+                    <div class="control-bar">
+                        <div class="ctrl-btn">⏸</div>
+                        <div class="timeline"><div class="timeline-progress"></div></div>
+                        <div class="ctrl-btn multiview-btn">MultiView</div>
+                        <div class="ctrl-btn">⚙</div>
+                    </div>
+                </div>
+                <div class="flow-note">[MultiView] 버튼은 비디오 플레이어 컨트롤 바 내에 위치</div>
             </div>
+
+            <!-- Step 3: MultiView Activated -->
+            <div class="flow-container">
+                <div class="flow-title">STEP 3: [MultiView] 버튼 클릭 → MultiView 모드 활성화</div>
+                <div class="video-player">
+                    <div class="video-screen">
+                        <div class="video-label">[Main Event - Table 1 LIVE]</div>
+                    </div>
+                    <div class="control-bar">
+                        <div class="ctrl-btn">⏸</div>
+                        <div class="timeline"><div class="timeline-progress"></div></div>
+                        <div class="ctrl-btn multiview-btn active">MultiView ✓</div>
+                        <div class="ctrl-btn">⚙</div>
+                    </div>
+                </div>
+                <div class="ticker" style="margin-top: 8px;">
+                    <div class="ticker-item watching">
+                        <div class="level">L38</div>
+                        <div class="name">Main Event</div>
+                        <div class="badge">WATCHING</div>
+                    </div>
+                    <div class="ticker-item" style="border: 2px dashed #000;">
+                        <div class="level">L25</div>
+                        <div class="name">$100K High</div>
+                        <div style="font-size: 7px; color: #000;">+ 클릭하여 추가</div>
+                    </div>
+                    <div class="ticker-item">
+                        <div class="level">FINAL</div>
+                        <div class="name">Super Circuit</div>
+                    </div>
+                </div>
+                <div class="flow-note">MultiView 활성화 → Ticker에서 추가 테이블 선택 가능 상태</div>
+            </div>
+
+            <!-- Step 4: Multi-view Result -->
+            <div class="flow-container">
+                <div class="flow-title">STEP 4: Ticker에서 추가 테이블 선택 → 2 VIEW 자동 전환</div>
+                <div class="two-col">
+                    <div class="col">
+                        <div class="ticker" style="margin-bottom: 8px;">
+                            <div class="ticker-item watching">
+                                <div class="level">L38</div>
+                                <div class="name">Main Event</div>
+                            </div>
+                            <div class="ticker-item added">
+                                <div class="level">L25</div>
+                                <div class="name">$100K High</div>
+                            </div>
+                        </div>
+                        <div class="multiview-panel">
+                            <div class="multiview-header">
+                                <div class="multiview-title">2 VIEW</div>
+                                <div class="view-selector">
+                                    <div class="view-btn">1</div>
+                                    <div class="view-btn active">2</div>
+                                    <div class="view-btn">4</div>
+                                </div>
+                            </div>
+                            <div class="multiview-grid view-2">
+                                <div class="mv-cell active">
+                                    Main Event
+                                    <div class="audio-badge">🔊</div>
+                                </div>
+                                <div class="mv-cell">$100K High</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="notes">
+                            <div class="notes-title">자동 동작</div>
+                            <ul>
+                                <li>테이블 추가 시 자동으로 2 VIEW 전환</li>
+                                <li>3~4개 추가 시 4 VIEW 전환</li>
+                                <li>화면 클릭으로 오디오 소스 변경</li>
+                                <li>View 버튼으로 수동 레이아웃 변경</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Spec Table -->
+        <div class="section">
+            <div class="section-title">③ 진입 플로우 명세</div>
+            <table class="spec-table">
+                <tr>
+                    <th class="step-num">#</th>
+                    <th style="width: 20%;">단계</th>
+                    <th style="width: 35%;">사용자 액션</th>
+                    <th style="width: 35%;">시스템 반응</th>
+                </tr>
+                <tr>
+                    <td class="step-num">1</td>
+                    <td>테이블 선택</td>
+                    <td>Tournament Ticker에서 테이블 클릭</td>
+                    <td><strong>즉시 Single View 시청 시작</strong></td>
+                </tr>
+                <tr>
+                    <td class="step-num">2</td>
+                    <td>MultiView 활성화</td>
+                    <td>비디오 플레이어 내 [MultiView] 버튼 클릭</td>
+                    <td>MultiView 모드 활성화, Ticker 추가 가능 상태</td>
+                </tr>
+                <tr>
+                    <td class="step-num">3</td>
+                    <td>테이블 추가</td>
+                    <td>Ticker에서 추가 테이블 클릭</td>
+                    <td>자동으로 2 VIEW / 4 VIEW 전환</td>
+                </tr>
+                <tr>
+                    <td class="step-num">4</td>
+                    <td>레이아웃 변경</td>
+                    <td>View 버튼 (1/2/4) 클릭</td>
+                    <td>선택한 레이아웃으로 변경</td>
+                </tr>
+                <tr>
+                    <td class="step-num">5</td>
+                    <td>오디오 전환</td>
+                    <td>멀티뷰 내 화면 클릭</td>
+                    <td>해당 테이블로 오디오 전환 (🔊 표시)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 4: View Modes -->
+        <div class="section">
+            <div class="section-title">④ View Mode 레이아웃</div>
+            <div class="two-col">
+                <div class="col">
+                    <div class="multiview-panel">
+                        <div class="multiview-header">
+                            <div class="multiview-title">2 VIEW (1:2)</div>
+                        </div>
+                        <div class="multiview-grid view-2">
+                            <div class="mv-cell active">Table 1<div class="audio-badge">🔊</div></div>
+                            <div class="mv-cell">Table 2</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="multiview-panel">
+                        <div class="multiview-header">
+                            <div class="multiview-title">4 VIEW (2x2)</div>
+                        </div>
+                        <div class="multiview-grid view-4">
+                            <div class="mv-cell active">T1<div class="audio-badge">🔊</div></div>
+                            <div class="mv-cell">T2</div>
+                            <div class="mv-cell">T3</div>
+                            <div class="mv-cell">T4</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="notes">
+            <div class="notes-title">📌 NBA TV 방식 핵심 원칙</div>
+            <ul>
+                <li><strong>즉시 시청</strong>: Ticker에서 테이블 선택 → 바로 시청 시작 (추가 단계 없음)</li>
+                <li><strong>선택적 확장</strong>: MultiView는 시청 중 선택적으로 활성화</li>
+                <li><strong>점진적 추가</strong>: 테이블 추가 시 자동으로 뷰 모드 확장 (1→2→4)</li>
+                <li><strong>원클릭 오디오</strong>: 화면 클릭만으로 오디오 소스 전환</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            WSOP TV Multi-view Workflow (NBA TV Style) | PRD-0002 Section 4.1 | Generated by Claude Code
         </div>
     </div>
 </body>
