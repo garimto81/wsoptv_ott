@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>STREAM 송출 옵션 비교표</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #000; padding: 10px; font-size: 13px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; text-align: center; }
+        .header h1 { font-size: 18px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        th, td { border: 1px solid #000; padding: 5px 6px; text-align: center; font-size: 12px; }
+        th { background: #f5f5f5; font-weight: bold; }
+        th.opt { background: #e8e8e8; font-size: 13px; }
+        td.label { background: #fafafa; font-weight: bold; text-align: left; font-size: 12px; }
+        .tag { display: inline-block; padding: 2px 6px; border: 1px solid #000; font-size: 10px; font-weight: bold; }
+        .tag.low { background: #fff; }
+        .tag.med { background: #f5f5f5; }
+        .tag.high { background: #333; color: #fff; }
+        .highlight { background: #fffde7; }
+        .guide { border: 2px solid #000; padding: 8px; margin-bottom: 8px; }
+        .guide h3 { font-size: 14px; margin-bottom: 6px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+        .guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .guide-box { border: 1px solid #ccc; padding: 6px; font-size: 12px; }
+        .guide-box.rec { border: 2px solid #000; background: #fafafa; }
+        .guide-box h4 { font-size: 12px; margin-bottom: 3px; }
+        .guide-box ul { padding-left: 14px; margin: 0; }
+        .guide-box li { margin-bottom: 1px; }
+        .note { background: #f5f5f5; border: 1px dashed #999; padding: 6px; font-size: 11px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header"><h1>STREAM 송출 옵션 비교표</h1></div>
+    <table>
+        <tr>
+            <th style="width:14%;">항목</th>
+            <th class="opt" style="width:29%;">옵션 2.1<br><small>피처 테이블별 멀티뷰</small></th>
+            <th class="opt" style="width:29%;">옵션 2.2<br><small>멀티뷰 + 인물별 직캠</small></th>
+            <th class="opt" style="width:28%;background:#e3f2fd;">옵션 2.3 ⭐<br><small>인물 팔로업 방식</small><br><span style="background:#000;color:#fff;padding:1px 4px;font-size:9px;">현재 시스템</span></th>
+        </tr>
+        <tr><td class="label">소스</td><td>테이블별 컷편집본</td><td>컷편집본 + 인물별 직캠</td><td>키 플레이어 팔로업 캠</td></tr>
+        <tr><td class="label">레이아웃</td><td>멀티뷰 (2x2)</td><td>메인 + 사이드바 캠</td><td>선수 중심 뷰</td></tr>
+        <tr><td class="label">장비 요구</td><td><span class="tag low">LOW</span> 기존 장비</td><td><span class="tag high">HIGH</span> 대량 추가 카메라</td><td><span class="tag med">MED</span> 이동 카메라 팀</td></tr>
+        <tr><td class="label">복잡도</td><td><span class="tag low">LOW</span> 기존 워크플로우</td><td><span class="tag high">HIGH</span> 다중 스트림 동기화</td><td><span class="tag med">MED</span> 실시간 조율</td></tr>
+        <tr><td class="label">유연성</td><td><span class="tag low">LOW</span> 피처 테이블만</td><td><span class="tag med">MED</span> 지정 테이블만</td><td><span class="tag high">HIGH</span> 테이블 무관 추적</td></tr>
+        <tr><td class="label">VIBLE 대응</td><td>부분 (멀티뷰만)</td><td class="highlight"><strong>완벽 대응</strong> (아이돌 직캠)</td><td>부분 (스타 선수 집중)</td></tr>
+        <tr><td class="label">NBA TV 대응</td><td class="highlight"><strong>1:1 대응</strong></td><td>WSOP 고유</td><td>WSOP 고유</td></tr>
+        <tr><td class="label">TEMPLE 영향</td><td><span class="tag low">LOW</span></td><td><span class="tag high">HIGH</span> ⚠️ 협의</td><td><span class="tag med">MED</span> ⚠️ 확인</td></tr>
+    </table>
+    <div class="guide">
+        <h3>선택 가이드</h3>
+        <div class="guide-grid">
+            <div class="guide-box rec"><h4>옵션 2.1 권장</h4><ul><li>MVP 빠른 출시 우선</li><li>기존 프로덕션 유지</li><li>NBA TV 패턴 준수</li><li>TEMPLE 제약 최소화</li></ul></div>
+            <div class="guide-box"><h4>옵션 2.2 권장</h4><ul><li>VIBLE 원문 완벽 구현</li><li>추가 장비 투자 가능</li><li>팬 경험 극대화 목표</li><li>프로덕션 TF 구성 가능</li></ul></div>
+            <div class="guide-box rec" style="border-color:#1976d2;background:#e3f2fd;"><h4>옵션 2.3 ⭐ 현재 시스템</h4><ul><li>GG Production 현재 운영</li><li>스타 플레이어 집중 커버</li><li>유연한 운영</li><li>이동 카메라 팀 활용</li></ul></div>
+        </div>
+    </div>
+    <div class="note">🏛️ <strong>TEMPLE 제약 확인 필수</strong>: 모든 옵션은 기존 프로덕션 시스템 한계 내에서 검토 | 옵션 2.2, 2.3 선택 시 Michael Note 재확인 필요</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>옵션 C: GGPOKER 방식 - 플레이어 팝업 정보</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #000; padding: 10px; font-size: 13px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 8px; }
+        .header h1 { font-size: 18px; }
+        .header .sub { font-size: 12px; color: #666; }
+        .concept { background: #f5f5f5; border: 1px solid #ccc; padding: 5px 8px; font-size: 12px; margin-bottom: 8px; }
+        .flow { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px; background: #fafafa; border: 1px solid #ddd; }
+        .box { border: 1px solid #000; padding: 6px 10px; font-size: 12px; text-align: center; background: #fff; min-height: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .box.src { border-style: dashed; background: #f5f5f5; }
+        .box small { font-size: 10px; color: #666; }
+        .arrow { font-size: 16px; }
+        .screen { border: 2px solid #000; padding: 8px; min-width: 220px; position: relative; }
+        .screen-title { font-size: 11px; font-weight: bold; text-align: center; margin-bottom: 6px; background: #000; color: #fff; padding: 3px; }
+        .table-view { border: 1px solid #999; padding: 6px; background: #f5f5f5; min-height: 60px; position: relative; }
+        .table-label { font-size: 10px; text-align: center; color: #666; }
+        .player-popup { position: absolute; right: 8px; top: 20px; border: 2px solid #000; background: #fff; padding: 6px; width: 90px; font-size: 10px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .player-popup .name { font-weight: bold; font-size: 11px; border-bottom: 1px solid #ccc; padding-bottom: 2px; margin-bottom: 4px; }
+        .player-popup .stat { display: flex; justify-content: space-between; margin-bottom: 2px; }
+        .player-popup .stat-label { color: #666; }
+        .player-popup .stat-value { font-weight: bold; }
+        .click-indicator { position: absolute; left: 30px; top: 35px; font-size: 16px; }
+        .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-bottom: 8px; }
+        .spec { font-size: 13px; line-height: 1.4; }
+        .spec strong { color: #666; }
+        .row { display: flex; gap: 8px; }
+        .col { flex: 1; border: 1px solid #ccc; padding: 6px; }
+        .col h4 { font-size: 13px; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+        .col ul { padding-left: 16px; margin: 0; font-size: 12px; }
+        .col li { margin-bottom: 2px; }
+        .ggpoker-ref { background: #fffde7; border: 1px solid #f5c518; padding: 5px 8px; font-size: 11px; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>옵션 C: GGPOKER 방식</h1>
+        <div class="sub">플레이어 클릭 → 팝업 정보 출력 (실시간 통계)</div>
+    </div>
+    <div class="ggpoker-ref">📱 <strong>GGPOKER 레퍼런스</strong>: 테이블 화면에서 플레이어 아바타 클릭 시 상세 정보 팝업</div>
+    <div class="concept"><strong>핵심:</strong> 테이블 영상 위에서 플레이어 클릭 → 실시간 통계/프로필 팝업 표시 (Non-intrusive UX)</div>
+    <div class="flow">
+        <div class="box src">🎬 테이블 영상<small>GG Production</small></div>
+        <span class="arrow">→</span>
+        <div class="box">👆 플레이어<br>클릭</div>
+        <span class="arrow">→</span>
+        <div class="screen">
+            <div class="screen-title">WSOP TV Player</div>
+            <div class="table-view">
+                <div class="table-label">[테이블 영상 재생 중]</div>
+                <div class="click-indicator">👆</div>
+                <div class="player-popup">
+                    <div class="name">D. Negreanu</div>
+                    <div class="stat"><span class="stat-label">Bracelets</span><span class="stat-value">6</span></div>
+                    <div class="stat"><span class="stat-label">Earnings</span><span class="stat-value">$42M</span></div>
+                    <div class="stat"><span class="stat-label">VPIP</span><span class="stat-value">28%</span></div>
+                    <div class="stat"><span class="stat-label">PFR</span><span class="stat-value">21%</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="specs">
+        <div class="spec"><strong>트리거:</strong> 화면 내 플레이어 영역 클릭/탭</div>
+        <div class="spec"><strong>데이터:</strong> 플레이어 DB + 실시간 핸드 통계</div>
+        <div class="spec"><strong>표시:</strong> 오버레이 팝업 (영상 재생 유지)</div>
+        <div class="spec"><strong>닫기:</strong> 팝업 외부 클릭 또는 X 버튼</div>
+    </div>
+    <div class="row">
+        <div class="col"><h4>장점 (+)</h4><ul><li>영상 시청 방해 최소화</li><li>사용자 선택적 정보 접근</li><li>GGPOKER 사용자 친숙한 UX</li><li>추가 장비 불필요</li></ul></div>
+        <div class="col"><h4>단점 (-)</h4><ul><li>플레이어 위치 인식 기술 필요</li><li>실시간 통계 연동 개발</li><li>모바일/TV 터치 UX 차이</li></ul></div>
+    </div>
+</body>
+</html>

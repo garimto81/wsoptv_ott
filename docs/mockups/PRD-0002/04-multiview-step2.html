@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WSOP TV - Multi-view Step 2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px;
+            margin: 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #000;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 11px;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            padding: 4px 8px;
+            margin-bottom: 8px;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .flow-container {
+            border: 1px solid #000;
+            padding: 10px;
+        }
+        .flow-title {
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            background: #f0f0f0;
+            padding: 4px 6px;
+        }
+        .flow-note {
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed #ccc;
+        }
+        .video-player {
+            border: 1px solid #000;
+            background: #1a1a1a;
+        }
+        .video-screen {
+            aspect-ratio: 21/9;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-label {
+            color: #666;
+            font-size: 9px;
+        }
+        .control-bar {
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;
+            background: #000;
+            gap: 5px;
+        }
+        .ctrl-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 3px 6px;
+            font-size: 8px;
+        }
+        .ctrl-btn.active {
+            background: #fff;
+            color: #000;
+        }
+        .timeline {
+            flex: 1;
+            height: 3px;
+            background: #444;
+            margin: 0 5px;
+        }
+        .timeline-progress {
+            width: 70%;
+            height: 100%;
+            background: #c00;
+        }
+        .ticker {
+            display: flex;
+            gap: 5px;
+            padding: 6px;
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            flex-wrap: wrap;
+        }
+        .ticker-item {
+            border: 1px solid #999;
+            padding: 4px 6px;
+            text-align: center;
+            min-width: 55px;
+            background: #fff;
+            font-size: 9px;
+        }
+        .ticker-item.watching {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        .ticker-item.added {
+            background: #333;
+            color: #fff;
+        }
+        .ticker-item .level { font-weight: bold; font-size: 10px; }
+        .ticker-item .name { font-size: 8px; color: #666; }
+        .ticker-item.watching .name,
+        .ticker-item.added .name { color: #ccc; }
+        .highlight-box {
+            border: 2px dashed #c00;
+            padding: 2px;
+        }
+        .multiview-panel {
+            border: 1px solid #000;
+            padding: 8px;
+            background: #f9f9f9;
+        }
+        .multiview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .multiview-title {
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .view-selector {
+            display: flex;
+            gap: 3px;
+        }
+        .view-btn {
+            border: 1px solid #000;
+            padding: 2px 5px;
+            font-size: 8px;
+            background: #fff;
+        }
+        .view-btn.active {
+            background: #000;
+            color: #fff;
+        }
+        .multiview-grid {
+            display: grid;
+            gap: 4px;
+        }
+        .multiview-grid.view-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .multiview-grid.view-4 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .two-col {
+            display: flex;
+            gap: 8px;
+        }
+        .col {
+            flex: 1;
+        }
+        .mv-cell {
+            aspect-ratio: 16/9;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #666;
+            position: relative;
+            border: 1px solid #999;
+        }
+        .mv-cell.active {
+            border: 2px solid #000;
+        }
+        .mv-cell .audio-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #000;
+            color: #fff;
+            font-size: 6px;
+            padding: 1px 3px;
+        }
+        .footer {
+            text-align: center;
+            padding: 8px;
+            font-size: 8px;
+            color: #999;
+            border-top: 1px solid #eee;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">MULTI-VIEW WORKFLOW - STEP 2</div>
+    <div class="subtitle">MultiView 활성화 → View Mode 선택</div>
+
+    <div class="section-title">STEP 3~4: MultiView 활성화 및 View Mode</div>
+    <div class="steps-grid">
+        <!-- Step 3 -->
+        <div class="flow-container">
+            <div class="flow-title">STEP 3: MultiView 활성화 → 추가 선택 가능</div>
+            <div class="video-player" style="margin-bottom: 6px;">
+                <div class="video-screen">
+                    <div class="video-label">[Main Event LIVE]</div>
+                </div>
+                <div class="control-bar">
+                    <div class="ctrl-btn">||</div>
+                    <div class="timeline"><div class="timeline-progress"></div></div>
+                    <div class="ctrl-btn active">MultiView ✓</div>
+                    <div class="ctrl-btn">*</div>
+                </div>
+            </div>
+            <div class="ticker">
+                <div class="ticker-item watching">
+                    <div class="level">L38</div>
+                    <div class="name">Main</div>
+                </div>
+                <div class="ticker-item highlight-box" style="border-style: dashed;">
+                    <div class="level">L25</div>
+                    <div class="name">$100K</div>
+                    <div style="font-size: 7px;">+ ADD</div>
+                </div>
+            </div>
+            <div class="flow-note">Ticker에서 추가 테이블 선택 가능</div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flow-container">
+            <div class="flow-title">STEP 4: View Mode 레이아웃 (2 VIEW / 4 VIEW)</div>
+            <div class="two-col">
+                <div class="col">
+                    <div class="multiview-panel">
+                        <div class="multiview-header">
+                            <div class="multiview-title">2 VIEW (1:2)</div>
+                        </div>
+                        <div class="multiview-grid view-2">
+                            <div class="mv-cell active">Main<div class="audio-badge">SND</div></div>
+                            <div class="mv-cell">$100K</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="multiview-panel">
+                        <div class="multiview-header">
+                            <div class="multiview-title">4 VIEW (2x2)</div>
+                        </div>
+                        <div class="multiview-grid view-4">
+                            <div class="mv-cell active">T1<div class="audio-badge">SND</div></div>
+                            <div class="mv-cell">T2</div>
+                            <div class="mv-cell">T3</div>
+                            <div class="mv-cell">T4</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-note">View 버튼(1/2/4)으로 레이아웃 전환</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        WSOP TV Multi-view Workflow Step 2 | PRD-0002 Section 4.1 | Generated by Claude Code
+    </div>
+</body>
+</html>

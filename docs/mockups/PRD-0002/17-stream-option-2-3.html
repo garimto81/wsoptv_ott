@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>옵션 2.3: 인물 팔로업 방식</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #000; padding: 10px; font-size: 13px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 8px; }
+        .header h1 { font-size: 18px; }
+        .header .sub { font-size: 12px; color: #666; }
+        .concept { background: #f5f5f5; border: 1px solid #ccc; padding: 5px 8px; font-size: 12px; margin-bottom: 8px; }
+        .flow { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px; background: #fafafa; border: 1px solid #ddd; }
+        .box { border: 1px solid #000; padding: 6px 8px; font-size: 12px; text-align: center; background: #fff; min-height: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .box.src { border-style: dashed; background: #f5f5f5; }
+        .box small { font-size: 10px; color: #666; }
+        .arrow { font-size: 16px; }
+        .players { display: flex; gap: 4px; }
+        .player { border: 1px solid #000; padding: 4px 6px; font-size: 11px; text-align: center; background: #fff; min-height: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .player.active { background: #e3f2fd; border-color: #1976d2; }
+        .player .icon { font-size: 14px; }
+        .player .name { font-weight: bold; font-size: 11px; }
+        .player .table { font-size: 10px; color: #666; }
+        .output { border: 2px solid #000; padding: 6px; display: flex; gap: 6px; min-height: 60px; }
+        .main { flex: 2; border: 1px solid #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; background: #e3f2fd; }
+        .main .name { font-weight: bold; }
+        .main .info { font-size: 10px; color: #666; }
+        .others { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .other { border: 1px solid #999; padding: 4px; font-size: 11px; text-align: center; background: #fafafa; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-bottom: 8px; }
+        .spec { font-size: 13px; line-height: 1.4; }
+        .spec strong { color: #666; }
+        .row { display: flex; gap: 8px; }
+        .col { flex: 1; border: 1px solid #ccc; padding: 6px; }
+        .col h4 { font-size: 13px; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+        .col ul { padding-left: 16px; margin: 0; font-size: 12px; }
+        .col li { margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>옵션 2.3: 인물 팔로업 방식 <span style="background:#000;color:#fff;padding:2px 6px;font-size:12px;margin-left:8px;">현재 구축 시스템</span></h1>
+        <div class="sub">키 플레이어 추적 카메라 → 테이블 무관 팔로업 | <strong>GG Production 현재 프로덕션 방식</strong></div>
+    </div>
+    <div class="concept"><strong>핵심:</strong> 테이블 무관, 키 플레이어를 따라다니는 팔로업 카메라 (이동 시 자동 전환)</div>
+    <div class="flow">
+        <div class="box src">🏛️ 팔로업 캠<small>이동 카메라 팀</small></div>
+        <span class="arrow">→</span>
+        <div class="players">
+            <div class="player active"><div class="icon">🎯</div><div class="name">Negreanu</div><div class="table">T3</div></div>
+            <div class="player active"><div class="icon">🎯</div><div class="name">Hellmuth</div><div class="table">T7</div></div>
+            <div class="player active"><div class="icon">🎯</div><div class="name">Ivey</div><div class="table">T1</div></div>
+            <div class="player"><div class="icon">👤</div><div class="name">P4</div><div class="table">T5</div></div>
+        </div>
+        <span class="arrow">→</span>
+        <div class="output">
+            <div class="main"><div class="name">🎯 Negreanu</div><div class="info">T3 → (이동 시 자동 전환)</div></div>
+            <div class="others"><div class="other">Hellmuth<br><small>T7</small></div><div class="other">Ivey<br><small>T1</small></div></div>
+        </div>
+    </div>
+    <div class="specs">
+        <div class="spec"><strong>소스:</strong> 키 플레이어 전용 팔로업 카메라</div>
+        <div class="spec"><strong>처리:</strong> GG Production (이동 카메라 팀)</div>
+        <div class="spec"><strong>송출:</strong> 선수 중심 뷰 (테이블 이동 시 자동 전환)</div>
+        <div class="spec"><strong>특징:</strong> 유연성 높음, 장비 요구량 중간</div>
+    </div>
+    <div class="row">
+        <div class="col"><h4>장점 (+)</h4><ul><li>유연한 선수 추적</li><li>테이블 이동에도 끊김 없음</li><li>장비 요구량 중간 수준</li><li>스타 플레이어 집중 커버리지</li></ul></div>
+        <div class="col"><h4>단점 (-)</h4><ul><li>이동 카메라맨 필요</li><li>커버 가능 선수 수 제한</li><li>실시간 조율 복잡</li></ul></div>
+    </div>
+</body>
+</html>

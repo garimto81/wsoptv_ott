@@ -40,7 +40,7 @@
 | 문서 | 역할 | 상태 |
 |------|------|:----:|
 | [STRAT-0001](strategies/STRAT-0001-viewer-experience-vision.md) | **Vision** - 시청자 경험 비전 | Active |
-| [PRD-0002](prds/PRD-0002-wsoptv-ott-platform-mvp.md) | **Platform** - MVP 플랫폼 스펙 | Active |
+| [PRD-0002](prds/PRD-0002-wsoptv-concept-paper.md) | **Concept Paper** - 플랫폼 컨셉 | Active |
 | [PRD-0006](prds/PRD-0006-advanced-mode.md) | **Feature** - Advanced Mode | Active |
 | [STRAT-0007](strategies/STRAT-0007-content-sourcing.md) | **Content** - 콘텐츠 소싱 | Active |
 

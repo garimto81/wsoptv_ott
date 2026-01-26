@@ -2,8 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=794">
-    <title>WSOP TV - Featured Hands (NBA TV Key Plays Style)</title>
+    <title>WSOP TV - Featured Hands (Modal Overlay)</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -12,66 +11,33 @@
             color: #000;
             padding: 0;
             margin: 0;
-            width: 794px;
         }
-        .page {
-            width: 794px;
-            padding: 25px;
+        .container {
+            padding: 15px;
         }
         .title {
             text-align: center;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 3px solid #000;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #000;
         }
         .subtitle {
             text-align: center;
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        .section {
-            margin-bottom: 15px;
-        }
-        .section-title {
-            font-size: 12px;
-            font-weight: bold;
-            background: #000;
-            color: #fff;
-            padding: 5px 10px;
-            margin-bottom: 8px;
-        }
-
-        /* Mapping Table */
-        .mapping-table {
-            width: 100%;
-            border-collapse: collapse;
             font-size: 10px;
-            margin-bottom: 15px;
+            color: #666;
+            margin-bottom: 12px;
         }
-        .mapping-table th, .mapping-table td {
-            border: 1px solid #ccc;
-            padding: 6px 8px;
-            text-align: left;
-        }
-        .mapping-table th {
-            background: #f0f0f0;
-            font-weight: bold;
-        }
-        .mapping-table .nba { background: #e8f4e8; }
-        .mapping-table .wsop { background: #e8e8f4; }
 
-        /* Video Player Mock */
-        .video-player {
+        /* Video Player with Modal Overlay */
+        .player-wrapper {
+            position: relative;
             border: 2px solid #000;
             background: #1a1a1a;
-            position: relative;
-            margin-bottom: 15px;
         }
         .video-screen {
-            aspect-ratio: 16/9;
+            height: 300px;
             background: #2a2a2a;
             display: flex;
             align-items: center;
@@ -89,20 +55,17 @@
             transform: translateX(-50%);
             background: rgba(0,0,0,0.8);
             color: #fff;
-            padding: 6px 12px;
+            padding: 5px 12px;
             font-size: 10px;
             display: flex;
             gap: 15px;
         }
-
-        /* Control Bar - Key Plays Button Position */
         .control-bar {
             display: flex;
             align-items: center;
-            padding: 8px 10px;
+            padding: 8px 12px;
             background: #000;
             gap: 8px;
-            position: relative;
         }
         .ctrl-btn {
             background: #333;
@@ -110,19 +73,13 @@
             border: none;
             padding: 5px 10px;
             font-size: 9px;
-            cursor: pointer;
         }
         .ctrl-btn.highlight {
             background: #c00;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
         .timeline {
             flex: 1;
-            height: 5px;
+            height: 4px;
             background: #444;
             margin: 0 10px;
         }
@@ -131,59 +88,38 @@
             height: 100%;
             background: #c00;
         }
-        .ctrl-right {
-            display: flex;
-            gap: 6px;
-        }
 
-        /* Position Callout */
-        .position-callout {
+        /* Modal Overlay */
+        .modal-overlay {
             position: absolute;
-            bottom: 50px;
-            left: 10px;
-            background: #ffeb3b;
-            color: #000;
-            padding: 6px 10px;
-            font-size: 10px;
-            font-weight: bold;
-            border: 2px solid #000;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 10;
         }
-        .position-callout::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 20px;
-            border-width: 10px 8px 0 8px;
-            border-style: solid;
-            border-color: #000 transparent transparent transparent;
-        }
-        .position-callout-inner::after {
-            content: '';
-            position: absolute;
-            bottom: -7px;
-            left: 22px;
-            border-width: 7px 6px 0 6px;
-            border-style: solid;
-            border-color: #ffeb3b transparent transparent transparent;
-        }
-
-        /* Featured Hands Modal */
-        .modal-overlay {
+        .modal-content {
+            background: #fff;
             border: 2px solid #000;
-            padding: 15px;
-            background: #f5f5f5;
+            width: 340px;
+            max-height: 280px;
+            display: flex;
+            flex-direction: column;
         }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #ccc;
+            padding: 10px 12px;
+            background: #000;
+            color: #fff;
         }
         .modal-title {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
         }
         .modal-close {
@@ -191,23 +127,24 @@
             color: #fff;
             border: none;
             padding: 4px 10px;
-            font-size: 10px;
+            font-size: 9px;
             cursor: pointer;
         }
 
         /* Filters */
         .filters {
             display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 4px;
+            padding: 8px 10px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ccc;
             flex-wrap: wrap;
         }
         .filter-btn {
             border: 1px solid #000;
-            padding: 4px 10px;
-            font-size: 9px;
+            padding: 3px 8px;
+            font-size: 8px;
             background: #fff;
-            cursor: pointer;
         }
         .filter-btn.active {
             background: #000;
@@ -216,47 +153,43 @@
 
         /* Hand List */
         .hand-list {
-            max-height: 200px;
+            flex: 1;
             overflow-y: auto;
-            border: 1px solid #ccc;
-            background: #fff;
+            padding: 5px 0;
         }
         .hand-item {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             padding: 8px 10px;
             border-bottom: 1px solid #eee;
             cursor: pointer;
         }
         .hand-item:hover {
-            background: #f9f9f9;
+            background: #f5f5f5;
         }
         .hand-thumb {
-            width: 80px;
-            height: 45px;
+            width: 50px;
+            height: 32px;
             background: #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 8px;
+            font-size: 7px;
             color: #666;
             flex-shrink: 0;
+            border: 1px solid #ccc;
         }
-        .hand-info {
-            flex: 1;
-        }
+        .hand-info { flex: 1; }
         .hand-title {
             font-size: 10px;
             font-weight: bold;
-            margin-bottom: 2px;
         }
         .hand-players {
             font-size: 9px;
             color: #666;
-            margin-bottom: 2px;
         }
         .hand-result {
-            font-size: 9px;
+            font-size: 8px;
             color: #333;
         }
         .hand-time {
@@ -265,62 +198,36 @@
             text-align: right;
         }
 
-        /* Two Column */
-        .two-col {
-            display: flex;
-            gap: 15px;
-        }
-        .col {
-            flex: 1;
-        }
-        .col-wide {
-            flex: 1.5;
-        }
-
-        /* Spec Box */
-        .spec-box {
-            border: 2px solid #000;
+        /* Flow description */
+        .flow-section {
+            margin-top: 12px;
             padding: 10px;
-            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
         }
-        .spec-title {
+        .flow-title {
             font-size: 11px;
             font-weight: bold;
             margin-bottom: 8px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #ccc;
         }
-        .spec-list {
+        .flow-steps {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-size: 9px;
+            flex-wrap: wrap;
         }
-        .spec-list li {
-            margin-bottom: 4px;
-            margin-left: 15px;
+        .flow-step {
+            border: 1px solid #999;
+            padding: 4px 8px;
+            background: #fff;
         }
+        .flow-arrow { color: #666; }
 
-        /* Notes */
-        .notes {
-            padding: 8px;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            font-size: 9px;
-        }
-        .notes-title {
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        .notes ul {
-            margin-left: 12px;
-        }
-        .notes li {
-            margin-bottom: 2px;
-        }
-
-        /* Footer */
         .footer {
             text-align: center;
             padding: 8px;
-            font-size: 9px;
+            font-size: 8px;
             color: #999;
             border-top: 1px solid #eee;
             margin-top: 10px;
@@ -328,98 +235,32 @@
     </style>
 </head>
 <body>
-    <div class="page">
-        <div class="title">FEATURED HANDS (NBA TV KEY PLAYS STYLE)</div>
-        <div class="subtitle">비디오 플레이어 좌측 하단 버튼 → 핸드 목록 모달 → 클릭 시 해당 시점 이동</div>
+    <div class="container">
+        <div class="title">FEATURED HANDS - MODAL OVERLAY</div>
+        <div class="subtitle">Featured Hands 버튼 클릭 시 비디오 위 모달 팝업으로 표시</div>
 
-        <!-- Section 1: NBA TV Mapping -->
-        <div class="section">
-            <div class="section-title">① NBA TV Key Plays → WSOP TV Featured Hands 매핑</div>
-            <table class="mapping-table">
-                <tr>
-                    <th style="width: 30%;">항목</th>
-                    <th style="width: 35%;" class="nba">NBA TV (Key Plays)</th>
-                    <th style="width: 35%;" class="wsop">WSOP TV (Featured Hands)</th>
-                </tr>
-                <tr>
-                    <td><strong>버튼 위치</strong></td>
-                    <td class="nba">비디오 플레이어 좌측 하단</td>
-                    <td class="wsop">비디오 플레이어 좌측 하단 (동일)</td>
-                </tr>
-                <tr>
-                    <td><strong>버튼 명칭</strong></td>
-                    <td class="nba">Key Plays</td>
-                    <td class="wsop">Featured Hands</td>
-                </tr>
-                <tr>
-                    <td><strong>목록 콘텐츠</strong></td>
-                    <td class="nba">주요 플레이 목록</td>
-                    <td class="wsop">주요 핸드 목록</td>
-                </tr>
-                <tr>
-                    <td><strong>항목 정보</strong></td>
-                    <td class="nba">플레이어, 시간, 설명</td>
-                    <td class="wsop">플레이어, 핸드, 결과</td>
-                </tr>
-                <tr>
-                    <td><strong>인터랙션</strong></td>
-                    <td class="nba">클릭 → 해당 시점 이동</td>
-                    <td class="wsop">클릭 → 해당 핸드 시점 이동 (동일)</td>
-                </tr>
-                <tr>
-                    <td><strong>필터</strong></td>
-                    <td class="nba">팀, 플레이어, 유형</td>
-                    <td class="wsop">플레이어, 핸드, 결과</td>
-                </tr>
-            </table>
-        </div>
+        <!-- Video Player with Modal -->
+        <div class="player-wrapper">
+            <div class="video-screen">
+                <div class="video-label">[Main Event - Table 1 LIVE]</div>
+                <div class="pot-board">
+                    <span>POT: $2.4M</span>
+                    <span>BOARD: A K 7</span>
+                </div>
 
-        <!-- Section 2: Button Position -->
-        <div class="section">
-            <div class="section-title">② 버튼 위치: 비디오 플레이어 좌측 하단</div>
-            <div class="video-player">
-                <div class="video-screen">
-                    <div class="video-label">[Main Event - Table 1 LIVE]</div>
-                    <div class="pot-board">
-                        <span>POT: $2.4M</span>
-                        <span>BOARD: A♥ K♦ 7♣</span>
-                    </div>
-                </div>
-                <div class="control-bar">
-                    <div class="ctrl-btn highlight">Featured Hands</div>
-                    <div class="ctrl-btn">⏸</div>
-                    <div class="timeline"><div class="timeline-progress"></div></div>
-                    <div class="ctrl-right">
-                        <div class="ctrl-btn">MultiView</div>
-                        <div class="ctrl-btn">⚙</div>
-                        <div class="ctrl-btn">⛶</div>
-                    </div>
-                </div>
-                <div class="position-callout">
-                    <span class="position-callout-inner"></span>
-                    ← Featured Hands 버튼<br/>
-                    (좌측 하단 고정)
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 3: Modal UI -->
-        <div class="section">
-            <div class="section-title">③ Featured Hands 모달 (Key Plays 동일 레이아웃)</div>
-            <div class="two-col">
-                <div class="col-wide">
-                    <div class="modal-overlay">
+                <!-- Modal Overlay -->
+                <div class="modal-overlay">
+                    <div class="modal-content">
                         <div class="modal-header">
-                            <div class="modal-title">Featured Hands - Main Event 2025</div>
-                            <div class="modal-close">✕ CLOSE</div>
+                            <div class="modal-title">FEATURED HANDS</div>
+                            <div class="modal-close">X CLOSE</div>
                         </div>
                         <div class="filters">
-                            <div class="filter-btn active">ALL HANDS</div>
+                            <div class="filter-btn active">ALL</div>
                             <div class="filter-btn">ALL-IN</div>
                             <div class="filter-btn">BIG POTS</div>
                             <div class="filter-btn">BLUFFS</div>
-                            <div class="filter-btn">ELIMINATIONS</div>
-                            <div class="filter-btn">HERO CALLS</div>
+                            <div class="filter-btn">ELIM</div>
                         </div>
                         <div class="hand-list">
                             <div class="hand-item">
@@ -427,106 +268,59 @@
                                 <div class="hand-info">
                                     <div class="hand-title">Hand #127 - ALL-IN</div>
                                     <div class="hand-players">Negreanu vs Hellmuth</div>
-                                    <div class="hand-result">Negreanu wins $2.4M (A♠A♥ vs K♠K♥)</div>
+                                    <div class="hand-result">Negreanu wins $2.4M</div>
                                 </div>
-                                <div class="hand-time">L38<br/>02:34:15</div>
+                                <div class="hand-time">L38<br/>02:34</div>
                             </div>
                             <div class="hand-item">
                                 <div class="hand-thumb">[Thumb]</div>
                                 <div class="hand-info">
                                     <div class="hand-title">Hand #89 - BLUFF</div>
                                     <div class="hand-players">Brunson vs Ivey</div>
-                                    <div class="hand-result">Brunson bluffs $890K (7♦2♣)</div>
+                                    <div class="hand-result">Brunson bluffs $890K</div>
                                 </div>
-                                <div class="hand-time">L37<br/>01:45:30</div>
+                                <div class="hand-time">L37<br/>01:45</div>
                             </div>
                             <div class="hand-item">
                                 <div class="hand-thumb">[Thumb]</div>
                                 <div class="hand-info">
                                     <div class="hand-title">Hand #56 - ELIMINATION</div>
                                     <div class="hand-players">Polk vs Dwan</div>
-                                    <div class="hand-result">Polk eliminates Dwan (Q♠Q♦ vs J♠J♣)</div>
+                                    <div class="hand-result">Polk eliminates Dwan</div>
                                 </div>
-                                <div class="hand-time">L35<br/>00:58:12</div>
+                                <div class="hand-time">L35<br/>00:58</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="spec-box">
-                        <div class="spec-title">필터 옵션</div>
-                        <ul class="spec-list">
-                            <li><strong>ALL HANDS</strong>: 전체 핸드</li>
-                            <li><strong>ALL-IN</strong>: 올인 핸드</li>
-                            <li><strong>BIG POTS</strong>: 큰 팟 ($500K+)</li>
-                            <li><strong>BLUFFS</strong>: 블러프 성공/실패</li>
-                            <li><strong>ELIMINATIONS</strong>: 탈락 핸드</li>
-                            <li><strong>HERO CALLS</strong>: 히어로 콜</li>
-                        </ul>
-                    </div>
-                    <div class="spec-box">
-                        <div class="spec-title">핸드 정보</div>
-                        <ul class="spec-list">
-                            <li>핸드 번호 + 타입</li>
-                            <li>참여 플레이어</li>
-                            <li>결과 + 홀카드</li>
-                            <li>Level + 타임스탬프</li>
-                        </ul>
-                    </div>
-                </div>
+            </div>
+            <div class="control-bar">
+                <div class="ctrl-btn highlight">Featured Hands</div>
+                <div class="ctrl-btn">||</div>
+                <div class="timeline"><div class="timeline-progress"></div></div>
+                <div class="ctrl-btn">MultiView</div>
+                <div class="ctrl-btn">*</div>
             </div>
         </div>
 
-        <!-- Section 4: Interaction Flow -->
-        <div class="section">
-            <div class="section-title">④ 인터랙션 플로우</div>
-            <div class="two-col">
-                <div class="col">
-                    <div class="spec-box">
-                        <div class="spec-title">진입 → 탐색 → 재생</div>
-                        <ul class="spec-list">
-                            <li><strong>1.</strong> [Featured Hands] 버튼 클릭 (좌측 하단)</li>
-                            <li><strong>2.</strong> 모달 열림 → 핸드 목록 표시</li>
-                            <li><strong>3.</strong> 필터로 원하는 핸드 유형 선택</li>
-                            <li><strong>4.</strong> 핸드 항목 클릭</li>
-                            <li><strong>5.</strong> → 해당 시점으로 자동 이동</li>
-                            <li><strong>6.</strong> 모달 자동 닫힘 + 재생 시작</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="spec-box">
-                        <div class="spec-title">복귀 경로</div>
-                        <ul class="spec-list">
-                            <li><strong>HAND LIST</strong> 버튼 → 핸드 목록 모달 재오픈</li>
-                            <li><strong>JUMP TO LIVE</strong> 버튼 → 라이브 시점으로 복귀</li>
-                            <li>타임라인 드래그 → 수동 시점 이동</li>
-                        </ul>
-                    </div>
-                    <div class="spec-box">
-                        <div class="spec-title">Street 타임라인</div>
-                        <ul class="spec-list">
-                            <li>PREFLOP → FLOP → TURN → RIVER → SHOWDOWN</li>
-                            <li>각 Street 클릭 시 해당 시점 이동</li>
-                        </ul>
-                    </div>
-                </div>
+        <!-- Flow description -->
+        <div class="flow-section">
+            <div class="flow-title">Interaction Flow</div>
+            <div class="flow-steps">
+                <div class="flow-step">1. Featured Hands Click</div>
+                <span class="flow-arrow">-></span>
+                <div class="flow-step">2. Modal Popup</div>
+                <span class="flow-arrow">-></span>
+                <div class="flow-step">3. Filter Select</div>
+                <span class="flow-arrow">-></span>
+                <div class="flow-step">4. Hand Click</div>
+                <span class="flow-arrow">-></span>
+                <div class="flow-step">5. Jump to Timestamp</div>
             </div>
-        </div>
-
-        <!-- Notes -->
-        <div class="notes">
-            <div class="notes-title">📌 NBA TV Key Plays 1:1 대응 원칙</div>
-            <ul>
-                <li><strong>버튼 위치</strong>: 비디오 플레이어 컨트롤 바 좌측 하단 (NBA TV 동일)</li>
-                <li><strong>모달 레이아웃</strong>: 썸네일 + 제목 + 상세 정보 (NBA TV Key Plays 동일)</li>
-                <li><strong>필터 UI</strong>: 상단 필터 버튼 → 목록 자동 갱신 (NBA TV 동일)</li>
-                <li><strong>클릭 인터랙션</strong>: 항목 클릭 → 해당 시점 즉시 이동 (NBA TV 동일)</li>
-            </ul>
         </div>
 
         <div class="footer">
-            WSOP TV Featured Hands (NBA TV Key Plays Style) | PRD-0002 Section 5 | Generated by Claude Code
+            WSOP TV Featured Hands Modal | PRD-0002 Section 5.2 | Generated by Claude Code
         </div>
     </div>
 </body>

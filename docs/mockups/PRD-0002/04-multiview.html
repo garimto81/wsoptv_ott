@@ -16,94 +16,74 @@
         }
         .page {
             width: 794px;
-            padding: 25px;
+            padding: 20px;
         }
         .title {
             text-align: center;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 3px solid #000;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #000;
         }
         .subtitle {
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .section {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .section-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             background: #000;
             color: #fff;
-            padding: 5px 10px;
+            padding: 4px 8px;
             margin-bottom: 8px;
         }
 
-        /* Flow Diagram */
+        /* Grid Layout for Steps */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Flow Container */
         .flow-container {
-            border: 2px solid #000;
-            padding: 12px;
-            margin-bottom: 12px;
+            border: 1px solid #000;
+            padding: 10px;
         }
         .flow-title {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .flow-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
             margin-bottom: 8px;
-        }
-        .flow-step {
-            border: 1px solid #000;
-            padding: 6px 10px;
-            font-size: 9px;
-            text-align: center;
-            min-width: 70px;
-            background: #fff;
-        }
-        .flow-step.highlight {
-            background: #000;
-            color: #fff;
-        }
-        .flow-step.current {
+            color: #333;
             background: #f0f0f0;
-            border: 2px solid #000;
-        }
-        .flow-arrow {
-            font-size: 12px;
-            color: #666;
+            padding: 4px 6px;
         }
         .flow-note {
             font-size: 9px;
             color: #666;
             text-align: center;
-            margin-top: 5px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed #ccc;
         }
 
-        /* Two Column Layout */
+        /* Two Column */
         .two-col {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
-        .col {
-            flex: 1;
-        }
+        .col { flex: 1; }
 
         /* Video Player Mock */
         .video-player {
-            border: 2px solid #000;
+            border: 1px solid #000;
             background: #1a1a1a;
-            position: relative;
         }
         .video-screen {
             aspect-ratio: 16/9;
@@ -111,28 +91,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
         }
         .video-label {
             color: #666;
-            font-size: 10px;
+            font-size: 9px;
         }
 
         /* Control Bar */
         .control-bar {
             display: flex;
             align-items: center;
-            padding: 6px 8px;
+            padding: 5px 8px;
             background: #000;
-            gap: 8px;
+            gap: 5px;
         }
         .ctrl-btn {
             background: #333;
             color: #fff;
             border: none;
-            padding: 4px 8px;
+            padding: 3px 6px;
             font-size: 8px;
-            cursor: pointer;
         }
         .ctrl-btn.active {
             background: #fff;
@@ -145,13 +123,12 @@
         .ctrl-btn.multiview-btn.active {
             background: #fff;
             color: #000;
-            border-color: #fff;
         }
         .timeline {
             flex: 1;
-            height: 4px;
+            height: 3px;
             background: #444;
-            margin: 0 8px;
+            margin: 0 5px;
         }
         .timeline-progress {
             width: 70%;
@@ -162,19 +139,18 @@
         /* Tournament Ticker */
         .ticker {
             display: flex;
-            gap: 6px;
-            padding: 8px;
+            gap: 5px;
+            padding: 6px;
             background: #f5f5f5;
             border: 1px solid #ccc;
-            overflow-x: auto;
+            flex-wrap: wrap;
         }
         .ticker-item {
             border: 1px solid #999;
-            padding: 4px 8px;
+            padding: 4px 6px;
             text-align: center;
-            min-width: 60px;
+            min-width: 55px;
             background: #fff;
-            cursor: pointer;
             font-size: 9px;
         }
         .ticker-item.watching {
@@ -185,9 +161,8 @@
         .ticker-item.added {
             background: #333;
             color: #fff;
-            border-color: #333;
         }
-        .ticker-item .level { font-weight: bold; }
+        .ticker-item .level { font-weight: bold; font-size: 10px; }
         .ticker-item .name { font-size: 8px; color: #666; }
         .ticker-item.watching .name,
         .ticker-item.added .name { color: #ccc; }
@@ -196,21 +171,19 @@
             background: #c00;
             color: #fff;
             padding: 1px 3px;
-            margin-top: 2px;
-            display: inline-block;
         }
 
         /* MultiView Layouts */
         .multiview-panel {
-            border: 2px solid #000;
-            padding: 10px;
+            border: 1px solid #000;
+            padding: 8px;
             background: #f9f9f9;
         }
         .multiview-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .multiview-title {
             font-size: 10px;
@@ -218,20 +191,18 @@
         }
         .view-selector {
             display: flex;
-            gap: 4px;
+            gap: 3px;
         }
         .view-btn {
             border: 1px solid #000;
-            padding: 3px 6px;
+            padding: 2px 5px;
             font-size: 8px;
             background: #fff;
-            cursor: pointer;
         }
         .view-btn.active {
             background: #000;
             color: #fff;
         }
-
         .multiview-grid {
             display: grid;
             gap: 4px;
@@ -266,51 +237,17 @@
             padding: 1px 3px;
         }
 
-        /* Feature Table */
-        .spec-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 9px;
-        }
-        .spec-table th, .spec-table td {
-            border: 1px solid #ccc;
-            padding: 5px 6px;
-            text-align: left;
-        }
-        .spec-table th {
-            background: #f0f0f0;
-            font-weight: bold;
-        }
-        .spec-table .step-num {
-            background: #000;
-            color: #fff;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Notes */
-        .notes {
-            padding: 8px;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            font-size: 9px;
-        }
-        .notes-title {
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        .notes ul {
-            margin-left: 12px;
-        }
-        .notes li {
-            margin-bottom: 2px;
+        /* Highlight */
+        .highlight-box {
+            border: 2px dashed #c00;
+            padding: 2px;
         }
 
         /* Footer */
         .footer {
             text-align: center;
             padding: 8px;
-            font-size: 9px;
+            font-size: 8px;
             color: #999;
             border-top: 1px solid #eee;
             margin-top: 10px;
@@ -322,179 +259,111 @@
         <div class="title">MULTI-VIEW WORKFLOW (NBA TV STYLE)</div>
         <div class="subtitle">Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가</div>
 
-        <!-- Section 1: Step-by-Step Flow -->
+        <!-- Section 1: Step-by-Step Flow (2x2 Grid) -->
         <div class="section">
             <div class="section-title">① 단계별 진입 플로우</div>
-
-            <!-- Step 1: Initial Selection -->
-            <div class="flow-container">
-                <div class="flow-title">STEP 1: Tournament Ticker에서 테이블 선택 → 즉시 시청</div>
-                <div class="ticker">
-                    <div class="ticker-item watching">
-                        <div class="level">L38</div>
-                        <div class="name">Main Event</div>
-                        <div class="badge">WATCHING</div>
-                    </div>
-                    <div class="ticker-item">
-                        <div class="level">L25</div>
-                        <div class="name">$100K High</div>
-                    </div>
-                    <div class="ticker-item">
-                        <div class="level">FINAL</div>
-                        <div class="name">Super Circuit</div>
-                    </div>
-                    <div class="ticker-item">
-                        <div class="level">L12</div>
-                        <div class="name">Online</div>
-                    </div>
-                </div>
-                <div class="flow-note">클릭 즉시 → 해당 테이블 Single View 시청 시작</div>
-            </div>
-
-            <!-- Step 2: Single View Playing -->
-            <div class="flow-container">
-                <div class="flow-title">STEP 2: Single View 시청 중 - 비디오 플레이어</div>
-                <div class="video-player">
-                    <div class="video-screen">
-                        <div class="video-label">[Main Event - Table 1 LIVE]</div>
-                    </div>
-                    <div class="control-bar">
-                        <div class="ctrl-btn">⏸</div>
-                        <div class="timeline"><div class="timeline-progress"></div></div>
-                        <div class="ctrl-btn multiview-btn">MultiView</div>
-                        <div class="ctrl-btn">⚙</div>
-                    </div>
-                </div>
-                <div class="flow-note">[MultiView] 버튼은 비디오 플레이어 컨트롤 바 내에 위치</div>
-            </div>
-
-            <!-- Step 3: MultiView Activated -->
-            <div class="flow-container">
-                <div class="flow-title">STEP 3: [MultiView] 버튼 클릭 → MultiView 모드 활성화</div>
-                <div class="video-player">
-                    <div class="video-screen">
-                        <div class="video-label">[Main Event - Table 1 LIVE]</div>
-                    </div>
-                    <div class="control-bar">
-                        <div class="ctrl-btn">⏸</div>
-                        <div class="timeline"><div class="timeline-progress"></div></div>
-                        <div class="ctrl-btn multiview-btn active">MultiView ✓</div>
-                        <div class="ctrl-btn">⚙</div>
-                    </div>
-                </div>
-                <div class="ticker" style="margin-top: 8px;">
-                    <div class="ticker-item watching">
-                        <div class="level">L38</div>
-                        <div class="name">Main Event</div>
-                        <div class="badge">WATCHING</div>
-                    </div>
-                    <div class="ticker-item" style="border: 2px dashed #000;">
-                        <div class="level">L25</div>
-                        <div class="name">$100K High</div>
-                        <div style="font-size: 7px; color: #000;">+ 클릭하여 추가</div>
-                    </div>
-                    <div class="ticker-item">
-                        <div class="level">FINAL</div>
-                        <div class="name">Super Circuit</div>
-                    </div>
-                </div>
-                <div class="flow-note">MultiView 활성화 → Ticker에서 추가 테이블 선택 가능 상태</div>
-            </div>
-
-            <!-- Step 4: Multi-view Result -->
-            <div class="flow-container">
-                <div class="flow-title">STEP 4: Ticker에서 추가 테이블 선택 → 2 VIEW 자동 전환</div>
-                <div class="two-col">
-                    <div class="col">
-                        <div class="ticker" style="margin-bottom: 8px;">
-                            <div class="ticker-item watching">
-                                <div class="level">L38</div>
-                                <div class="name">Main Event</div>
-                            </div>
-                            <div class="ticker-item added">
-                                <div class="level">L25</div>
-                                <div class="name">$100K High</div>
-                            </div>
+            <div class="steps-grid">
+                <!-- Step 1 -->
+                <div class="flow-container">
+                    <div class="flow-title">STEP 1: Ticker에서 테이블 선택 → 즉시 시청</div>
+                    <div class="ticker">
+                        <div class="ticker-item watching">
+                            <div class="level">L38</div>
+                            <div class="name">Main Event</div>
+                            <div class="badge">WATCHING</div>
                         </div>
-                        <div class="multiview-panel">
-                            <div class="multiview-header">
-                                <div class="multiview-title">2 VIEW</div>
-                                <div class="view-selector">
-                                    <div class="view-btn">1</div>
-                                    <div class="view-btn active">2</div>
-                                    <div class="view-btn">4</div>
-                                </div>
-                            </div>
-                            <div class="multiview-grid view-2">
-                                <div class="mv-cell active">
-                                    Main Event
-                                    <div class="audio-badge">🔊</div>
-                                </div>
-                                <div class="mv-cell">$100K High</div>
-                            </div>
+                        <div class="ticker-item">
+                            <div class="level">L25</div>
+                            <div class="name">$100K</div>
+                        </div>
+                        <div class="ticker-item">
+                            <div class="level">FT</div>
+                            <div class="name">Circuit</div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="notes">
-                            <div class="notes-title">자동 동작</div>
-                            <ul>
-                                <li>테이블 추가 시 자동으로 2 VIEW 전환</li>
-                                <li>3~4개 추가 시 4 VIEW 전환</li>
-                                <li>화면 클릭으로 오디오 소스 변경</li>
-                                <li>View 버튼으로 수동 레이아웃 변경</li>
-                            </ul>
+                    <div class="flow-note">클릭 즉시 Single View 시청 시작</div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flow-container">
+                    <div class="flow-title">STEP 2: Single View 시청 중</div>
+                    <div class="video-player">
+                        <div class="video-screen">
+                            <div class="video-label">[Main Event - Table 1 LIVE]</div>
+                        </div>
+                        <div class="control-bar">
+                            <div class="ctrl-btn">⏸</div>
+                            <div class="timeline"><div class="timeline-progress"></div></div>
+                            <div class="ctrl-btn multiview-btn highlight-box">MultiView</div>
+                            <div class="ctrl-btn">⚙</div>
                         </div>
                     </div>
+                    <div class="flow-note">[MultiView] 버튼 = 컨트롤 바 내 위치</div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flow-container">
+                    <div class="flow-title">STEP 3: MultiView 활성화 → 추가 선택 가능</div>
+                    <div class="video-player" style="margin-bottom: 6px;">
+                        <div class="video-screen" style="aspect-ratio: 21/9;">
+                            <div class="video-label">[Main Event LIVE]</div>
+                        </div>
+                        <div class="control-bar">
+                            <div class="ctrl-btn">⏸</div>
+                            <div class="timeline"><div class="timeline-progress"></div></div>
+                            <div class="ctrl-btn multiview-btn active">MultiView ✓</div>
+                            <div class="ctrl-btn">⚙</div>
+                        </div>
+                    </div>
+                    <div class="ticker">
+                        <div class="ticker-item watching">
+                            <div class="level">L38</div>
+                            <div class="name">Main</div>
+                        </div>
+                        <div class="ticker-item highlight-box" style="border-style: dashed;">
+                            <div class="level">L25</div>
+                            <div class="name">$100K</div>
+                            <div style="font-size: 7px;">+추가</div>
+                        </div>
+                    </div>
+                    <div class="flow-note">Ticker에서 추가 테이블 선택 가능</div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flow-container">
+                    <div class="flow-title">STEP 4: 추가 선택 → 2 VIEW 자동 전환</div>
+                    <div class="ticker" style="margin-bottom: 6px;">
+                        <div class="ticker-item watching">
+                            <div class="level">L38</div>
+                            <div class="name">Main</div>
+                        </div>
+                        <div class="ticker-item added">
+                            <div class="level">L25</div>
+                            <div class="name">$100K</div>
+                        </div>
+                    </div>
+                    <div class="multiview-panel">
+                        <div class="multiview-header">
+                            <div class="multiview-title">2 VIEW</div>
+                            <div class="view-selector">
+                                <div class="view-btn">1</div>
+                                <div class="view-btn active">2</div>
+                                <div class="view-btn">4</div>
+                            </div>
+                        </div>
+                        <div class="multiview-grid view-2">
+                            <div class="mv-cell active">Main<div class="audio-badge">🔊</div></div>
+                            <div class="mv-cell">$100K</div>
+                        </div>
+                    </div>
+                    <div class="flow-note">테이블 추가 시 자동 뷰 확장</div>
                 </div>
             </div>
         </div>
 
-        <!-- Section 2: Spec Table -->
+        <!-- Section 2: View Modes -->
         <div class="section">
-            <div class="section-title">② 진입 플로우 명세</div>
-            <table class="spec-table">
-                <tr>
-                    <th class="step-num">#</th>
-                    <th style="width: 20%;">단계</th>
-                    <th style="width: 35%;">사용자 액션</th>
-                    <th style="width: 35%;">시스템 반응</th>
-                </tr>
-                <tr>
-                    <td class="step-num">1</td>
-                    <td>테이블 선택</td>
-                    <td>Tournament Ticker에서 테이블 클릭</td>
-                    <td><strong>즉시 Single View 시청 시작</strong></td>
-                </tr>
-                <tr>
-                    <td class="step-num">2</td>
-                    <td>MultiView 활성화</td>
-                    <td>비디오 플레이어 내 [MultiView] 버튼 클릭</td>
-                    <td>MultiView 모드 활성화, Ticker 추가 가능 상태</td>
-                </tr>
-                <tr>
-                    <td class="step-num">3</td>
-                    <td>테이블 추가</td>
-                    <td>Ticker에서 추가 테이블 클릭</td>
-                    <td>자동으로 2 VIEW / 4 VIEW 전환</td>
-                </tr>
-                <tr>
-                    <td class="step-num">4</td>
-                    <td>레이아웃 변경</td>
-                    <td>View 버튼 (1/2/4) 클릭</td>
-                    <td>선택한 레이아웃으로 변경</td>
-                </tr>
-                <tr>
-                    <td class="step-num">5</td>
-                    <td>오디오 전환</td>
-                    <td>멀티뷰 내 화면 클릭</td>
-                    <td>해당 테이블로 오디오 전환 (🔊 표시)</td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- Section 3: View Modes -->
-        <div class="section">
-            <div class="section-title">③ View Mode 레이아웃</div>
+            <div class="section-title">② View Mode 레이아웃</div>
             <div class="two-col">
                 <div class="col">
                     <div class="multiview-panel">
@@ -521,17 +390,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Notes -->
-        <div class="notes">
-            <div class="notes-title">📌 NBA TV 방식 핵심 원칙</div>
-            <ul>
-                <li><strong>즉시 시청</strong>: Ticker에서 테이블 선택 → 바로 시청 시작 (추가 단계 없음)</li>
-                <li><strong>선택적 확장</strong>: MultiView는 시청 중 선택적으로 활성화</li>
-                <li><strong>점진적 추가</strong>: 테이블 추가 시 자동으로 뷰 모드 확장 (1→2→4)</li>
-                <li><strong>원클릭 오디오</strong>: 화면 클릭만으로 오디오 소스 전환</li>
-            </ul>
         </div>
 
         <div class="footer">

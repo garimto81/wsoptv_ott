@@ -1,51 +1,33 @@
-# PRD-0002: WSOPTV OTT Platform MVP
+# PRD-0002: WSOPTV Concept Paper
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 7.5 |
+| **Version** | 8.3 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
-| **Updated** | 2026-01-23 |
+| **Updated** | 2026-01-26 |
 | **Author** | Claude Code |
 | **Launch Target** | Q3 2026 |
 
 ---
 
-## 0. 3대 원천 기반 설계 원칙
+## 0. 4대 원천 기반 설계 원칙
 
-### 0.1 3대 원천 (Three Pillars)
+### 0.1 4대 원천 (Four Pillars)
 
-![3대 원천 다이어그램](../images/PRD-0002/01-three-pillars.png)
+![4대 원천 다이어그램](../images/PRD-0002/01-three-pillars.png)
 
 [HTML 원본](../mockups/PRD-0002/01-three-pillars.html)
 
+> **"VIBLE이 말씀하시면, MOSES가 해석하고, KORAN이 구현하되, TEMPLE의 한계 안에서 이루어진다."**
+
 | 원천 | 명칭 | 출처 | 역할 | 우선순위 |
 |:----:|------|------|------|:--------:|
+| 🏛️ | **TEMPLE** | 기존 방송 프로덕션 시스템 | 물리적 제약 조건 | 0 (제약) |
 | 📜 | **VIBLE** | michael_note.md | 운영 계획의 근간, 비즈니스 요구사항 | 1 (최고) |
 | 📋 | **MOSES** | tony_note.md | 첨언 및 확장, 태깅/검색 기능 | 2 |
 | 📖 | **KORAN** | NBA TV League Pass | UI/UX 참조, 1:1 복제 대상 | 3 |
-
-### 0.2 충돌 해결 원칙
-
-> **VIBLE이 말씀하시면, MOSES가 해석하고, KORAN이 구현한다.**
-
-| 상황 | 해결 방법 |
-|------|----------|
-| VIBLE ↔ MOSES 충돌 | VIBLE 우선 |
-| VIBLE ↔ KORAN 충돌 | VIBLE 우선 |
-| MOSES ↔ KORAN 충돌 | MOSES 우선 |
-| 모두 언급 없음 | KORAN 기본 패턴 적용 |
-
-### 0.3 기능 분류
-
-| 분류 | 원천 | 정의 | 예시 |
-|------|:----:|------|------|
-| **Core-Vible** | 📜 | VIBLE에서 명시한 필수 기능 | Advanced Mode, GGPass, 구독 모델 |
-| **Core-Moses** | 📋 | MOSES에서 제안한 확장 기능 | 핸드 태깅, 검색, 멀티 재생 |
-| **Core-Koran** | 📖 | KORAN 1:1 대응 기능 | Ticker, MultiView, Info Tabs |
-
-> **중요**: 3대 원천에 명시되지 않은 기능은 구현 범위에서 **제외**됩니다.
 
 ---
 
@@ -86,11 +68,104 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 ---
 
-## 2. 콘텐츠 소싱 전략
+## 2. 콘텐츠 아키텍처 (Content Architecture)
 
 > **상세 문서**: [STRAT-0008 콘텐츠 소싱 전략](../strategies/STRAT-0008-content-sourcing-architecture.md)
 
-### 2.1 WSOP 콘텐츠 Tier 구조
+### 2.1 OVP vs STREAM 이원화 구조
+
+![OVP/STREAM 이원화 아키텍처](../images/PRD-0002/16-ovp-stream-architecture.png)
+
+[HTML 원본](../mockups/PRD-0002/16-ovp-stream-architecture.html)
+
+| 구분 | OVP (다시보기) | STREAM (라이브) |
+|------|---------------|----------------|
+| **소스** | 기존 아카이브 | 실시간 프로덕션 |
+| **의존성** | 낮음 (데이터 이관) | 높음 (🏛️ TEMPLE 제약) |
+| **복잡도** | 표준 VOD | 멀티뷰 / 직캠 옵션 |
+| **이슈 수준** | LOW | **HIGH** |
+
+### 2.2 OVP (다시보기) - 이슈 수준: LOW
+
+| 단계 | 작업 |
+|:----:|------|
+| 1 | 기존 업체에서 영상 데이터 이관 |
+| 2 | 미국 로컬 스토리지 → AWS 클라우드 |
+| 3 | 카탈로그 + 메타 태그 |
+| 4 | 재생 / 목록화 |
+
+> **특징**: 기존 아카이브 자산 활용, 표준 VOD 워크플로우
+
+### 2.3 STREAM (라이브) - 이슈 수준: HIGH
+
+| 항목 | 상태 |
+|------|------|
+| **🏛️ TEMPLE 이해** | ⚠️ 현재 프로덕션 시스템 완벽 이해 필요 |
+| **Michael Note** | ⚠️ 재확인 필요 |
+| **프로덕션 의존성** | 높음 (장비/인력 제약 확인 필요) |
+
+### 2.4 STREAM 송출 옵션
+
+![STREAM 옵션 비교표](../images/PRD-0002/17-stream-option-comparison.png)
+
+[HTML 원본](../mockups/PRD-0002/17-stream-option-comparison.html)
+
+#### 옵션 2.1: 피처 테이블별 멀티뷰
+
+![옵션 2.1 와이어프레임](../images/PRD-0002/17-stream-option-2-1.png)
+
+[HTML 원본](../mockups/PRD-0002/17-stream-option-2-1.html)
+
+| 항목 | 내용 |
+|------|------|
+| **소스** | 테이블별 스위처 컷편집본 (GFX 포함) |
+| **처리 주체** | GG Production (한국) |
+| **송출 방식** | 멀티뷰 (2x2) 레이아웃 |
+| **장점** | 기존 워크플로우 활용, NBA TV 방식 동일 |
+| **단점** | 개별 플레이어 집중 불가 |
+
+#### 옵션 2.2: 멀티뷰 + 인물별 직캠
+
+![옵션 2.2 와이어프레임](../images/PRD-0002/17-stream-option-2-2.png)
+
+[HTML 원본](../mockups/PRD-0002/17-stream-option-2-2.html)
+
+> 📜 **VIBLE 원문**: "메인화면이 중앙에 있고, 각 유저들의 얼굴을 잡고 있는 화면이 옆에 또 있는 방식 (아이돌 직캠 카메라)"
+
+| 항목 | 내용 |
+|------|------|
+| **소스** | 스위처 컷편집본 + 모든 인물별 직캠 |
+| **처리 주체** | GG Production (직캠 추가 장비 필요) |
+| **송출 방식** | 메인 테이블 + Player Cam 사이드바 |
+| **장점** | VIBLE 원문 완벽 대응, 팬 경험 극대화 |
+| **단점** | 추가 카메라 대량 필요, 🏛️ TEMPLE 협의 필요 |
+
+#### 옵션 2.3: 인물 팔로업 방식 ⭐ **현재 구축 시스템**
+
+> **GG Production 현재 프로덕션 방식** - 현재 운영 중인 프로덕션 시스템
+
+![옵션 2.3 와이어프레임](../images/PRD-0002/17-stream-option-2-3.png)
+
+[HTML 원본](../mockups/PRD-0002/17-stream-option-2-3.html)
+
+| 항목 | 내용 |
+|------|------|
+| **소스** | 키 플레이어 전용 팔로업 카메라 |
+| **처리 주체** | GG Production (이동 카메라 팀) |
+| **송출 방식** | 선수 중심 뷰 (테이블 이동 시 자동 전환) |
+| **장점** | 유연한 선수 추적, 장비 요구량 중간 |
+| **단점** | 이동 카메라맨 필요, 커버 선수 수 제한 |
+| **상태** | ⭐ **현재 프로덕션 구축 완료** |
+
+#### 옵션 선택 가이드
+
+| 조건 | 권장 옵션 |
+|------|----------|
+| MVP 빠른 출시, 기존 워크플로우 유지 | **옵션 2.1** |
+| VIBLE 원문 완벽 구현, 추가 투자 가능 | **옵션 2.2** |
+| 스타 플레이어 집중, 중간 투자 | **옵션 2.3** ⭐ 현재 시스템 |
+
+### 2.5 WSOP 콘텐츠 Tier 구조
 
 | Tier | 카테고리 | 콘텐츠 | 설명 |
 |:----:|----------|--------|------|
@@ -121,7 +196,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 > **범위**: WSOP 공식 라이브 대회 + 예능 콘텐츠 포함. 온라인 전용 이벤트는 제외.
 
-### 2.2 소스별 프로덕션 파트너
+### 2.6 소스별 프로덕션 파트너
 
 ![콘텐츠 소싱 다이어그램](../images/PRD-0002/02-content-sourcing.png)
 
@@ -134,15 +209,15 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 | **Triton Poker** | WSOP Paradise | 전체 |
 | **PokerCaster** | WSOPE | 유럽 지역 전체 |
 
-### 2.3 콘텐츠 플로우
+### 2.7 콘텐츠 플로우
 
-> 상세 다이어그램은 [02-content-sourcing.html](../mockups/PRD-0002/02-content-sourcing.html) 참조
->
-> ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#1-콘텐츠-플로우-섹션-23) 참조
+![콘텐츠 플로우 다이어그램](../images/PRD-0002/15-content-flow.png)
+
+[HTML 원본](../mockups/PRD-0002/15-content-flow.html)
 
 **GG Production 역할**: 모든 프로덕션 파트너 소스를 받아 종편(Post-Production) 작업 수행
 
-### 2.4 YouTube vs WSOPTV 설정 비교
+### 2.8 YouTube vs WSOPTV 설정 비교
 
 | 설정 | YouTube | WSOPTV |
 |------|---------|--------|
@@ -202,11 +277,19 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 >
 > **정의**: 하나의 이벤트 내 여러 Feature Table을 동시에 시청하는 방식. 간혹 다른 이벤트 테이블도 포함 가능.
 
-![Multi-view Workflow (NBA TV Style)](../images/PRD-0002/04-multiview.png)
+#### 진입 플로우 (NBA TV 방식) - Step 1
 
-[HTML 원본](../mockups/PRD-0002/04-multiview.html)
+![Multi-view Step 1: Ticker 선택 및 Single View](../images/PRD-0002/04-multiview-step1.png)
 
-#### 진입 플로우 (NBA TV 방식)
+[HTML 원본](../mockups/PRD-0002/04-multiview-step1.html)
+
+#### 진입 플로우 (NBA TV 방식) - Step 2
+
+![Multi-view Step 2: MultiView 활성화 및 View Mode](../images/PRD-0002/04-multiview-step2.png)
+
+[HTML 원본](../mockups/PRD-0002/04-multiview-step2.html)
+
+#### 단계별 설명
 
 > **핵심 원칙**: Ticker 선택 → **즉시 시청** → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가
 
@@ -346,6 +429,26 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 > **권장**: Option B 선택 시 GGM$와 동일하게 **Production 단계에서 처리**
 
+#### Option C: GGPOKER 방식 (플레이어 팝업 정보)
+
+> 플레이어 클릭 시 **실시간 통계/프로필 오버레이 팝업** 표시
+
+![옵션 C: GGPOKER 방식](../images/PRD-0002/15-content-flow-option-c.png)
+
+[HTML 원본](../mockups/PRD-0002/15-content-flow-option-c.html)
+
+| 특징 | 설명 |
+|------|------|
+| **트리거** | 화면 내 플레이어 영역 클릭/탭 |
+| **데이터** | 플레이어 DB + 실시간 핸드 통계 |
+| **표시** | 오버레이 팝업 (영상 재생 유지) |
+| **닫기** | 팝업 외부 클릭 또는 X 버튼 |
+
+**팝업 정보 항목**:
+- 기본 정보: 이름, 국적, 프로필 사진
+- WSOP 기록: Bracelets 수, 총 상금
+- 실시간 통계: VPIP, PFR, AF (핸드 진행 중 업데이트)
+
 **StatsView 표시 정보**:
 
 | 요소 | 표시 정보 | VIBLE 원문 대응 |
@@ -385,7 +488,29 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 | 필터 | 팀, 플레이어, 유형 | **플레이어, 핸드, 결과** |
 | 정렬 | 시간순 | 핸드 번호순 |
 
-### 5.3 핸드 단위 태깅 (메타데이터)
+### 5.3 필터 옵션
+
+| 필터 | 설명 |
+|------|------|
+| **ALL HANDS** | 전체 핸드 |
+| **ALL-IN** | 올인 핸드 |
+| **BIG POTS** | 큰 팟 ($500K+) |
+| **BLUFFS** | 블러프 성공/실패 |
+| **ELIMINATIONS** | 탈락 핸드 |
+| **HERO CALLS** | 히어로 콜 |
+
+### 5.4 핸드 정보 구조
+
+| 항목 | 설명 | 예시 |
+|------|------|------|
+| 핸드 번호 | 고유 식별자 | Hand #127 |
+| 타입 | 핸드 분류 | ALL-IN, BLUFF, ELIM |
+| 참여 플레이어 | 해당 핸드에 참여한 선수 | Negreanu vs Hellmuth |
+| 결과 | 핸드 결과 + 홀카드 | Negreanu wins $2.4M (A♠A♥ vs K♠K♥) |
+| Level | 토너먼트 레벨 | L38 |
+| 타임스탬프 | 핸드 시작 시간 | 02:34 |
+
+### 5.5 핸드 단위 태깅 (메타데이터)
 
 | 태그 항목 | 설명 |
 |----------|------|
@@ -395,7 +520,7 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 | Community Card | 보드 카드 (플롭/턴/리버) |
 | 최종 Winner | 핸드 승자 |
 
-### 5.4 검색 기능
+### 5.6 검색 기능
 
 **검색 예제**:
 - A 선수와 B 선수가 함께 했던 대회/동영상 검색
@@ -536,20 +661,34 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 [HTML 원본](../mockups/PRD-0002/10-viewing-flow.html)
 
+**계층 구조** (Sequential Flow):
+
+```
+LIVE → MultiView → View Mode (1/2/4) → Player Cam
+                 → Featured Hands
+     → Timeshift → Featured Hands
+```
+
+> **Player Cam 진입 조건**: MultiView 활성화 후 **View Mode 선택 필수** (Level 3)
+
 **Stream Tabs 옵션** (Video Player Area ⑤):
 
-| 탭 | 기능 | NBA TV 대응 |
-|----|------|-------------|
-| Active Tables | 다른 테이블 추가/전환 | Streams |
-| MultiView | 멀티뷰 레이아웃 선택 (1:2, 2x2) | MultiView |
-| Player Cam | 아이돌 직캠 모드 | WSOP TV 고유 |
-| Featured Hands | 주요 핸드 목록 | Key Plays |
+| 탭 | 기능 | 진입 조건 | NBA TV 대응 |
+|----|------|----------|-------------|
+| Active Tables | 다른 테이블 추가/전환 | - | Streams |
+| MultiView | 멀티뷰 레이아웃 선택 (1:2, 2x2) | - | MultiView |
+| Player Cam | 아이돌 직캠 모드 | **View Mode 선택 후** | WSOP TV 고유 |
+| Featured Hands | 주요 핸드 목록 | - | Key Plays |
 
 ### 9.3 Featured Hands Flow (핸드 탐색)
 
-![Featured Hands Flow 와이어프레임](../images/PRD-0002/11-featured-hands-flow.png)
+![Featured Hands Flow 1/2](../images/PRD-0002/11-featured-hands-flow-1.png)
 
-[HTML 원본](../mockups/PRD-0002/11-featured-hands-flow.html)
+[HTML 원본 (1/2)](../mockups/PRD-0002/11-featured-hands-flow-1.html)
+
+![Featured Hands Flow 2/2](../images/PRD-0002/11-featured-hands-flow-2.png)
+
+[HTML 원본 (2/2)](../mockups/PRD-0002/11-featured-hands-flow-2.html)
 
 **필터 옵션**:
 
@@ -564,7 +703,7 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 **Street 타임라인**: PREFLOP → FLOP → TURN → RIVER → SHOWDOWN
 
-> 상세 다이어그램은 [11-featured-hands-flow.html](../mockups/PRD-0002/11-featured-hands-flow.html) 참조
+> 상세 다이어그램은 [11-featured-hands-flow-1.html](../mockups/PRD-0002/11-featured-hands-flow-1.html), [11-featured-hands-flow-2.html](../mockups/PRD-0002/11-featured-hands-flow-2.html) 참조
 >
 > ASCII 원본은 [아카이브](../archive/PRD-0002-ascii-mockups.md#4-street-타임라인-섹션-93) 참조
 
@@ -627,18 +766,21 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 ### 10.3 기능 → Phase 매핑
 
-| 기능 카테고리 | MVP | P2 | P3 | P4 |
-|--------------|:---:|:--:|:--:|:--:|
-| 라이브 스트리밍 | ✅ | | | |
-| Tournament Ticker | ✅ | | | |
-| GGPass SSO | ✅ | | | |
-| 구독 모델 | ✅ | | | |
-| Multi-view | | ✅ | | |
-| Featured Hands | | ✅ | | |
-| 핸드 태깅/검색 | | ✅ | | |
-| Info Tabs | | | ✅ | |
-| Player Cam | | | | ✅ |
-| StatsView 오버레이 | | | | ✅ |
+> **핵심 개념**: Tournament Ticker = Multi-view 진입점
+> - Tournament Ticker 자체가 멀티뷰를 선택할 수 있는 인터페이스
+> - Ticker에서 테이블 클릭 → 즉시 시청, MultiView 버튼으로 추가 테이블 선택
+
+| 기능 카테고리 | MVP | P2 | P3 | P4 | 비고 |
+|--------------|:---:|:--:|:--:|:--:|------|
+| 라이브 스트리밍 | ✅ | | | | |
+| **Tournament Ticker / Multi-view** | ✅ | ✅ | | | MVP: Single View, P2: Multi-view 레이아웃 |
+| GGPass SSO | ✅ | | | | |
+| 구독 모델 | ✅ | | | | |
+| Featured Hands | | ✅ | | | |
+| 핸드 태깅/검색 | | ✅ | | | |
+| Info Tabs | | | ✅ | | |
+| Player Cam | | | | ✅ | View Mode 선택 후 진입 |
+| StatsView 오버레이 | | | | ✅ | |
 
 ---
 
@@ -690,4 +832,12 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 | 7.2 | 2026-01-23 | Claude Code | ASCII 아카이브 분리: 섹션 2.3 콘텐츠 플로우 ASCII 다이어그램 복원, PRD-0002-ascii-archive.md 파일로 전체 ASCII 와이어프레임 아카이브 생성 |
 | 7.3 | 2026-01-23 | Claude Code | ASCII 아카이브 참조 완료: 섹션 2.3/6.2/9.1/9.3/4.2에 ASCII 원본 아카이브 참조 링크 추가, 모든 ASCII 목업 → HTML 교체 + 아카이브 참조 처리 완료 |
 | 7.4 | 2026-01-23 | Claude Code | Multi-view 워크플로우 NBA TV 방식으로 수정: Ticker 선택 → 즉시 시청 → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가 (점진적 확장 UX), Featured Hands 버튼 위치 명시 (비디오 플레이어 좌측 하단) |
-| **7.5** | **2026-01-23** | **Claude Code** | **예능 콘텐츠 카테고리 추가**: Tier E (예능) 신설 - Poker After Dark, Game of Gold 포함, 콘텐츠 범위 확장 (라이브 대회 + 예능), 온라인 전용 이벤트만 제외 |
+| 7.5 | 2026-01-23 | Claude Code | 예능 콘텐츠 카테고리 추가: Tier E (예능) 신설 - Poker After Dark, Game of Gold 포함, 콘텐츠 범위 확장 (라이브 대회 + 예능), 온라인 전용 이벤트만 제외 |
+| 7.6 | 2026-01-23 | Claude Code | 목업 이미지 최적화 및 텍스트 분리: Featured Hands Flow 2장 분리 (1/2, 2/2), 필터 옵션/핸드 정보 구조 섹션 5에 텍스트로 보강 (5.3, 5.4 신설), Multi-view/Featured Hands/Player Cam 목업 컴팩트화 (A4 크기 최적화) |
+| 7.7 | 2026-01-26 | Claude Code | 4대 원천 확장 및 OVP/STREAM 이원화: 🏛️ TEMPLE(기존 방송 프로덕션 시스템) 원천 추가, OVP(다시보기)/STREAM(라이브) 아키텍처 분리, STREAM 송출 옵션 3가지 목업 추가 |
+| 7.8 | 2026-01-26 | Claude Code | 옵션 C 추가: 2.7 콘텐츠 플로우에 GGPOKER 방식 플레이어 팝업 정보 옵션 추가 (플레이어 클릭 → 실시간 통계/프로필 오버레이 팝업) |
+| 7.9 | 2026-01-26 | Claude Code | 옵션 C 위치 수정 및 이미지 최적화: GGPOKER 방식 플레이어 팝업 정보를 2.7 → 4.3 StatsView로 이동, 6개 이미지 잘림/여백 문제 수정 |
+| 8.0 | 2026-01-26 | Claude Code | 목업 이미지 전면 최적화: 7개 목업 여백 제거, Multi-view 2장 분리 (Step1/Step2), Featured Hands UI Modal 방식 재설계, Viewing Flow 계층형 트리 재설계, viewport 표준화 |
+| 8.1 | 2026-01-26 | Claude Code | Viewing Flow 계층 수정: Player Cam 진입 조건 변경 - MultiView → View Mode 선택 후에만 Player Cam 접근 가능 (Level 3 신설) |
+| 8.2 | 2026-01-26 | Claude Code | 목업 여백 최적화 및 기능 매핑 명확화: 9.2/9.3/9.5/2.1/4.1 목업 여백 제거, 10.3 기능 매핑에 "Tournament Ticker = Multi-view 진입점" 명시 (동일 기능 통합) |
+| **8.3** | **2026-01-26** | **Claude Code** | **옵션 2.3 현재 시스템 표기 및 Viewing Flow 재설계**: STREAM 옵션 2.3(인물 팔로업 방식)을 "현재 구축 시스템"으로 표시 (목업+비교표 뱃지 추가), 9.2 Viewing Flow 목업 가로 500px로 재설계 (가독성 향상: 폰트/노드 크기 확대) |
