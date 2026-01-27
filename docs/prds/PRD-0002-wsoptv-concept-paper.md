@@ -6,7 +6,7 @@
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
-| **Updated** | 2026-01-26 |
+| **Updated** | 2026-01-27 |
 | **Author** | Claude Code |
 | **Launch Target** | Q3 2026 |
 
@@ -291,23 +291,23 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 #### 단계별 설명
 
-> **핵심 원칙**: Ticker 선택 → **즉시 시청** → 비디오 플레이어 내 MultiView 활성화 → Ticker에서 추가
+> **핵심 원칙**: Ticker 선택 → **즉시 시청** → 비디오 플레이어 컨트롤 바 내 MultiView 버튼 → 팝업 선택
 
 | 단계 | 사용자 액션 | 시스템 반응 |
 |:----:|------------|------------|
 | 1 | Tournament Ticker에서 테이블 클릭 | **즉시 Single View 시청 시작** |
-| 2 | 비디오 플레이어 내 [MultiView] 버튼 클릭 | MultiView 모드 활성화, Ticker 추가 가능 상태 |
-| 3 | Ticker에서 추가 테이블 클릭 | 자동으로 2 VIEW / 4 VIEW 전환 |
-| 4 | View 버튼 (1/2/4) 클릭 | 선택한 레이아웃으로 변경 |
+| 2 | 컨트롤 바 "MultiView ⊞" 버튼 클릭 | MultiView 레이아웃 선택 팝업 표시 |
+| 3 | 팝업에서 레이아웃 선택 (1/1:1/2x2) | 선택한 레이아웃으로 변경 |
+| 4 | Tournament Ticker에서 추가 테이블 클릭 | 자동으로 2 VIEW / 4 VIEW 전환 |
 | 5 | 멀티뷰 내 화면 클릭 | 해당 테이블로 오디오 전환 (🔊 표시) |
 
 #### View Mode 옵션
 
 | 모드 | 레이아웃 | 자동 전환 조건 |
 |:----:|:--------:|---------------|
-| **1 VIEW** | 단일 화면 | 기본 (Single View) |
-| **2 VIEW** | 1:2 좌우 분할 | 2개 테이블 선택 시 |
-| **4 VIEW** | 2x2 그리드 | 3~4개 테이블 선택 시 |
+| **1** | 단일 화면 | 기본 (Single View) |
+| **1:1** | 좌우 2분할 | 2개 테이블 선택 시 |
+| **2x2** | 2x2 그리드 | 3~4개 테이블 선택 시 |
 
 #### 기능 명세
 
@@ -473,14 +473,19 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 | 항목 | NBA TV (Key Plays) | WSOP TV (Featured Hands) |
 |------|-------------------|-------------------------|
-| **버튼 위치** | 비디오 플레이어 **좌측 하단** | 비디오 플레이어 **좌측 하단** (동일) |
-| 버튼 명칭 | Key Plays | Featured Hands |
+| **버튼 위치** | 컨트롤 바 상단 (좌측 정렬) | 컨트롤 바 상단 "🔥 Key Plays" 버튼 |
+| 버튼 명칭 | Key Plays | 🔥 Key Plays (Featured Hands) |
+| 표시 방식 | 팝업 | 팝업 (동일) |
 | 목록 콘텐츠 | 주요 플레이 목록 | 주요 핸드 목록 |
 | 항목 정보 | 플레이어, 시간, 설명 | 플레이어, 핸드, 결과 |
 | 인터랙션 | 클릭 → 해당 시점 이동 | 클릭 → 해당 핸드 시점 이동 (동일) |
+| **YouTube Link** | - | ✅ YouTube에서 보기 버튼 (v3.1 추가) |
 | 필터 | 팀, 플레이어, 유형 | 플레이어, 핸드, 결과 |
 
-> **버튼 레이아웃**: 비디오 플레이어 컨트롤 바 **좌측 하단**에 고정 배치 (NBA TV Key Plays 동일)
+> **버튼 레이아웃 (v3.1)**: 컨트롤 바 상단에 좌측 정렬 배치
+> ```
+> [Streams] [MultiView ⊞] [🔥 Key Plays]
+> ```
 
 ### 5.2 Featured Hands UI (Key Plays 동일 레이아웃)
 
@@ -588,14 +593,27 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 | ② | Ad Banner | Ad Banner |
 | ③ | Game Header | Tournament Header |
 
-### 7.3 Video Player Area (④⑤⑥⑦)
+### 7.3 Video Player Area (④⑤⑥⑦) - v3.1 오버레이 컨트롤
 
-| 레이어 | NBA TV 컴포넌트 | WSOP TV 컴포넌트 |
-|:------:|-----------------|------------------|
-| ④ | Video Player | Video Player + POT/BOARD |
-| ⑤ | Stream Tabs | Stream Tabs |
-| ⑥ | Timeline | Timeline |
-| ⑦ | Controls | Controls |
+> **v3.1 변경**: YouTube/Netflix 스타일 오버레이 컨트롤 - 마우스 호버 시 표시, 3초 후 자동 숨김
+
+| 레이어 | NBA TV 컴포넌트 | WSOP TV 컴포넌트 (v3.1) |
+|:------:|-----------------|------------------------|
+| ④ | Video Player | Video Player + POT/BOARD (16:9 고정) |
+| ⑤ | Stream Tabs | **오버레이 컨트롤 바** (타임라인 위) |
+| ⑥ | Timeline | Timeline (오버레이) |
+| ⑦ | Controls | Controls (오버레이) |
+
+**v3.1 컨트롤 바 구조**:
+```
+┌───────────────────────────────────────────────────────────────┐
+│  Streams  MultiView⊞  🔥Key Plays  [GFX/HUD 배지]            │ ← 버튼 행 (좌측 정렬)
+├───────────────────────────────────────────────────────────────┤
+│  01:38:59 ════════════════════════════════════════════ LIVE  │ ← 타임라인
+├───────────────────────────────────────────────────────────────┤
+│  ⏵  ⏪10  10⏩  🔊──                           CC  ⚙  ⛶      │ ← 재생 컨트롤
+└───────────────────────────────────────────────────────────────┘
+```
 
 ### 7.4 용어 매핑
 
@@ -677,14 +695,14 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 
 > **Player Cam 진입 조건**: MultiView 활성화 후 **View Mode 선택 필수** (Level 3)
 
-**Stream Tabs 옵션** (Video Player Area ⑤):
+**컨트롤 바 버튼** (Video Player Area ⑤ - v3.1 오버레이):
 
-| 탭 | 기능 | 진입 조건 | NBA TV 대응 |
-|----|------|----------|-------------|
-| Active Tables | 다른 테이블 추가/전환 | - | Streams |
-| MultiView | 멀티뷰 레이아웃 선택 (1:2, 2x2) | - | MultiView |
+| 버튼 | 기능 | 팝업 내용 | NBA TV 대응 |
+|------|------|----------|-------------|
+| **Streams** | 스트림 목록 표시 | 활성 테이블 목록 + 상태 | Streams |
+| **MultiView ⊞** | 멀티뷰 레이아웃 선택 | 1 / 1:1 / 2x2 선택 | MultiView |
+| **🔥 Key Plays** | 주요 핸드 목록 | 핸드 목록 + YouTube 링크 | Key Plays |
 | Player Cam | 아이돌 직캠 모드 | **View Mode 선택 후** | WSOP TV 고유 |
-| Featured Hands | 주요 핸드 목록 | - | Key Plays |
 
 ### 9.3 Featured Hands Flow (핸드 탐색)
 
@@ -848,4 +866,5 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 | 8.2 | 2026-01-26 | Claude Code | 목업 여백 최적화 및 기능 매핑 명확화: 9.2/9.3/9.5/2.1/4.1 목업 여백 제거, 10.3 기능 매핑에 "Tournament Ticker = Multi-view 진입점" 명시 (동일 기능 통합) |
 | 8.3 | 2026-01-26 | Claude Code | 옵션 2.3 현재 시스템 표기 및 Viewing Flow 재설계: STREAM 옵션 2.3(인물 팔로업 방식)을 "현재 구축 시스템"으로 표시 (목업+비교표 뱃지 추가), 9.2 Viewing Flow 목업 가로 500px로 재설계 (가독성 향상: 폰트/노드 크기 확대) |
 | 8.4 | 2026-01-26 | Claude Code | Google Docs 직접 삽입 이미지 동기화: Option B (GGM$ 영상 오버레이), Option C (GGPOKER 팝업 상세) 이미지 2개 Google Docs에서 다운로드 후 로컬 PRD에 추가 |
-| **8.5** | **2026-01-27** | **Claude Code** | **Option A 이미지 추가**: NBA TV 방식 (Info Tabs) 섹션에 Google Docs에서 복사된 이미지 다운로드 후 추가 (20-option-a-nba-tv-info-tabs.png) |
+| 8.5 | 2026-01-27 | Claude Code | Option A 이미지 추가: NBA TV 방식 (Info Tabs) 섹션에 Google Docs에서 복사된 이미지 다운로드 후 추가 (20-option-a-nba-tv-info-tabs.png) |
+| **8.6** | **2026-01-27** | **Claude Code** | **v3.1 POC 동기화**: 오버레이 컨트롤 설계 반영 - 컨트롤 바 상단 버튼 배치 (Streams/MultiView⊞/🔥Key Plays 좌측 정렬), View Mode 1:1로 수정, Key Plays에 YouTube 링크 추가 |
