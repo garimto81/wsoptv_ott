@@ -475,7 +475,7 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 |------|-------------------|-------------------------|
 | **버튼 위치** | 컨트롤 바 상단 (좌측 정렬) | 컨트롤 바 상단 "🔥 Key Plays" 버튼 |
 | 버튼 명칭 | Key Plays | 🔥 Key Plays (Featured Hands) |
-| 표시 방식 | 팝업 | 팝업 (동일) |
+| **표시 방식** | 팝업 | **중앙 모달 배너** (v3.2) |
 | 목록 콘텐츠 | 주요 플레이 목록 | 주요 핸드 목록 |
 | 항목 정보 | 플레이어, 시간, 설명 | 플레이어, 핸드, 결과 |
 | 인터랙션 | 클릭 → 해당 시점 이동 | 클릭 → 해당 핸드 시점 이동 (동일) |
@@ -486,6 +486,8 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 > ```
 > [Streams] [MultiView ⊞] [🔥 Key Plays]
 > ```
+
+> **팝업 방식 (v3.2)**: Streams/Key Plays 클릭 시 **비디오 플레이어 중앙에 대형 모달 배너**로 표시 (백드롭 오버레이 + 닫기 버튼)
 
 ### 5.2 Featured Hands UI (Key Plays 동일 레이아웃)
 
@@ -867,4 +869,5 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 | 8.3 | 2026-01-26 | Claude Code | 옵션 2.3 현재 시스템 표기 및 Viewing Flow 재설계: STREAM 옵션 2.3(인물 팔로업 방식)을 "현재 구축 시스템"으로 표시 (목업+비교표 뱃지 추가), 9.2 Viewing Flow 목업 가로 500px로 재설계 (가독성 향상: 폰트/노드 크기 확대) |
 | 8.4 | 2026-01-26 | Claude Code | Google Docs 직접 삽입 이미지 동기화: Option B (GGM$ 영상 오버레이), Option C (GGPOKER 팝업 상세) 이미지 2개 Google Docs에서 다운로드 후 로컬 PRD에 추가 |
 | 8.5 | 2026-01-27 | Claude Code | Option A 이미지 추가: NBA TV 방식 (Info Tabs) 섹션에 Google Docs에서 복사된 이미지 다운로드 후 추가 (20-option-a-nba-tv-info-tabs.png) |
-| **8.6** | **2026-01-27** | **Claude Code** | **v3.1 POC 동기화**: 오버레이 컨트롤 설계 반영 - 컨트롤 바 상단 버튼 배치 (Streams/MultiView⊞/🔥Key Plays 좌측 정렬), View Mode 1:1로 수정, Key Plays에 YouTube 링크 추가 |
+| 8.6 | 2026-01-27 | Claude Code | v3.1 POC 동기화: 오버레이 컨트롤 설계 반영 - 컨트롤 바 상단 버튼 배치 (Streams/MultiView⊞/🔥Key Plays 좌측 정렬), View Mode 1:1로 수정, Key Plays에 YouTube 링크 추가 |
+| **8.7** | **2026-01-27** | **Claude Code** | **v3.2 POC 동기화**: Streams/Key Plays 클릭 시 중앙 모달 배너 팝업으로 변경 (대형 카드, 백드롭 오버레이, 닫기 버튼) |
