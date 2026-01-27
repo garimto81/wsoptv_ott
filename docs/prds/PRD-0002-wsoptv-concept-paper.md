@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 8.3 |
+| **Version** | 8.5 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
@@ -395,6 +395,8 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 
 > 시청에 방해되지 않도록 **별도 하단 패널**에 표시
 
+![Option A: NBA TV 방식 (Info Tabs)](../images/PRD-0002/20-option-a-nba-tv-info-tabs.png)
+
 | 특징 | 설명 |
 |------|------|
 | **위치** | 영상 하단 Info Tabs 영역 |
@@ -412,6 +414,8 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 #### Option B: GGM$ 방식 (영상 오버레이)
 
 > 시청에 **직접적인 역할**을 하도록 영상 위에 오버레이
+
+![Option B: GGM$ 방식 (영상 오버레이)](../images/PRD-0002/18-option-b-ggms-overlay.png)
 
 | 특징 | 설명 |
 |------|------|
@@ -436,6 +440,8 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 ![옵션 C: GGPOKER 방식](../images/PRD-0002/15-content-flow-option-c.png)
 
 [HTML 원본](../mockups/PRD-0002/15-content-flow-option-c.html)
+
+![옵션 C: GGPOKER 팝업 상세](../images/PRD-0002/19-option-c-ggpoker-popup.png)
 
 | 특징 | 설명 |
 |------|------|
@@ -840,4 +846,6 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 | 8.0 | 2026-01-26 | Claude Code | 목업 이미지 전면 최적화: 7개 목업 여백 제거, Multi-view 2장 분리 (Step1/Step2), Featured Hands UI Modal 방식 재설계, Viewing Flow 계층형 트리 재설계, viewport 표준화 |
 | 8.1 | 2026-01-26 | Claude Code | Viewing Flow 계층 수정: Player Cam 진입 조건 변경 - MultiView → View Mode 선택 후에만 Player Cam 접근 가능 (Level 3 신설) |
 | 8.2 | 2026-01-26 | Claude Code | 목업 여백 최적화 및 기능 매핑 명확화: 9.2/9.3/9.5/2.1/4.1 목업 여백 제거, 10.3 기능 매핑에 "Tournament Ticker = Multi-view 진입점" 명시 (동일 기능 통합) |
-| **8.3** | **2026-01-26** | **Claude Code** | **옵션 2.3 현재 시스템 표기 및 Viewing Flow 재설계**: STREAM 옵션 2.3(인물 팔로업 방식)을 "현재 구축 시스템"으로 표시 (목업+비교표 뱃지 추가), 9.2 Viewing Flow 목업 가로 500px로 재설계 (가독성 향상: 폰트/노드 크기 확대) |
+| 8.3 | 2026-01-26 | Claude Code | 옵션 2.3 현재 시스템 표기 및 Viewing Flow 재설계: STREAM 옵션 2.3(인물 팔로업 방식)을 "현재 구축 시스템"으로 표시 (목업+비교표 뱃지 추가), 9.2 Viewing Flow 목업 가로 500px로 재설계 (가독성 향상: 폰트/노드 크기 확대) |
+| 8.4 | 2026-01-26 | Claude Code | Google Docs 직접 삽입 이미지 동기화: Option B (GGM$ 영상 오버레이), Option C (GGPOKER 팝업 상세) 이미지 2개 Google Docs에서 다운로드 후 로컬 PRD에 추가 |
+| **8.5** | **2026-01-27** | **Claude Code** | **Option A 이미지 추가**: NBA TV 방식 (Info Tabs) 섹션에 Google Docs에서 복사된 이미지 다운로드 후 추가 (20-option-a-nba-tv-info-tabs.png) |

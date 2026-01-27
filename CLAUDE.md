@@ -80,7 +80,7 @@ docs/images/[문서ID]/*.png     # 스크린샷
 
 | 문서 | Google Docs ID | 버전 | 동기화 날짜 |
 |------|----------------|------|-------------|
-| **PRD-0002** | `1Y5KMRFunHJEXmR0MrXbb_flmf-_88obGnJBe0AC94_A` | v8.3 | 2026-01-26 |
+| **PRD-0002** | `1Y5KMRFunHJEXmR0MrXbb_flmf-_88obGnJBe0AC94_A` | v8.5 | 2026-01-27 |
 
 로컬 PRD: `docs/prds/PRD-0002-wsoptv-concept-paper.md`
 
