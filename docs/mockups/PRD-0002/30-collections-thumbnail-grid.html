@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <title>WSOP TV - Collections Thumbnail Grid</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, system-ui, sans-serif;
+            background: #fafafa;
+            padding: 40px;
+            width: 1200px;
+            height: 800px;
+            color: #1a1a1a;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #1a1a2e;
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .nav-item.active {
+            color: #1a1a2e;
+            border-bottom: 2px solid #1a1a2e;
+            padding-bottom: 2px;
+        }
+
+        .category {
+            margin-bottom: 32px;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: #e74c3c;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            background: white;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: #1a1a2e;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 100%);
+            border-bottom: 1.5px solid #d0d0d0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumbnail::before {
+            content: '';
+            width: 48px;
+            height: 48px;
+            border: 2px solid #b0b0b0;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .thumbnail::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 16px solid #b0b0b0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 4px;
+        }
+
+        .badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-meta {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .wireframe-label {
+            position: fixed;
+            bottom: 20px;
+            right: 40px;
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">WSOP TV</div>
+        <div class="nav">
+            <div class="nav-item">Home</div>
+            <div class="nav-item active">Collections</div>
+            <div class="nav-item">Players</div>
+            <div class="nav-item">Schedule</div>
+        </div>
+    </div>
+
+    <!-- Featured / Live Now -->
+    <div class="category">
+        <div class="category-title">
+            <div class="live-indicator"></div>
+            Live Now
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="badge">LIVE</div>
+                    <div class="duration">2:45:30</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Main Event Day 3 - Table 1</div>
+                    <div class="card-meta">2,456 viewers · Feature Table</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="badge">LIVE</div>
+                    <div class="duration">2:45:30</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">High Roller Final Table</div>
+                    <div class="card-meta">1,823 viewers · ESPN</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="badge">LIVE</div>
+                    <div class="duration">1:12:05</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">$10K NLH - Table 5</div>
+                    <div class="card-meta">892 viewers · Secondary</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="badge">LIVE</div>
+                    <div class="duration">0:38:22</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Ladies Event - Feature</div>
+                    <div class="card-meta">567 viewers · PokerGO</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WSOP Vegas 2025 -->
+    <div class="category">
+        <div class="category-title">WSOP Vegas 2025</div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">3:24:15</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Main Event Day 2 - Highlights</div>
+                    <div class="card-meta">Jun 15, 2025 · 45K views</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">2:08:42</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">$50K High Roller Final Table</div>
+                    <div class="card-meta">Jun 14, 2025 · 32K views</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">1:45:33</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Tag Team Event - Best Hands</div>
+                    <div class="card-meta">Jun 13, 2025 · 28K views</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">4:12:08</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Opening Ceremony & Shuffle Up</div>
+                    <div class="card-meta">Jun 12, 2025 · 89K views</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WSOPE Prague 2024 -->
+    <div class="category">
+        <div class="category-title">WSOPE Prague 2024</div>
+        <div class="grid">
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">5:45:20</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Main Event Final Table (Full)</div>
+                    <div class="card-meta">Nov 8, 2024 · 156K views</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">2:33:15</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">€25K High Roller - Day 2</div>
+                    <div class="card-meta">Nov 5, 2024 · 67K views</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">1:58:44</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">PLO Championship Highlights</div>
+                    <div class="card-meta">Nov 3, 2024 · 41K views</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="thumbnail">
+                    <div class="duration">3:12:30</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Super High Roller Bowl Europe</div>
+                    <div class="card-meta">Nov 1, 2024 · 98K views</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wireframe-label">Executive Wireframe · PRD-0002</div>
+</body>
+</html>

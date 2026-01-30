@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1000, initial-scale=1.0">
+    <title>WSOPTV Dual Flywheel - 콘텐츠 놀이터 생태계</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #000;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Flywheel Container */
+        .flywheel-wrapper {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-bottom: 25px;
+        }
+
+        /* SVG for arrows */
+        .flywheel-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .arrow-path {
+            fill: none;
+            stroke: #000;
+            stroke-width: 2;
+        }
+
+        .arrow-head {
+            fill: #000;
+        }
+
+        /* Center Core */
+        .core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px;
+            height: 130px;
+            border: 3px solid #000;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .core-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .core-subtitle {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Nodes */
+        .node {
+            position: absolute;
+            width: 140px;
+            padding: 14px 10px;
+            border: 2px solid #000;
+            background: #fff;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .node.highlight {
+            border-width: 3px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .node.dashed {
+            border-style: dashed;
+            background: #f9f9f9;
+        }
+
+        .node-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .node-desc {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .node.highlight .node-desc {
+            color: #bbb;
+        }
+
+        /* Symmetric Node Positions - Hexagonal Layout */
+        /* Top row */
+        .node-1 { top: 30px; left: 130px; }
+        .node-2 { top: 30px; right: 130px; }
+        /* Middle row */
+        .node-6 { top: 200px; left: 50px; }
+        .node-3 { top: 200px; right: 50px; }
+        /* Bottom row */
+        .node-5 { bottom: 50px; left: 130px; }
+        .node-4 { bottom: 50px; right: 130px; }
+
+        /* Zone Labels */
+        .zone-label {
+            position: absolute;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border: 2px solid #000;
+            background: #fff;
+            z-index: 15;
+        }
+
+        .zone-left { top: 120px; left: 0; }
+        .zone-right { top: 120px; right: 0; }
+
+        /* Key Message */
+        .key-message {
+            border: 2px solid #000;
+            padding: 18px 24px;
+            text-align: center;
+            background: #f5f5f5;
+        }
+
+        .key-message-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .key-message-text {
+            font-size: 12px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Legend */
+        .legend {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #000;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+        }
+
+        .legend-box {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #000;
+        }
+
+        .legend-box.filled { background: #1a1a2e; }
+        .legend-box.dashed { border-style: dashed; background: #f9f9f9; }
+        .legend-box.solid { background: #fff; }
+
+        @media print {
+            body { padding: 20px; }
+            .node.highlight {
+                background: #333 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">WSOPTV Dual Flywheel</div>
+        <div class="subtitle">콘텐츠 놀이터가 만드는 GG 생태계 선순환</div>
+
+        <div class="flywheel-wrapper">
+            <!-- SVG Arrows - Smooth Curved Paths -->
+            <svg class="flywheel-svg" viewBox="0 0 900 500">
+                <defs>
+                    <!-- Arrow marker -->
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" class="arrow-head"/>
+                    </marker>
+                </defs>
+
+                <!-- Outer clockwise arrows (hexagonal flow) -->
+                <!-- 1 → 2: Top horizontal -->
+                <path d="M 295 75 Q 450 50, 605 75" class="arrow-path" marker-end="url(#arrowhead)"/>
+
+                <!-- 2 → 3: Top-right to Mid-right -->
+                <path d="M 720 115 Q 780 170, 755 230" class="arrow-path" marker-end="url(#arrowhead)"/>
+
+                <!-- 3 → 4: Mid-right to Bottom-right -->
+                <path d="M 755 295 Q 780 350, 720 400" class="arrow-path" marker-end="url(#arrowhead)"/>
+
+                <!-- 4 → 5: Bottom horizontal -->
+                <path d="M 605 435 Q 450 460, 295 435" class="arrow-path" marker-end="url(#arrowhead)"/>
+
+                <!-- 5 → 6: Bottom-left to Mid-left -->
+                <path d="M 175 400 Q 115 350, 140 295" class="arrow-path" marker-end="url(#arrowhead)"/>
+
+                <!-- 6 → 1: Mid-left to Top-left -->
+                <path d="M 140 230 Q 115 170, 175 115" class="arrow-path" marker-end="url(#arrowhead)"/>
+            </svg>
+
+            <!-- Center Core -->
+            <div class="core">
+                <div class="core-title">Dual<br>Flywheel</div>
+                <div class="core-subtitle">이중 선순환</div>
+            </div>
+
+            <!-- Nodes - Symmetric Hexagonal Layout -->
+            <!-- Left Side: GG Ecosystem -->
+            <div class="node node-1">
+                <div class="node-title">GG POKER</div>
+                <div class="node-desc">게임 플레이</div>
+            </div>
+
+            <div class="node node-6">
+                <div class="node-title">재참여</div>
+                <div class="node-desc">영감받은 플레이</div>
+            </div>
+
+            <div class="node node-5">
+                <div class="node-title">플레이시간 증가</div>
+                <div class="node-desc">다시 게임으로</div>
+            </div>
+
+            <!-- Right Side: Content Playground -->
+            <div class="node highlight node-2">
+                <div class="node-title">WSOPTV</div>
+                <div class="node-desc">대회 시청</div>
+            </div>
+
+            <div class="node dashed node-3">
+                <div class="node-title">플레이어 발견</div>
+                <div class="node-desc">Player Cam 시청</div>
+            </div>
+
+            <div class="node dashed node-4">
+                <div class="node-title">체류시간 증가</div>
+                <div class="node-desc">콘텐츠 탐색</div>
+            </div>
+
+            <!-- Zone Labels -->
+            <div class="zone-label zone-left">GG 생태계</div>
+            <div class="zone-label zone-right">콘텐츠 놀이터</div>
+        </div>
+
+        <!-- Key Message -->
+        <div class="key-message">
+            <div class="key-message-title">핵심 전략</div>
+            <div class="key-message-text">
+                WSOPTV는 독립 OTT가 아니라 GG 생태계의 "콘텐츠 놀이터"<br>
+                시청 → 팬심 → 체류 → 플레이 → 다시 시청의 선순환 구조로 Lock-in 효과 극대화
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box solid"></div>
+                <span>GG POKER 영역</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box filled"></div>
+                <span>WSOPTV (핵심)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box dashed"></div>
+                <span>콘텐츠 놀이터</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

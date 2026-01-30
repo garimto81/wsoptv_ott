@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Streaming Architecture - Simplified</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+            background: #ffffff;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 900px;
+            max-width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* Architecture Diagram */
+        .diagram {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        /* Row Layout */
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Boxes */
+        .box {
+            flex: 1;
+            border: 2px solid #333;
+            background: #fff;
+            padding: 20px;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .box-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .box-subtitle {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .box-items {
+            font-size: 10px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* NEW WSOPTV Station Box */
+        .box-wsoptv {
+            border: 2px dashed #0066cc;
+            background: rgba(0, 102, 204, 0.02);
+        }
+
+        .box-wsoptv .box-title {
+            color: #0066cc;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: -12px;
+            right: 10px;
+            background: #0066cc;
+            color: white;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Arrows */
+        .arrow {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 2px;
+            background: #333;
+            position: relative;
+        }
+
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid #333;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .arrow-blue {
+            background: #0066cc;
+        }
+
+        .arrow-blue::after {
+            border-left-color: #0066cc;
+        }
+
+        /* Vertical Connector */
+        .vertical-connector {
+            position: absolute;
+            left: calc(50% + 220px);
+            top: -30px;
+            width: 2px;
+            height: 30px;
+            background: #0066cc;
+        }
+
+        .vertical-connector::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-top: 8px solid #0066cc;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+        }
+
+        /* Phase Badge */
+        .phase-badge {
+            position: absolute;
+            left: calc(50% + 230px);
+            top: -45px;
+            font-size: 9px;
+            color: #0066cc;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* Legend */
+        .legend {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .legend-title {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #000;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 11px;
+        }
+
+        .legend-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #333;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .legend-icon-blue {
+            border: 2px dashed #0066cc;
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        .legend-text {
+            flex: 1;
+            color: #333;
+        }
+
+        .legend-text strong {
+            font-weight: 700;
+            color: #000;
+        }
+
+        .legend-text-blue strong {
+            color: #0066cc;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                width: 100%;
+            }
+
+            .row {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .arrow {
+                width: 2px;
+                height: 30px;
+                background: #333;
+                transform: rotate(90deg);
+            }
+
+            .vertical-connector {
+                display: none;
+            }
+
+            .phase-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WSOPTV Streaming Architecture</h1>
+        <p class="subtitle">Simplified Flow with WSOPTV Station Overlay (Phase 2+)</p>
+
+        <div class="diagram">
+            <!-- Row 1: Existing YouTube Path -->
+            <div class="row">
+                <div class="box">
+                    <div class="box-title">Las Vegas Production</div>
+                    <div class="box-subtitle">(On-Site)</div>
+                    <div class="box-items">
+                        Feature Tables<br>
+                        + Switcher
+                    </div>
+                </div>
+
+                <div class="arrow"></div>
+
+                <div class="box">
+                    <div class="box-title">LiveU Cloud</div>
+                    <div class="box-subtitle">(SaaS)</div>
+                    <div class="box-items">
+                        Matrix/Routing
+                    </div>
+                </div>
+
+                <div class="arrow"></div>
+
+                <div class="box">
+                    <div class="box-title">Seoul Studio</div>
+                    <div class="box-subtitle">(편집)</div>
+                    <div class="box-items">
+                        Hand Selection<br>
+                        + Graphics
+                    </div>
+                </div>
+
+                <div class="arrow"></div>
+
+                <div class="box">
+                    <div class="box-title">YouTube</div>
+                    <div class="box-subtitle">(무료)</div>
+                    <div class="box-items">
+                        DVR: OFF<br>
+                        Post: Private
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: New WSOPTV Path -->
+            <div class="row">
+                <div class="phase-badge">(Phase 2+)</div>
+                <div class="vertical-connector"></div>
+
+                <!-- Empty spacer for Las Vegas column -->
+                <div class="box" style="opacity: 0; pointer-events: none; visibility: hidden;">
+                    <div class="box-title">Spacer</div>
+                </div>
+
+                <div class="arrow" style="opacity: 0;"></div>
+
+                <div class="box">
+                    <div class="box-title">LiveU Cloud</div>
+                    <div class="box-subtitle">(SaaS)</div>
+                    <div class="box-items">
+                        Matrix/Routing
+                    </div>
+                </div>
+
+                <div class="arrow arrow-blue"></div>
+
+                <div class="box box-wsoptv">
+                    <div class="new-badge">NEW</div>
+                    <div class="box-title">⭐ WSOPTV Station</div>
+                    <div class="box-subtitle">(신규)</div>
+                    <div class="box-items">
+                        Multi-Encoder Bank<br>
+                        GFX Overlay<br>
+                        Player Cam 매칭
+                    </div>
+                </div>
+
+                <div class="arrow arrow-blue"></div>
+
+                <div class="box box-wsoptv">
+                    <div class="box-title">WSOPTV OTT</div>
+                    <div class="box-subtitle">(유료)</div>
+                    <div class="box-items">
+                        Multi-view<br>
+                        Player Cam<br>
+                        Timeshift
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-title">핵심 메시지</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-icon"></div>
+                    <div class="legend-text">
+                        <strong>기존 경로:</strong> Las Vegas → LiveU → Seoul → YouTube (변경 없음)
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon legend-icon-blue"></div>
+                    <div class="legend-text legend-text-blue">
+                        <strong>신규 경로:</strong> LiveU → WSOPTV Station → WSOPTV OTT (Phase 2+)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # WSOPTV OTT 문서 인덱스
 
-**Version**: 4.1.0
-**Last Updated**: 2026-01-20
-**Major Update**: PRD-0010 NBA TV UX 솔루션 추가
+**Version**: 5.0.0
+**Last Updated**: 2026-01-28
+**Major Update**: PRD-0006 4-layer 통합, Executive Summary 추가, 문서 구조 정리
 
 ---
 
@@ -33,15 +33,16 @@
 
 ---
 
-## Tier 1: 핵심 문서 (4개)
+## Tier 1: 핵심 문서 (5개)
 
 반드시 최신 상태로 유지해야 하는 문서
 
 | 문서 | 역할 | 상태 |
 |------|------|:----:|
 | [STRAT-0001](strategies/STRAT-0001-viewer-experience-vision.md) | **Vision** - 시청자 경험 비전 | Active |
-| [PRD-0002](prds/PRD-0002-wsoptv-concept-paper.md) | **Concept Paper** - 플랫폼 컨셉 | Active |
-| [PRD-0006](prds/PRD-0006-advanced-mode.md) | **Feature** - Advanced Mode | Active |
+| [PRD-0002](prds/PRD-0002-wsoptv-concept-paper.md) | **Concept Paper** - 플랫폼 컨셉 (v8.6) | Active |
+| [PRD-0002-executive-summary](prds/PRD-0002-executive-summary.md) | **Executive Summary** - 경영진 보고용 | Active |
+| [PRD-0006](prds/PRD-0006-advanced-mode.md) | **Feature** - Advanced Mode (4-layer) | Active |
 | [STRAT-0007](strategies/STRAT-0007-content-sourcing.md) | **Content** - 콘텐츠 소싱 | Active |
 
 ### YouTube 대비 핵심 차별점 (STRAT-0001)
@@ -55,17 +56,19 @@
 
 ---
 
-## Tier 2: 보조 문서 (5개)
+## Tier 2: 보조 문서 (7개)
 
 필요 시 참조하는 문서
 
 | 문서 | 역할 | 상태 |
 |------|------|:----:|
+| [PRD-0005](prds/PRD-0005-wsoptv-ott-rfp.md) | RFP 문서 | Active |
 | [PRD-0009](prds/PRD-0009-hand-tagging-search.md) | Hand Tagging (Phase 2) | Draft |
 | [PRD-0010](prds/PRD-0010-nbatv-ux-solutions.md) | NBA TV UX 솔루션 적용 | Draft |
 | [ADR-0001](adrs/ADR-0001-multiview-3layer-rationale.md) | Multi-view 설계 근거 | Draft |
 | [ADR-0002](adrs/ADR-0002-database-schema-design.md) | DB 스키마 설계 | Proposed |
 | [STRAT-0003](strategies/STRAT-0003-cross-promotion.md) | 프로모션 전략 | Proposal |
+| [STRAT-0008](strategies/STRAT-0008-content-sourcing-architecture.md) | 콘텐츠 소싱 아키텍처 | Draft |
 
 ---
 
@@ -90,13 +93,15 @@
 
 ---
 
-## 아카이브 (7개)
+## 아카이브 (8개)
 
 초기 기획 단계에서 과도하게 상세화된 문서들
 
 | 문서 | 사유 |
 |------|------|
-| STRAT-0008~0011 | 타임라인/KPI/법규/API 미확정 |
+| PRD-0006-advanced-mode-v4-3layer | 4-layer로 대체됨 |
+| PRD-0002-ascii-archive | ASCII 다이어그램 백업 |
+| STRAT-0009~0011 | 타임라인/KPI/법규/API 미확정 |
 | ADR-0003 | 기술 스택 미확정 |
 | PRD-0008 | UX 방향 미확정 |
 | REPORT-strategy | 전략 재검토 필요 |
@@ -116,11 +121,13 @@ docs/
 ├── strategies/                  # 전략 문서
 │   ├── STRAT-0001-viewer-experience-vision.md  ★
 │   ├── STRAT-0003-cross-promotion.md
-│   └── STRAT-0007-content-sourcing.md
+│   ├── STRAT-0007-content-sourcing.md
+│   └── STRAT-0008-content-sourcing-architecture.md
 ├── prds/                        # PRD
-│   ├── PRD-0002-wsoptv-ott-platform-mvp.md     ★
+│   ├── PRD-0002-wsoptv-concept-paper.md        ★
+│   ├── PRD-0002-executive-summary.md           ★ NEW
 │   ├── PRD-0005-wsoptv-ott-rfp.md
-│   ├── PRD-0006-advanced-mode.md               ★
+│   ├── PRD-0006-advanced-mode.md               ★ (4-layer)
 │   ├── PRD-0009-hand-tagging-search.md
 │   └── PRD-0010-nbatv-ux-solutions.md
 ├── adrs/                        # ADR
@@ -145,4 +152,4 @@ docs/
 
 ---
 
-*Last Updated: 2026-01-20 (PRD-0010 추가)*
+*Last Updated: 2026-01-28 (PRD-0006 4-layer 통합, Executive Summary 추가)*

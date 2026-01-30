@@ -2,13 +2,174 @@
 
 | 항목 | 값 |
 |------|---|
-| **Version** | 8.5 |
+| **Version** | 9.1 |
 | **Status** | Draft |
 | **Priority** | P0 |
 | **Created** | 2026-01-07 |
-| **Updated** | 2026-01-27 |
+| **Updated** | 2026-01-30 |
 | **Author** | Claude Code |
 | **Launch Target** | Q3 2026 |
+
+---
+
+## -1. GG 생태계 내 WSOPTV 역할
+
+> **핵심**: WSOPTV는 독립 OTT가 아니라 **GG 생태계의 "콘텐츠 놀이터"**로서 GG POKER 구독의 핵심 혜택 역할을 수행합니다.
+
+### -1.1 GGPass 구독 구조
+
+![GGPass 생태계 구조](../images/PRD-0002/57-ggpass-ecosystem.png)
+
+[HTML 원본](../mockups/PRD-0002/57-ggpass-ecosystem.html)
+
+| 구분 | 특징 | 서비스 |
+|:----:|------|--------|
+| **구독 전용 서비스** | 서비스 이용 시 구독 필수, Payment 구현 필수 | ClubbGG, WSOP Academy, **WSOP TV** |
+| **구독 혜택 서비스** | 구독자에게 혜택 제공, Payment 구현 안함 | GGPoker, WSOP+, Pokerstake |
+
+### -1.2 쿠팡플레이 비교 (역순 구조)
+
+> 📋 **MOSES**: 쿠팡플레이와 구조는 유사하지만 **위치가 반대**입니다.
+
+| 구분 | 쿠팡플레이 | WSOPTV |
+|:----:|-----------|--------|
+| **구독 중심** | 쿠팡 로켓와우 | **WSOPTV** |
+| **혜택 방향** | 로켓와우 → 쿠팡플레이 무료 | WSOPTV 구독 → ClubbGG, Academy, GGPoker 혜택 |
+| **핵심 서비스** | e-commerce | **동영상 시청** |
+
+**Reader App 전략** (앱스토어 수수료 회피):
+
+| 서비스 | 앱스토어 수수료 | Reader App 판정 |
+|--------|:-------------:|:---------------:|
+| **WSOPTV** | **면제 가능** | ✅ 동영상 시청 위주 |
+| WSOP Academy | 면제 시도 예정 | ⚠️ 교육 콘텐츠 |
+| ClubbGG | 수수료 부담 | ❌ 게임 콘텐츠 |
+
+> **Reader App이란?**: 디지털 콘텐츠(책, 잡지, 음악, 비디오 등)를 구독하는 앱으로, Apple/Google이 별도로 분류하여 인앱 결제 수수료를 면제하는 앱 유형. Netflix, Spotify 등이 해당.
+
+**WSOPTV가 중심인 이유**:
+- 동영상 시청 위주 비즈니스 모델 → Reader App 판정 용이
+- WSOPTV 구독이 다른 GG 서비스 혜택의 게이트웨이 역할
+- 앱스토어 수수료 부담 없이 구독 결제 가능
+
+### -1.3 포커 시청 특성과 "콘텐츠 놀이터" 개념
+
+포커 대회 시청은 일반 스포츠와 근본적으로 다릅니다.
+
+| 특성 | 일반 스포츠 (NBA 등) | 포커 대회 |
+|------|---------------------|----------|
+| **경기 시간** | 2-3시간 | 수 시간~수십 시간 |
+| **구조** | 긴장감 유지 | 느슨한 구조 (핸드 간 대기) |
+| **시청 패턴** | 집중 시청 | **탐색/검색/비교** |
+| **몰입 방식** | 경기 자체에 몰입 | 플레이어 중심 관심 |
+
+**"콘텐츠 놀이터" 철학:**
+
+포커 플레이어는 영상 자체에 집중하기보다, WSOPTV를 **놀이터**처럼 이용합니다:
+- GG POKER에서 게임 플레이 중 휴식
+- WSOPTV로 이동하여 대회 시청
+- 관심 있는 플레이어 발견 → Player Cam으로 집중 시청
+- 해당 플레이어의 과거 핸드/하이라이트 탐색
+- 다시 GG POKER로 돌아가 플레이
+
+### -1.4 Dual Flywheel: 이중 선순환 구조
+
+![Dual Flywheel](../images/PRD-0002/58-dual-flywheel.png)
+
+[HTML 원본](../mockups/PRD-0002/58-dual-flywheel.html)
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│                                                                   │
+│   GG POKER 플레이 ════════════════════════▶ WSOPTV 시청           │
+│         ▲                                        │                │
+│         │                                        ▼                │
+│         │                               플레이어 팬심 형성         │
+│         │                                        │                │
+│         │                                        ▼                │
+│   플레이시간 증가 ◀════════════════════════ 체류시간 증가          │
+│                                                                   │
+│     [GG 생태계]                        [콘텐츠 놀이터]             │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+**이중 효과:**
+1. **WSOPTV 체류시간 증가**: 플레이어 중심 콘텐츠 탐색
+2. **GG POKER 플레이시간 증가**: 영감을 받아 다시 게임으로 복귀
+
+### -1.5 Multi-view/Player Cam의 생태계적 의미
+
+기능을 **독립 OTT 관점**으로 판단하면 비효율적으로 보입니다. 하지만 **GG 생태계 관점**에서는 핵심적인 의미를 갖습니다.
+
+| 기능 | 독립 OTT 관점 (부정적) | GG 생태계 관점 (긍정적) |
+|------|----------------------|----------------------|
+| **Multi-view** | 제작 비용 대비 ROI 불명확 | **포커 관전 놀이터** - 여러 테이블 모니터링 → 관심 선수 발견 → 팬심 형성 |
+| **Player Cam** | 대단히 비효율적, 쓸모없음 | **아이돌 팬덤 메커니즘** - 특정 선수 감정 연결 → 충성도 강화 → 생태계 Lock-in |
+| **Hand Search** | 단순 편의 기능 | **명장면 컬렉션** - SNS 공유 → 바이럴 → 신규 유입 |
+| **StatsView** | 부가 정보 | **학습/분석** - 전략 이해 → GG POKER 스킬 향상 욕구 → 플레이 동기 |
+
+> **핵심 인사이트**: Player Cam을 독립적으로 판단하면 대단히 비효율적이지만, GG 생태계 내 "콘텐츠 놀이터" 역할로서는 플레이어들이 재미있게 놀 수 있는 핵심 장치입니다.
+
+### -1.6 프리미엄 구독 혜택 전략
+
+> 📋 **MOSES**: Multi-view는 MVP 필수 기능이 아니라 **프리미엄($49.99) 고급 기능**으로 포지셔닝해야 합니다. 구현 난이도가 높다면 대안 혜택을 우선 고려합니다.
+
+**프리미엄 vs 스탠다드 가격 비교**:
+
+| 티어 | 가격 | 배수 | 기대 가치 |
+|:----:|:----:|:----:|----------|
+| WSOP Plus | $9.99/월 | 1x | 기본 시청 |
+| WSOP Plus+ | $49.99/월 | **5x** | 고급 기능 |
+
+**대안 프리미엄 혜택 (Multi-view 구현이 늦어질 경우)**:
+
+| 카테고리 | 혜택 | 설명 |
+|----------|------|------|
+| **편집 콘텐츠** | DNEG 하이라이트 | Daniel Negreanu 명장면 모음 |
+| | Ivey 하이라이트 | Phil Ivey 명장면 모음 |
+| | Top 10 Bad Beat | WSOP 역대 Bad Beat 순위 |
+| **독점 콘텐츠** | Making Film | 대회 비하인드 씬 |
+| | Player's Commentary | 선수 직접 해설 |
+| | Poker News | 포커 뉴스/인터뷰 |
+| **OTT 기능** | 동시 시청 기기 | 최대 3개 (Plus+) vs 1개 (Plus) |
+| | 오프라인 다운로드 | 모바일 동영상 저장 |
+| | 광고 제거 | Plus+ 전용 |
+
+> **참고**: 일반 OTT의 4K 화질 제공 혜택은 불가능 (소스 제약)
+
+### -1.7 GGPoker 트래픽 연동
+
+> 📋 **MOSES**: WSOPTV 론칭 시 GGPoker 내 관련 영역이 WSOPTV로 연결되어 트래픽을 유입시킵니다.
+
+#### 현재: GGPoker.TV (YouTube 연동)
+
+![GGPoker.TV 섹션](../images/PRD-0002/59-ggpoker-tv-section.png)
+
+현재 GGPoker 앱 로비에는 **"GGPoker.TV"** 섹션이 있으며, YouTube 콘텐츠를 직접 앱 내에서 보여주고 있습니다.
+
+| 현재 상태 | 내용 |
+|----------|------|
+| **섹션명** | GGPoker.TV |
+| **콘텐츠 소스** | YouTube |
+| **표시 콘텐츠** | Super High Roller Poker, GGMillion$ 등 라이브 대회 |
+| **조회수** | 17K~24K views |
+| **위치** | GGPoker 로비 중앙 (배너 아래) |
+
+#### WSOPTV 론칭 후: 트래픽 전환
+
+| 현재 (GGPoker.TV) | WSOPTV 론칭 후 |
+|------------------|----------------|
+| YouTube 콘텐츠 임베드 | **WSOPTV 딥링크** |
+| 무료 시청만 가능 | 프리미엄 기능 안내 |
+| GGPoker 앱 내 시청 | WSOPTV 앱 전환 또는 앱 내 플레이어 |
+
+**트래픽 전환 시나리오**:
+1. GGPoker.TV 섹션 → **"WSOPTV"**로 브랜드 변경
+2. YouTube 링크 → WSOPTV 딥링크로 교체
+3. 무료 하이라이트 제공 + "풀버전은 WSOPTV에서" CTA
+4. Plus 구독자 → 앱 내 WSOPTV 플레이어에서 바로 시청
+
+> **예상 효과**: 기존 GGPoker.TV 시청자(월 수십만 views)가 자연스럽게 WSOPTV로 유입
 
 ---
 
@@ -35,18 +196,43 @@
 
 ### 1.1 WSOP TV란?
 
-> **"YouTube에서는 맛보기, WSOP TV에서 진짜 경험"**
+> **"GG 생태계 내에서 포커 플레이어들이 게임 외 시간에 머무를 수 있는 '콘텐츠 놀이터'로서, GG POKER 구독의 핵심 혜택 역할을 수행하는 스트리밍 플랫폼"**
 
-WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로, 기존 YouTube 라이브의 한계를 넘어선 **전문 시청자를 위한 심층 콘텐츠**를 제공합니다.
+WSOP 공식 OTT 스트리밍 플랫폼. 기존 YouTube를 통해 무료로 제공하던 WSOP 라이브 스트림을 자체 플랫폼으로 이전하고, **GGPass Plus Subscription의 핵심 혜택**으로 제공하여 GG 생태계 전체의 가치를 극대화합니다.
 
 ### 1.2 왜 WSOP TV인가?
 
-| 문제 (YouTube) | 해결 (WSOP TV) |
-|---------------|----------------|
-| 라이브 중 되감기 불가 | **Timeshift**: 실시간 되감기로 명장면 다시 보기 |
-| 방송 종료 시 비공개 | **아카이브**: 영구 보존, VOD 자동 전환 |
-| 단일 화면만 제공 | **Multi-view**: 여러 테이블 동시 시청 |
-| 검색 불가 | **핸드 검색**: 선수/핸드 기반 정밀 검색 |
+**핵심 목적: GG 생태계 Lock-in + 구독 혜택 강화**
+
+| 비즈니스 목적 | 설명 |
+|--------------|------|
+| **생태계 Lock-in** | GG POKER ↔ WSOPTV 선순환으로 플레이어 이탈 방지 |
+| **구독 혜택 강화** | Plus Subscription의 핵심 가치 제안 (쿠팡플레이 모델) |
+| **데이터 자산화** | 시청자 행동 데이터 직접 수집 → GG POKER 마케팅 활용 |
+| **플랫폼 자립** | YouTube 정책 변경 리스크 제거, 자체 브랜드 경험 |
+
+**YouTube 전략적 재배치:**
+
+![YouTube 전략 흐름](../images/PRD-0002/35-youtube-strategy-flow.png)
+
+[HTML 목업](../mockups/PRD-0002/35-youtube-strategy-flow.html)
+
+| 채널 | 역할 | 콘텐츠 |
+|------|------|--------|
+| YouTube | 마케팅 채널 (무료 티저) | 하이라이트, 예고편, 인터뷰 클립 |
+| WSOP TV | 프리미엄 채널 (유료 풀버전) | 풀 라이브, VOD, 멀티뷰, 핸드 검색 |
+
+> **핵심 메시지**: "YouTube에서는 맛보기, WSOP TV에서 진짜 경험"
+
+**구독자 전환 가치 (왜 유료를 내는가?):**
+
+| 가치 | 설명 |
+|------|------|
+| **Timeshift** | 라이브 중 놓친 순간 즉시 되감기 |
+| **영구 아카이브** | YouTube 비공개 전환 없이 영구 VOD |
+| **Multi-view** | 4개 테이블 동시 시청 (NBA League Pass 방식) |
+| **Hand Search** | 특정 핸드/선수 검색 (Phase 2) |
+| **광고 없음** | Plus+ 구독 시 광고 제거 |
 
 ### 1.3 타깃 사용자
 
@@ -62,7 +248,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 |------|------|
 | **런칭 목표** | 2027년 3월 1일 전 |
 | **플랫폼** | Web, iOS, Android, Samsung TV, LG TV |
-| **구독 모델** | $10 WSOP Plus / $50 WSOP Plus+ |
+| **구독 모델** | $9.99 WSOP Plus / $49.99 WSOP Plus+ |
 | **화질** | 1080p Full HD |
 | **자막** | 20개국 다국어 지원 |
 
@@ -165,7 +351,51 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 | VIBLE 원문 완벽 구현, 추가 투자 가능 | **옵션 2.2** |
 | 스타 플레이어 집중, 중간 투자 | **옵션 2.3** ⭐ 현재 시스템 |
 
-### 2.5 WSOP 콘텐츠 Tier 구조
+### 2.5 Video Streaming Architecture
+
+> **버전**: v8 (2026-01-28 업데이트)
+>
+> **v8 주요 변경**: LiveU Cloud 아키텍처 수정 - Cloud Channel 추가, Output Protocol 확장, SRT 전송 적용
+
+![Video Streaming Architecture v8](../images/PRD-0002/28-streaming-architecture-v8.png)
+
+[HTML 원본](../mockups/PRD-0002/28-streaming-architecture-v8.html)
+
+#### 아키텍처 개요
+
+| Section | 구성요소 | 역할 |
+|---------|---------|------|
+| **A** | On-Site Production (Las Vegas) | Feature Table → Switcher → LiveU Unit |
+| **B** | LiveU CLOUD (SaaS) | Cloud Channel → Matrix → Output Protocols |
+| **C** | GG Production (Seoul) | Hand Split → Rating → Render → Broadcast |
+| **E-1** | YouTube Path | Free/Teaser 배포 |
+
+#### Section B: LiveU CLOUD 상세
+
+| 컴포넌트 | 역할 |
+|---------|------|
+| **Cloud Channel** | LRT™ Bonded Stream 수신, 패킷 재조립, 디코딩 |
+| **LiveU Matrix** | Share/Receive/Record 플랫폼, Cloud Recording 내장 |
+| **LiveU Central** | 오케스트레이션 (Unit Monitor, Video Multiview, Drag & Drop Routing) |
+| **Output Protocols** | LRT™, SRT, RTMP, NDI, HLS, MPEG-TS |
+
+#### 전송 프로토콜
+
+| 구간 | 프로토콜 | 이유 |
+|------|---------|------|
+| LiveU Unit → Cloud | **LRT™** | Bonded Cellular 최적화 |
+| Cloud → Seoul | **SRT** | 대륙 간 전송에 적합 (RTMP 대비 에러 복구 우수) |
+| Seoul → YouTube | **RTMP** | YouTube Ingest 표준 |
+
+#### 딜레이 구성
+
+| 구간 | 딜레이 |
+|------|--------|
+| LiveU Transport | 3-8초 |
+| GG Production (Hand Split → Broadcast) | 1-2시간 |
+| YouTube Stream | 15-30초 추가 |
+
+### 2.6 WSOP 콘텐츠 Tier 구조
 
 | Tier | 카테고리 | 콘텐츠 | 설명 |
 |:----:|----------|--------|------|
@@ -196,7 +426,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 > **범위**: WSOP 공식 라이브 대회 + 예능 콘텐츠 포함. 온라인 전용 이벤트는 제외.
 
-### 2.6 소스별 프로덕션 파트너
+### 2.7 소스별 프로덕션 파트너
 
 ![콘텐츠 소싱 다이어그램](../images/PRD-0002/02-content-sourcing.png)
 
@@ -209,7 +439,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 | **Triton Poker** | WSOP Paradise | 전체 |
 | **PokerCaster** | WSOPE | 유럽 지역 전체 |
 
-### 2.7 콘텐츠 플로우
+### 2.8 콘텐츠 플로우
 
 ![콘텐츠 플로우 다이어그램](../images/PRD-0002/15-content-flow.png)
 
@@ -217,7 +447,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 **GG Production 역할**: 모든 프로덕션 파트너 소스를 받아 종편(Post-Production) 작업 수행
 
-### 2.8 YouTube vs WSOPTV 설정 비교
+### 2.9 YouTube vs WSOPTV 설정 비교
 
 | 설정 | YouTube | WSOPTV |
 |------|---------|--------|
@@ -233,9 +463,11 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 ### 3.1 구독 플랜 와이어프레임
 
-![구독 플랜 와이어프레임](../images/PRD-0002/03-subscription-plans.png)
+![구독 플랜 비교](../images/PRD-0002/34-subscription-plans.png)
 
-[HTML 원본](../mockups/PRD-0002/03-subscription-plans.html)
+[HTML 목업](../mockups/PRD-0002/34-subscription-plans.html)
+
+> **레거시 목업**: [03-subscription-plans.html](../mockups/PRD-0002/03-subscription-plans.html)
 
 > **레퍼런스 이미지**: [NBA League Pass 구독 페이지](../images/leaguepass/)
 
@@ -243,7 +475,7 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 | 항목 | NBA League Pass | NBA League Pass Premium | WSOP Plus | WSOP Plus+ |
 |------|-----------------|------------------------|-----------|------------|
-| **가격 (월간)** | $14.99/월 | $22.99/월 | **$10/월** | **$50/월** |
+| **가격 (월간)** | $14.99/월 | $22.99/월 | **$9.99/월** | **$49.99/월** |
 | **설명** | 1개 기기에서 경기 생중계 및 VOD | 최대 3개 기기, 오프라인 시청, 다운로드 | 1개 기기에서 대회 생중계 및 VOD | 최대 3개 기기, 오프라인 시청, 다운로드 |
 | **광고** | 광고 포함 | 광고 없음 (휴식 시간 현장 생중계) | 광고 포함 | 광고 없음 |
 | **오프라인 시청** | 불포함 | 포함 | 불포함 | 포함 |
@@ -255,15 +487,15 @@ WSOP 공식 OTT 스트리밍 플랫폼. 프리미엄 포커 방송 서비스로,
 
 | 티어 | 가격 | 명칭 | 주요 기능 |
 |------|------|------|----------|
-| Basic | **$10/월** | **WSOP Plus** | 1개 기기, 라이브, VOD, Timeshift, 광고 포함, 멀티뷰 4개 |
-| Premium | **$50/월** | **WSOP Plus+** | 최대 3개 기기, 광고 없음, 오프라인 시청, 다운로드, 멀티뷰 4개 |
+| Basic | **$9.99/월** | **WSOP Plus** | 1개 기기, 라이브, VOD, Timeshift, 광고 포함, 멀티뷰 4개 |
+| Premium | **$49.99/월** | **WSOP Plus+** | 최대 3개 기기, 광고 없음, 오프라인 시청, 다운로드, 멀티뷰 4개 |
 
 ### 3.4 프로모션 전략
 
 | Flow | 설명 |
 |------|------|
-| GG POKER → WSOPTV | $10 칩 구매 → WSOPTV Plus 구독권 자동 발급 |
-| WSOPTV → GG POKER | Plus $10 구독 → GG POKER $10 칩 제공 |
+| GG POKER → WSOPTV | $9.99 칩 구매 → WSOPTV Plus 구독권 자동 발급 |
+| WSOPTV → GG POKER | Plus $9.99 구독 → GG POKER $9.99 칩 제공 |
 
 ---
 
@@ -507,7 +739,7 @@ Advanced Mode는 세 가지 **완전히 독립적인** 기능으로 구성됩니
 |------|------|
 | **ALL HANDS** | 전체 핸드 |
 | **ALL-IN** | 올인 핸드 |
-| **BIG POTS** | 큰 팟 ($500K+) |
+| **BIG POTS** | 큰 팟 ($49.990K+) |
 | **BLUFFS** | 블러프 성공/실패 |
 | **ELIMINATIONS** | 탈락 핸드 |
 | **HERO CALLS** | 히어로 콜 |
@@ -722,7 +954,7 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 |------|------|
 | ALL HANDS | 전체 핸드 |
 | ALL-IN | 올인 핸드 |
-| BIG POTS | 큰 팟 ($500K+) |
+| BIG POTS | 큰 팟 ($49.990K+) |
 | BLUFFS | 블러프 성공/실패 |
 | ELIMINATIONS | 탈락 핸드 |
 | HERO CALLS | 히어로 콜 |
@@ -772,6 +1004,10 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 
 > **Phase별 점진적 구현** - MVP에서 시작하여 Advanced Mode까지 단계적 확장
 
+![개발 로드맵 타임라인](../images/PRD-0002/36-development-roadmap.png)
+
+[HTML 목업](../mockups/PRD-0002/36-development-roadmap.html)
+
 ### 10.1 Phase 개요
 
 | Phase | 마감 | 핵심 목표 | NBA TV 대응 |
@@ -785,7 +1021,7 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 
 | Phase | 기능 목록 |
 |:-----:|----------|
-| **MVP** | Video Player, Tournament Ticker, Timeline, Stream Tabs, Controls, GGPass SSO, 구독 모델 ($10/$50) |
+| **MVP** | Video Player, Tournament Ticker, Timeline, Stream Tabs, Controls, GGPass SSO, 구독 모델 ($9.99/$49.99) |
 | **P2** | MultiView 레이아웃 (1:2, 2x2), Featured Hands 모달/플레이어, Camera/Commentary 선택, 핸드 단위 태깅, 선수/핸드 검색 |
 | **P3** | Summary (7:3 레이아웃), Player Stats (VPIP/PFR), Hand Charts (Position Map), Hand History (Level 필터) |
 | **P4** | Player Cam Mode (아이돌 직캠), StatsView 영상 오버레이, 3x3 MultiView (파이널용), 멀티 재생 |
@@ -870,4 +1106,6 @@ LIVE → MultiView → View Mode (1/2/4) → Player Cam
 | 8.4 | 2026-01-26 | Claude Code | Google Docs 직접 삽입 이미지 동기화: Option B (GGM$ 영상 오버레이), Option C (GGPOKER 팝업 상세) 이미지 2개 Google Docs에서 다운로드 후 로컬 PRD에 추가 |
 | 8.5 | 2026-01-27 | Claude Code | Option A 이미지 추가: NBA TV 방식 (Info Tabs) 섹션에 Google Docs에서 복사된 이미지 다운로드 후 추가 (20-option-a-nba-tv-info-tabs.png) |
 | 8.6 | 2026-01-27 | Claude Code | v3.1 POC 동기화: 오버레이 컨트롤 설계 반영 - 컨트롤 바 상단 버튼 배치 (Streams/MultiView⊞/🔥Key Plays 좌측 정렬), View Mode 1:1로 수정, Key Plays에 YouTube 링크 추가 |
-| **8.7** | **2026-01-27** | **Claude Code** | **v3.2 POC 동기화**: Streams/Key Plays 클릭 시 중앙 모달 배너 팝업으로 변경 (대형 카드, 백드롭 오버레이, 닫기 버튼) |
+| 8.7 | 2026-01-27 | Claude Code | v3.2 POC 동기화: Streams/Key Plays 클릭 시 중앙 모달 배너 팝업으로 변경 (대형 카드, 백드롭 오버레이, 닫기 버튼) |
+| 9.0 | 2026-01-30 | Claude Code | GG 생태계 관점 전면 재설계: 섹션 -1 "GG 생태계 내 WSOPTV 역할" 신설 (최상단 배치), GGPass 구독 구조 다이어그램 추가, 쿠팡플레이 케이스 스터디, "콘텐츠 놀이터" 철학, Dual Flywheel 이중 선순환 구조, Multi-view/Player Cam 생태계적 의미 재해석, 핵심 메시지 변경 (독립 OTT → 생태계 콘텐츠 놀이터) |
+| **9.1** | **2026-01-30** | **Claude Code** | **Tony Note 십계명 반영**: 가격 수정 ($10/$50 → $9.99/$49.99), 쿠팡플레이 비교 역순 구조 재작성 (WSOPTV가 중심), Reader App 전략 추가 (앱스토어 수수료 면제), 프리미엄 구독 혜택 전략 섹션 -1.6 신설 (Multi-view 대안 혜택), GGPoker 트래픽 연동 섹션 -1.7 신설, GGPoker.TV 스크린샷 추가 (현재 YouTube 연동 → WSOPTV 전환 시나리오) |

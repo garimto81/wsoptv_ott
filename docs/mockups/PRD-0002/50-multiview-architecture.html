@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-view Architecture - Extending Existing Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #000;
+            color: #fff;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .diagram-wrapper {
+            background: #fff;
+            padding: 60px;
+            border-radius: 2px;
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .cost-table {
+            margin-top: 40px;
+            border: 1px solid #333;
+        }
+
+        .cost-table th,
+        .cost-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .cost-table th {
+            background: #1a1a1a;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cost-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight {
+            color: #0066ff;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #0066ff;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .key-points {
+            margin-top: 40px;
+            padding: 24px;
+            border-left: 3px solid #0066ff;
+            background: #0a0a0a;
+        }
+
+        .key-points h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #0066ff;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .key-points li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0066ff;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multi-view Architecture</h1>
+        <p class="subtitle">Extending Existing Production Infrastructure (No Additional Crew)</p>
+
+        <div class="diagram-wrapper">
+            <svg viewBox="0 0 950 700" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Arrow marker -->
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#000" />
+                    </marker>
+                    <marker id="arrowhead-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#0066ff" />
+                    </marker>
+
+                    <!-- Dashed pattern for additions -->
+                    <pattern id="dots" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1" fill="#0066ff" opacity="0.3"/>
+                    </pattern>
+                </defs>
+
+                <!-- Title -->
+                <text x="475" y="30" font-size="20" font-weight="700" text-anchor="middle" fill="#000">
+                    Multi-view Streaming Architecture
+                </text>
+                <text x="475" y="50" font-size="12" text-anchor="middle" fill="#666">
+                    기존 Production 구조 유지 + Multi-Stream 확장
+                </text>
+
+                <!-- ==================== LAYER 1: GG PRODUCTION (Existing) ==================== -->
+                <g id="gg-production">
+                    <!-- Main box -->
+                    <rect x="50" y="80" width="850" height="180"
+                          fill="#f8f8f8" stroke="#000" stroke-width="2" rx="4"/>
+
+                    <!-- Header -->
+                    <rect x="50" y="80" width="850" height="40"
+                          fill="#000" rx="4"/>
+                    <text x="70" y="105" font-size="14" font-weight="700" fill="#fff">
+                        GG PRODUCTION (Las Vegas) - 기존 구조 유지
+                    </text>
+                    <rect x="770" y="88" width="110" height="24"
+                          fill="#666" rx="2"/>
+                    <text x="825" y="105" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">
+                        NO CHANGE
+                    </text>
+
+                    <!-- Feature Tables with Switchers -->
+                    <g id="tables">
+                        <!-- Table 1 -->
+                        <rect x="80" y="140" width="160" height="50"
+                              fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                        <text x="160" y="162" font-size="11" font-weight="700" text-anchor="middle">Feature Table 1</text>
+                        <text x="160" y="177" font-size="9" fill="#666" text-anchor="middle">4 Cams → Switcher</text>
+
+                        <!-- Table 2 -->
+                        <rect x="260" y="140" width="160" height="50"
+                              fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                        <text x="340" y="162" font-size="11" font-weight="700" text-anchor="middle">Feature Table 2</text>
+                        <text x="340" y="177" font-size="9" fill="#666" text-anchor="middle">4 Cams → Switcher</text>
+
+                        <!-- Table 3 -->
+                        <rect x="440" y="140" width="160" height="50"
+                              fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                        <text x="520" y="162" font-size="11" font-weight="700" text-anchor="middle">Feature Table 3</text>
+                        <text x="520" y="177" font-size="9" fill="#666" text-anchor="middle">4 Cams → Switcher</text>
+
+                        <!-- Table 4 -->
+                        <rect x="620" y="140" width="160" height="50"
+                              fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                        <text x="700" y="162" font-size="11" font-weight="700" text-anchor="middle">Feature Table 4</text>
+                        <text x="700" y="177" font-size="9" fill="#666" text-anchor="middle">4 Cams → Switcher</text>
+                    </g>
+
+                    <!-- PGM Outputs -->
+                    <g id="pgm-outputs">
+                        <rect x="160" y="210" width="80" height="30"
+                              fill="#000" stroke="#000" stroke-width="1" rx="2"/>
+                        <text x="200" y="230" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">PGM 1</text>
+
+                        <rect x="340" y="210" width="80" height="30"
+                              fill="#000" stroke="#000" stroke-width="1" rx="2"/>
+                        <text x="380" y="230" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">PGM 2</text>
+
+                        <rect x="520" y="210" width="80" height="30"
+                              fill="#000" stroke="#000" stroke-width="1" rx="2"/>
+                        <text x="560" y="230" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">PGM 3</text>
+
+                        <rect x="700" y="210" width="80" height="30"
+                              fill="#000" stroke="#000" stroke-width="1" rx="2"/>
+                        <text x="740" y="230" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">PGM 4</text>
+                    </g>
+
+                    <!-- Arrows from tables to PGM -->
+                    <line x1="160" y1="190" x2="200" y2="210" stroke="#000" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <line x1="340" y1="190" x2="380" y2="210" stroke="#000" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <line x1="520" y1="190" x2="560" y2="210" stroke="#000" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <line x1="700" y1="190" x2="740" y2="210" stroke="#000" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                </g>
+
+                <!-- ==================== ADDED: LiveU Units ==================== -->
+                <g id="liveu-units">
+                    <!-- Dashed box for additions -->
+                    <rect x="750" y="140" width="130" height="100"
+                          fill="url(#dots)" stroke="#0066ff" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
+
+                    <!-- ADDED badge -->
+                    <rect x="760" y="148" width="60" height="20"
+                          fill="#0066ff" rx="2"/>
+                    <text x="790" y="162" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">
+                        ADDED
+                    </text>
+
+                    <!-- LiveU Units -->
+                    <rect x="765" y="180" width="100" height="24"
+                          fill="#fff" stroke="#0066ff" stroke-width="1.5" rx="2"/>
+                    <text x="815" y="196" font-size="9" font-weight="700" fill="#0066ff" text-anchor="middle">LiveU Unit x4</text>
+
+                    <text x="815" y="218" font-size="8" fill="#666" text-anchor="middle">$45K (3대 추가)</text>
+                </g>
+
+                <!-- Arrows from PGM to LiveU area -->
+                <line x1="200" y1="240" x2="475" y2="280" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+                <line x1="380" y1="240" x2="475" y2="280" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+                <line x1="560" y1="240" x2="475" y2="280" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+                <line x1="740" y1="240" x2="475" y2="280" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                <!-- ==================== LAYER 2: LiveU Cloud ==================== -->
+                <g id="liveu-cloud">
+                    <rect x="150" y="290" width="650" height="140"
+                          fill="#f0f0f0" stroke="#000" stroke-width="2" rx="4"/>
+
+                    <rect x="150" y="290" width="650" height="35"
+                          fill="#000" rx="4"/>
+                    <text x="170" y="312" font-size="13" font-weight="700" fill="#fff">
+                        LiveU Cloud (기존 경로 확장)
+                    </text>
+
+                    <!-- Cloud Processing -->
+                    <rect x="200" y="345" width="140" height="60"
+                          fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                    <text x="270" y="367" font-size="11" font-weight="700" text-anchor="middle">Cloud Channel</text>
+                    <text x="270" y="383" font-size="9" fill="#666" text-anchor="middle">4-Stream Ingest</text>
+                    <text x="270" y="397" font-size="8" fill="#999" text-anchor="middle">Network: $80K/yr</text>
+
+                    <!-- Matrix -->
+                    <rect x="380" y="345" width="100" height="60"
+                          fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                    <text x="430" y="370" font-size="11" font-weight="700" text-anchor="middle">Matrix</text>
+                    <text x="430" y="390" font-size="9" fill="#666" text-anchor="middle">Routing</text>
+
+                    <!-- Multi-Output -->
+                    <rect x="520" y="345" width="240" height="60"
+                          fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                    <text x="640" y="363" font-size="11" font-weight="700" text-anchor="middle">Multi-Output Distribution</text>
+
+                    <!-- Output destinations -->
+                    <text x="580" y="383" font-size="9" fill="#666">→ Seoul Studio (YouTube)</text>
+                    <text x="580" y="397" font-size="9" fill="#0066ff" font-weight="700">→ WSOPTV CDN (OTT)</text>
+
+                    <!-- Arrows -->
+                    <line x1="340" y1="375" x2="380" y2="375" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="480" y1="375" x2="520" y2="375" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+                </g>
+
+                <!-- ==================== LAYER 3: Distribution ==================== -->
+                <g id="distribution">
+                    <!-- YouTube (Existing) -->
+                    <rect x="150" y="470" width="180" height="80"
+                          fill="#fff" stroke="#000" stroke-width="2" rx="4"/>
+                    <text x="240" y="492" font-size="12" font-weight="700" text-anchor="middle">Seoul Studio</text>
+                    <text x="240" y="508" font-size="10" fill="#666" text-anchor="middle">YouTube Live</text>
+                    <text x="240" y="528" font-size="9" fill="#999" text-anchor="middle">기존 단일 스트림</text>
+                    <text x="240" y="541" font-size="9" fill="#999" text-anchor="middle">(변경 없음)</text>
+
+                    <!-- OTT Server (New) -->
+                    <rect x="385" y="470" width="180" height="80"
+                          fill="#fff" stroke="#0066ff" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
+                    <rect x="395" y="478" width="60" height="20"
+                          fill="#0066ff" rx="2"/>
+                    <text x="425" y="492" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">NEW</text>
+
+                    <text x="475" y="510" font-size="12" font-weight="700" text-anchor="middle" fill="#0066ff">OTT Server</text>
+                    <text x="475" y="528" font-size="9" fill="#666" text-anchor="middle">4-Stream Multi-view</text>
+                    <text x="475" y="541" font-size="8" fill="#999" text-anchor="middle">CDN: $20K/yr</text>
+
+                    <!-- Timecode Sync -->
+                    <rect x="620" y="470" width="180" height="80"
+                          fill="#fff" stroke="#0066ff" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
+                    <rect x="630" y="478" width="60" height="20"
+                          fill="#0066ff" rx="2"/>
+                    <text x="660" y="492" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">NEW</text>
+
+                    <text x="710" y="510" font-size="12" font-weight="700" text-anchor="middle" fill="#0066ff">Timecode Sync</text>
+                    <text x="710" y="528" font-size="9" fill="#666" text-anchor="middle">Frame-accurate</text>
+                    <text x="710" y="541" font-size="8" fill="#999" text-anchor="middle">시청자 seamless 전환</text>
+
+                    <!-- Arrows from cloud -->
+                    <line x1="240" y1="430" x2="240" y2="470" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="640" y1="405" x2="475" y2="470" stroke="#0066ff" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                    <line x1="710" y1="405" x2="710" y2="470" stroke="#0066ff" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                </g>
+
+                <!-- ==================== LAYER 4: Viewer ==================== -->
+                <g id="viewer">
+                    <rect x="300" y="590" width="350" height="80"
+                          fill="#000" stroke="#000" stroke-width="2" rx="4"/>
+
+                    <text x="475" y="612" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">
+                        시청자 (Viewer)
+                    </text>
+                    <text x="475" y="632" font-size="10" fill="#aaa" text-anchor="middle">
+                        실시간 테이블 선택 시청
+                    </text>
+                    <text x="475" y="650" font-size="10" fill="#0066ff" text-anchor="middle">
+                        Table 1 | Table 2 | Table 3 | Table 4
+                    </text>
+
+                    <!-- Arrow from OTT Server -->
+                    <line x1="475" y1="550" x2="475" y2="590" stroke="#0066ff" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                </g>
+
+                <!-- ==================== Phase Badge ==================== -->
+                <rect x="820" y="600" width="70" height="28"
+                      fill="#0066ff" rx="3"/>
+                <text x="855" y="618" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">
+                    PHASE 2
+                </text>
+            </svg>
+        </div>
+
+        <div class="key-points">
+            <h3>핵심 포인트: 기존 Production 인프라 활용</h3>
+            <ul>
+                <li><span class="highlight">NO 추가 인력</span>: 기존 4테이블 Production 팀 그대로 운영</li>
+                <li><span class="highlight">NO 추가 카메라</span>: 기존 16대 카메라 + 4대 Switcher 그대로 사용</li>
+                <li><span class="highlight">추가 장비</span>: LiveU Unit 3대만 추가 (기존 1대 + 신규 3대 = 총 4대)</li>
+                <li><span class="highlight">Production 부하 제로</span>: 각 테이블 Switcher가 PGM 출력 후 LiveU로 전송만 추가</li>
+                <li><span class="highlight">시청자 선택권</span>: OTT 플랫폼에서 실시간으로 원하는 테이블 선택 가능</li>
+                <li><span class="highlight">Timecode 동기화</span>: Frame-accurate sync로 seamless 전환 보장</li>
+            </ul>
+        </div>
+
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>항목</th>
+                    <th>내용</th>
+                    <th>비용</th>
+                    <th>Phase</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge">CAPEX</span> LiveU Unit</td>
+                    <td>3대 추가 (기존 1대 + 신규 3대)</td>
+                    <td class="highlight">$45K</td>
+                    <td>P2 (2027 Q1)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge">OPEX</span> Network</td>
+                    <td>4-stream 대역폭 (연간)</td>
+                    <td class="highlight">$80K/yr</td>
+                    <td>P2</td>
+                </tr>
+                <tr>
+                    <td><span class="badge">OPEX</span> CDN</td>
+                    <td>Multi-view streaming (연간)</td>
+                    <td class="highlight">$20K/yr</td>
+                    <td>P2</td>
+                </tr>
+                <tr>
+                    <td><span class="badge">OPEX</span> 추가 인력</td>
+                    <td>Production crew 증원</td>
+                    <td class="highlight">$0</td>
+                    <td>불필요</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

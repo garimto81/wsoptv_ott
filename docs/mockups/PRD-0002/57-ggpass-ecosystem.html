@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1000, initial-scale=1.0">
+    <title>GGPass Ecosystem Structure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #000;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* GGPass Circle */
+        .ggpass-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .ggpass-circle {
+            width: 160px;
+            height: 160px;
+            border: 3px solid #000;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: #f5f5f5;
+        }
+
+        .ggpass-text {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .ggpass-subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Connector */
+        .connector {
+            width: 3px;
+            height: 40px;
+            background: #000;
+            margin: 0 auto;
+        }
+
+        /* Plus Subscription */
+        .plus-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .plus-box {
+            display: inline-block;
+            padding: 16px 40px;
+            border: 3px solid #000;
+            background: #f5f5f5;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* Branch connector */
+        .branch-connector {
+            position: relative;
+            height: 60px;
+            margin: 0 auto;
+            max-width: 700px;
+        }
+
+        .branch-connector::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 25px;
+            background: #000;
+        }
+
+        .branch-connector::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: #000;
+        }
+
+        .branch-left, .branch-right {
+            position: absolute;
+            top: 25px;
+            width: 3px;
+            height: 35px;
+            background: #000;
+        }
+
+        .branch-left { left: 50px; }
+        .branch-right { right: 50px; }
+
+        /* Service Groups */
+        .service-groups {
+            display: flex;
+            justify-content: space-between;
+            gap: 60px;
+            margin-top: 20px;
+        }
+
+        .service-group {
+            flex: 1;
+        }
+
+        .group-label {
+            text-align: center;
+            padding: 16px 20px;
+            border: 2px solid #000;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+
+        .group-label.required {
+            border-style: solid;
+        }
+
+        .group-label.benefits {
+            border-style: dashed;
+        }
+
+        .group-label h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .group-label p {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Service Cards */
+        .service-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-card {
+            padding: 16px 20px;
+            border: 2px solid #000;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            background: #fff;
+        }
+
+        .service-card.highlight {
+            border-width: 4px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .service-card.gray {
+            background: #f5f5f5;
+            border-style: dashed;
+        }
+
+        /* Legend */
+        .legend {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #000;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+        }
+
+        .legend-box {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #000;
+        }
+
+        .legend-box.solid { background: #fff; }
+        .legend-box.filled { background: #1a1a2e; }
+        .legend-box.dashed { border-style: dashed; background: #f5f5f5; }
+
+        @media print {
+            body { padding: 20px; }
+            .service-card.highlight {
+                background: #333 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">GGPass Ecosystem Structure</div>
+        <div class="subtitle">GG Network 통합 구독 체계</div>
+
+        <!-- GGPass Circle -->
+        <div class="ggpass-section">
+            <div class="ggpass-circle">
+                <div class="ggpass-text">GGPass</div>
+                <div class="ggpass-subtitle">통합 인증</div>
+            </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- Plus Subscription -->
+        <div class="plus-section">
+            <div class="plus-box">Plus Subscription</div>
+        </div>
+
+        <!-- Branch Connector -->
+        <div class="branch-connector">
+            <div class="branch-left"></div>
+            <div class="branch-right"></div>
+        </div>
+
+        <!-- Service Groups -->
+        <div class="service-groups">
+            <!-- Subscription Required Services -->
+            <div class="service-group">
+                <div class="group-label required">
+                    <h3>구독 전용 서비스</h3>
+                    <p>서비스 이용 시 구독 필수<br>구독 Payment 구현 필수</p>
+                </div>
+
+                <div class="service-cards">
+                    <div class="service-card">ClubbGG</div>
+                    <div class="service-card">WSOP Academy</div>
+                    <div class="service-card highlight">WSOP TV</div>
+                </div>
+            </div>
+
+            <!-- Subscription Benefits Services -->
+            <div class="service-group">
+                <div class="group-label benefits">
+                    <h3>구독 혜택 서비스</h3>
+                    <p>구독자에게 혜택 제공<br>구독 Payment 구현 안함</p>
+                </div>
+
+                <div class="service-cards">
+                    <div class="service-card gray">GGPoker</div>
+                    <div class="service-card gray">WSOP+</div>
+                    <div class="service-card gray">Pokerstake</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box solid"></div>
+                <span>구독 전용</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box filled"></div>
+                <span>WSOP TV (핵심)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box dashed"></div>
+                <span>구독 혜택</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

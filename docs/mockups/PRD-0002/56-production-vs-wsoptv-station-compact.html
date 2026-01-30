@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production vs WSOPTV Station - Compact Summary</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #fff;
+            color: #333;
+            padding: 0;
+            margin: 0;
+            width: fit-content;
+            height: fit-content;
+        }
+        .container {
+            display: inline-block;
+            padding: 8px;
+        }
+        .title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        svg { display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title">Production vs WSOPTV Station</div>
+    <div class="subtitle">기존 워크플로우 변경 없음 | 4개 데이터 연결 포인트로 WSOPTV 구축</div>
+
+    <svg viewBox="12 12 928 542" width="928" height="542">
+        <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#333"/>
+            </marker>
+            <marker id="arrow-conn" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+            </marker>
+        </defs>
+
+        <!-- ===== LEFT: EXISTING PRODUCTION ===== -->
+        <g id="left">
+            <rect x="15" y="15" width="380" height="480" fill="#fafafa" stroke="#333" stroke-width="2" rx="5"/>
+
+            <!-- Header -->
+            <rect x="15" y="15" width="380" height="40" fill="#333" rx="5"/>
+            <rect x="15" y="45" width="380" height="10" fill="#333"/>
+            <text x="205" y="42" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">EXISTING PRODUCTION</text>
+            <text x="205" y="72" text-anchor="middle" font-size="12" fill="#666">(NO CHANGE)</text>
+
+            <!-- [1] Feature Table -->
+            <g transform="translate(35, 90)">
+                <rect width="340" height="65" fill="#fff" stroke="#333" stroke-width="1.5" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#555" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#555"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[1] Feature Table</text>
+
+                <g transform="translate(15, 35)">
+                    <rect width="55" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="27" y="15" text-anchor="middle" font-size="10" font-weight="bold">Cam1</text>
+                </g>
+                <g transform="translate(75, 35)">
+                    <rect width="55" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="27" y="15" text-anchor="middle" font-size="10" font-weight="bold">Cam2</text>
+                </g>
+                <g transform="translate(135, 35)">
+                    <rect width="55" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="27" y="15" text-anchor="middle" font-size="10" font-weight="bold">Cam3</text>
+                </g>
+                <g transform="translate(195, 35)">
+                    <rect width="55" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="27" y="15" text-anchor="middle" font-size="10" font-weight="bold">Cam4</text>
+                </g>
+                <g transform="translate(260, 35)">
+                    <rect width="65" height="22" fill="#d0d0d0" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="32" y="15" text-anchor="middle" font-size="10" font-weight="bold">Switcher</text>
+                </g>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M205,155 L205,175" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [2] LiveU Unit -->
+            <g transform="translate(35, 180)">
+                <rect width="340" height="50" fill="#fff" stroke="#333" stroke-width="1.5" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#555" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#555"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[2] LiveU Unit</text>
+                <text x="170" y="42" text-anchor="middle" font-size="11" fill="#666">Encoder + Bonding (LU800)</text>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M205,230 L205,250" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [3] LiveU Cloud -->
+            <g transform="translate(35, 255)">
+                <rect width="340" height="50" fill="#fff" stroke="#333" stroke-width="1.5" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#555" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#555"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[3] LiveU Cloud</text>
+                <text x="170" y="42" text-anchor="middle" font-size="11" fill="#666">Matrix / Routing / Cloud Decode</text>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M205,305 L205,325" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [4] Seoul Studio -->
+            <g transform="translate(35, 330)">
+                <rect width="340" height="55" fill="#fff" stroke="#333" stroke-width="1.5" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#555" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#555"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[4] Seoul Studio</text>
+
+                <g transform="translate(20, 32)">
+                    <rect width="70" height="18" fill="#f0f0f0" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="35" y="13" text-anchor="middle" font-size="9" font-weight="bold">Edit</text>
+                </g>
+                <text x="100" y="45" font-size="12" fill="#333">→</text>
+                <g transform="translate(115, 32)">
+                    <rect width="70" height="18" fill="#f0f0f0" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="35" y="13" text-anchor="middle" font-size="9" font-weight="bold">Render</text>
+                </g>
+                <text x="195" y="45" font-size="12" fill="#333">→</text>
+                <g transform="translate(210, 32)">
+                    <rect width="110" height="18" fill="#e0e0e0" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="55" y="13" text-anchor="middle" font-size="9" font-weight="bold">1-2hr Delay</text>
+                </g>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M205,385 L205,405" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [5] YouTube -->
+            <g transform="translate(35, 410)">
+                <rect width="340" height="55" fill="#fff" stroke="#333" stroke-width="2" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#333" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#333"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[5] YouTube</text>
+                <text x="170" y="40" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">FREE Broadcast (Single PGM)</text>
+                <text x="170" y="52" text-anchor="middle" font-size="9" fill="#666">DVR OFF | Post-live Private | No Archive</text>
+            </g>
+        </g>
+
+        <!-- ===== RIGHT: WSOPTV STATION ===== -->
+        <g id="right">
+            <rect x="555" y="15" width="380" height="480" fill="#f5f5f5" stroke="#333" stroke-width="2" stroke-dasharray="6,3" rx="5"/>
+
+            <!-- Header -->
+            <rect x="555" y="15" width="380" height="40" fill="#666" rx="5"/>
+            <rect x="555" y="45" width="380" height="10" fill="#666"/>
+            <text x="745" y="42" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">WSOPTV STATION</text>
+
+            <!-- NEW Badge -->
+            <rect x="870" y="22" width="50" height="20" fill="#333" rx="3"/>
+            <text x="895" y="36" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">NEW</text>
+
+            <text x="745" y="72" text-anchor="middle" font-size="12" fill="#555">(Phase 2+ Premium)</text>
+
+            <!-- [1] Network Infrastructure -->
+            <g transform="translate(575, 90)">
+                <rect width="340" height="50" fill="#fff" stroke="#333" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#666" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#666"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[1] Network Infrastructure</text>
+                <text x="170" y="42" text-anchor="middle" font-size="11" fill="#333">10G Network (Shared)</text>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M745,140 L745,160" stroke="#666" stroke-width="2" stroke-dasharray="4,2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [2] Player Cam Setup -->
+            <g transform="translate(575, 165)">
+                <rect width="340" height="70" fill="#fff" stroke="#333" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#666" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#666"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[2] Player Cam Setup</text>
+
+                <!-- Phase Badge -->
+                <rect x="275" y="5" width="55" height="16" fill="#999" rx="2"/>
+                <text x="302" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#fff">Phase 4</text>
+
+                <!-- Player Cams -->
+                <g transform="translate(15, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P1</text>
+                </g>
+                <g transform="translate(52, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P2</text>
+                </g>
+                <g transform="translate(89, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P3</text>
+                </g>
+                <g transform="translate(126, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P4</text>
+                </g>
+                <g transform="translate(163, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P5</text>
+                </g>
+                <g transform="translate(200, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P6</text>
+                </g>
+                <g transform="translate(237, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P7</text>
+                </g>
+                <g transform="translate(274, 32)">
+                    <rect width="32" height="22" fill="#e8e8e8" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="16" y="15" text-anchor="middle" font-size="10" font-weight="bold">P8</text>
+                </g>
+                <text x="315" y="48" font-size="10" fill="#555">...</text>
+
+                <text x="170" y="65" text-anchor="middle" font-size="10" fill="#666">8-10 Dedicated Cams + Multi-Encoder</text>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M745,235 L745,255" stroke="#666" stroke-width="2" stroke-dasharray="4,2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [3] OTT Server - PGM -->
+            <g transform="translate(575, 260)">
+                <rect width="340" height="50" fill="#fff" stroke="#333" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#666" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#666"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[3] OTT Server - PGM</text>
+                <text x="170" y="42" text-anchor="middle" font-size="11" fill="#333">Real-time PGM Ingest (no delay)</text>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M745,310 L745,330" stroke="#666" stroke-width="2" stroke-dasharray="4,2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [4] OTT Server - VOD -->
+            <g transform="translate(575, 335)">
+                <rect width="340" height="50" fill="#fff" stroke="#333" stroke-width="1.5" stroke-dasharray="4,2" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#666" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#666"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[4] OTT Server - VOD</text>
+                <text x="170" y="42" text-anchor="middle" font-size="11" fill="#333">Edited Broadcast (1-2hr delay)</text>
+            </g>
+
+            <!-- Arrow -->
+            <path d="M745,385 L745,405" stroke="#666" stroke-width="2" stroke-dasharray="4,2" fill="none" marker-end="url(#arrow)"/>
+
+            <!-- [5] Output -->
+            <g transform="translate(575, 410)">
+                <rect width="340" height="55" fill="#fff" stroke="#333" stroke-width="2" rx="4"/>
+                <rect x="0" y="0" width="340" height="25" fill="#444" rx="4"/>
+                <rect x="0" y="20" width="340" height="5" fill="#444"/>
+                <text x="170" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">[5] WSOPTV OTT Platform</text>
+                <text x="85" y="42" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">Multi-view</text>
+                <text x="170" y="42" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">Player Cam</text>
+                <text x="255" y="42" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">Timeshift</text>
+                <text x="170" y="54" text-anchor="middle" font-size="10" fill="#555">Permanent Archive</text>
+            </g>
+        </g>
+
+        <!-- ===== CONNECTION ARROWS ===== -->
+
+        <!-- Connection 1: Infra Share -->
+        <path d="M395,115 L555,115" stroke="#555" stroke-width="2.5" stroke-dasharray="6,3" fill="none" marker-end="url(#arrow-conn)"/>
+        <g transform="translate(445, 97)">
+            <rect width="85" height="22" fill="#fff" stroke="#555" stroke-width="1.5" rx="3"/>
+            <text x="42" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">1 Infra</text>
+        </g>
+
+        <!-- Connection 2: Raw Cams -->
+        <path d="M395,140 Q475,175 555,200" stroke="#555" stroke-width="2.5" stroke-dasharray="6,3" fill="none" marker-end="url(#arrow-conn)"/>
+        <g transform="translate(445, 160)">
+            <rect width="85" height="22" fill="#fff" stroke="#555" stroke-width="1.5" rx="3"/>
+            <text x="42" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">2 Cams</text>
+        </g>
+
+        <!-- Connection 3: PGM Stream -->
+        <path d="M395,280 L555,285" stroke="#555" stroke-width="2.5" stroke-dasharray="6,3" fill="none" marker-end="url(#arrow-conn)"/>
+        <g transform="translate(445, 263)">
+            <rect width="85" height="22" fill="#fff" stroke="#555" stroke-width="1.5" rx="3"/>
+            <text x="42" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">3 PGM</text>
+        </g>
+
+        <!-- Connection 4: Final VOD -->
+        <path d="M395,430 Q475,400 555,360" stroke="#555" stroke-width="2.5" stroke-dasharray="6,3" fill="none" marker-end="url(#arrow-conn)"/>
+        <g transform="translate(445, 380)">
+            <rect width="85" height="22" fill="#fff" stroke="#555" stroke-width="1.5" rx="3"/>
+            <text x="42" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">4 VOD</text>
+        </g>
+
+        <!-- ===== LEGEND ===== -->
+        <g transform="translate(15, 510)">
+            <rect width="920" height="40" fill="#fafafa" stroke="#ccc" stroke-width="1" rx="4"/>
+
+            <line x1="25" y1="20" x2="65" y2="20" stroke="#333" stroke-width="2"/>
+            <text x="75" y="25" font-size="12" fill="#333">Existing Flow</text>
+
+            <line x1="190" y1="20" x2="230" y2="20" stroke="#666" stroke-width="2" stroke-dasharray="4,2"/>
+            <text x="240" y="25" font-size="12" fill="#666">WSOPTV Flow</text>
+
+            <line x1="360" y1="20" x2="400" y2="20" stroke="#555" stroke-width="2.5" stroke-dasharray="6,3"/>
+            <polygon points="400,20 408,17 408,23" fill="#555"/>
+            <text x="420" y="25" font-size="12" fill="#333" font-weight="bold">Data Connections (1-4)</text>
+
+            <rect x="620" y="10" width="290" height="22" fill="#f0f0f0" stroke="#999" stroke-width="1" rx="3"/>
+            <text x="765" y="25" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">핵심: 기존 워크플로우 변경 없음 (Additive Only)</text>
+        </g>
+    </svg>
+</div>
+</body>
+</html>

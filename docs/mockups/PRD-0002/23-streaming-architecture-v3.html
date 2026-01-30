@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV - Video Streaming Architecture v3 (26 Nodes)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #000;
+        }
+
+        /* Section Header */
+        .section-header {
+            background: #000;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 0;
+        }
+        .section-header:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Node Card */
+        .node {
+            border: 2px solid #000;
+            margin-bottom: 0;
+            background: #fff;
+        }
+        .node-header {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #000;
+            gap: 10px;
+        }
+        .node-number {
+            font-size: 10px;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            padding: 2px 6px;
+            white-space: nowrap;
+        }
+        .node-name {
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .node-body {
+            padding: 8px 10px;
+        }
+        .node-row {
+            display: flex;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        .node-row:last-child {
+            margin-bottom: 0;
+        }
+        .node-row .label {
+            min-width: 60px;
+            font-weight: bold;
+            color: #555;
+            font-size: 10px;
+        }
+        .node-row .value {
+            flex: 1;
+            color: #000;
+        }
+        .node-row.next {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed #ccc;
+        }
+        .node-row.next .label {
+            color: #000;
+        }
+        .node-row.next .value {
+            font-weight: bold;
+        }
+
+        /* Arrow */
+        .arrow {
+            text-align: center;
+            padding: 6px 0;
+            background: #fafafa;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
+        }
+        .arrow-line {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .arrow-info {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+        .arrow-info span {
+            color: #666;
+        }
+        .arrow-info .protocol {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Branch Layout */
+        .branch-container {
+            display: flex;
+            gap: 0;
+        }
+        .branch-left, .branch-right {
+            flex: 1;
+        }
+        .branch-left {
+            border-right: 1px solid #000;
+        }
+        .branch-header {
+            background: #333;
+            color: #fff;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .branch-features {
+            background: #f0f0f0;
+            padding: 8px 10px;
+            font-size: 10px;
+            border: 2px solid #000;
+            border-top: none;
+        }
+        .branch-features .tag {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 2px 6px;
+            margin: 2px;
+            font-size: 9px;
+        }
+        .branch-features .tag.positive {
+            background: #333;
+        }
+
+        /* Parallel Flow (PokerGFX) */
+        .parallel-container {
+            display: flex;
+            border: 2px solid #000;
+            border-top: none;
+            background: #fafafa;
+        }
+        .parallel-left, .parallel-right {
+            flex: 1;
+            padding: 10px;
+        }
+        .parallel-left {
+            border-right: 1px dashed #999;
+        }
+        .parallel-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .parallel-box {
+            border: 1px solid #000;
+            padding: 6px;
+            background: #fff;
+            font-size: 11px;
+            text-align: center;
+        }
+        .parallel-arrow {
+            text-align: center;
+            padding: 5px 0;
+            font-size: 14px;
+        }
+
+        /* Merge Arrow */
+        .merge-arrow {
+            text-align: center;
+            padding: 8px 0;
+            background: #fafafa;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
+            font-size: 10px;
+            color: #555;
+        }
+
+        /* End Node */
+        .end-node {
+            border: 2px solid #000;
+            background: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            margin-top: 0;
+        }
+        .end-node .label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .end-node .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 10px;
+        }
+        .end-node .stat {
+            text-align: center;
+        }
+        .end-node .stat .num {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .end-node .stat .desc {
+            font-size: 10px;
+            color: #666;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 11px;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 2px solid #000;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background: #000;
+            color: #fff;
+        }
+        .comparison-table td:first-child {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .comparison-table .youtube-col {
+            background: #fafafa;
+        }
+        .comparison-table .wsoptv-col {
+            background: #f0f0f0;
+        }
+
+        /* Split Arrow */
+        .split-arrow {
+            text-align: center;
+            padding: 10px 0;
+            background: #fafafa;
+            border: 2px solid #000;
+            border-top: none;
+        }
+        .split-arrow-line {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Video Streaming Architecture v3</div>
+        <div class="subtitle">Node-by-Node Data Flow | Camera to Viewer (26 Nodes, 7 Sections) | YouTube + WSOPTV Split</div>
+
+        <!-- ===== SECTION A: On-Site Production ===== -->
+        <div class="section-header">SECTION A: On-Site Production (5 Nodes)</div>
+
+        <!-- NODE 1 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 1</span>
+                <span class="node-name">Broadcast Cameras</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">HD/4K Broadcast Cameras (Main PGM, Player Cam, Table Cam, Audience Cam)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">SDI Uncompressed Video Signal</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Table, Players, Audience, Commentators</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">SDI 1080p60 (1.5Gbps per camera)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Production Switcher</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">SDI (SMPTE 292M)</span>
+                <span>1080p60, Uncompressed</span>
+                <span>1.5 Gbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 2 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 2</span>
+                <span class="node-name">Production Switcher</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Video Mixer/Switcher</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Select/switch camera sources, generate final PGM output</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Multiple SDI signals (4-16 inputs)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Program (PGM) SDI + Clean Feed</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">PokerGFX (parallel) / Video Combiner</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parallel Flow: PGM + PokerGFX -->
+        <div class="parallel-container">
+            <div class="parallel-left">
+                <div class="parallel-label">PGM Signal (Direct)</div>
+                <div class="parallel-box">Clean PGM Video</div>
+                <div class="parallel-arrow">|</div>
+            </div>
+            <div class="parallel-right">
+                <div class="parallel-label">GFX Generation</div>
+                <!-- NODE 3 -->
+                <div class="parallel-box" style="background: #f5f5f5; text-align: left; padding: 8px;">
+                    <div style="font-weight: bold; margin-bottom: 4px;"><span style="background:#000;color:#fff;padding:1px 4px;font-size:9px;">NODE 3</span> PokerGFX</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>WHAT:</strong> Poker GFX Overlay Generator</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>ROLE:</strong> Generate POT, BOARD, Hole Cards, Player Info, Win Probability overlays</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>INPUT:</strong> PGM Reference + Game Data (RFID, Dealer Input, Tournament Clock)</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>OUTPUT:</strong> GFX Overlay Layer (Fill + Key, Alpha Channel)</div>
+                    <div style="font-size: 10px; border-top: 1px dashed #ccc; padding-top: 4px; margin-top: 4px;"><strong>-> NEXT:</strong> Video Combiner</div>
+                </div>
+                <div class="parallel-arrow">|</div>
+            </div>
+        </div>
+
+        <div class="merge-arrow">
+            ------- PGM + GFX Overlay Merge -------
+        </div>
+
+        <!-- NODE 4 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 4</span>
+                <span class="node-name">Video Combiner</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Video Compositor</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Combine Switcher PGM + PokerGFX overlay into final broadcast video</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Switcher PGM Video + PokerGFX Overlay Layer</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">GFX-combined Final Program Video</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">On-Site Encoder</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">SDI (SMPTE 292M)</span>
+                <span>1080p60, GFX Combined</span>
+                <span>1.5 Gbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 5 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 5</span>
+                <span class="node-name">On-Site Encoder</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Live Encoder</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Compress SDI uncompressed signal to H.264/H.265 for IP transmission to AWS Cloud</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">GFX-combined SDI 1080p60 (1.5 Gbps)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">RTMP/SRT Stream (H.264, 8-15 Mbps)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">AWS MediaLive Ingest</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">RTMP / SRT</span>
+                <span>H.264, 1080p60</span>
+                <span>8-15 Mbps</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION B: Cloud Ingest ===== -->
+        <div class="section-header">SECTION B: Cloud Ingest - AWS Cloud (2 Nodes)</div>
+
+        <!-- NODE 6 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 6</span>
+                <span class="node-name">AWS MediaLive Ingest</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">AWS MediaLive Real-time Ingest Point</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Receive live stream directly from on-site encoder into AWS Cloud</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">RTMP/SRT Stream (On-Site Encoder output)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Cloud Live Stream (Ingest Point) + Archive trigger</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Cloud Recording (parallel) / GG Ingest</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parallel: Live Stream + Recording -->
+        <div class="parallel-container">
+            <div class="parallel-left">
+                <div class="parallel-label">Live Stream Path</div>
+                <div class="parallel-box">To GG Ingest</div>
+                <div class="parallel-arrow">|</div>
+            </div>
+            <div class="parallel-right">
+                <div class="parallel-label">Archive Path</div>
+                <!-- NODE 7 -->
+                <div class="parallel-box" style="background: #f5f5f5; text-align: left; padding: 8px;">
+                    <div style="font-weight: bold; margin-bottom: 4px;"><span style="background:#000;color:#fff;padding:1px 4px;font-size:9px;">NODE 7</span> Cloud Recording</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>WHAT:</strong> Cloud Archive Recording System</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>ROLE:</strong> Real-time archive to S3 for backup and VOD source</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>INPUT:</strong> AWS MediaLive Ingest Stream</div>
+                    <div style="font-size: 10px; margin-bottom: 2px;"><strong>OUTPUT:</strong> S3 Archive Files (MP4/MKV segments)</div>
+                    <div style="font-size: 10px; border-top: 1px dashed #ccc; padding-top: 4px; margin-top: 4px;"><strong>-> NEXT:</strong> (Parallel - referenced by GG Ingest)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">AWS Internal / S3</span>
+                <span>Live Stream or Archive</span>
+                <span>Variable</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION C: GG Production ===== -->
+        <div class="section-header">SECTION C: GG Production - Seoul (7 Nodes)</div>
+
+        <!-- NODE 8 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 8</span>
+                <span class="node-name">GG Ingest</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">GG Production Post-Production Center Ingest Point</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Receive live/archive sources from AWS Cloud, register to MAM system</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">AWS MediaLive Stream or S3 Archive</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">MAM (Media Asset Management) registered source</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Quality Control</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Internal Storage</span>
+                <span>Original preserved</span>
+                <span>N/A (Storage)</span>
+            </div>
+        </div>
+
+        <!-- NODE 9 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 9</span>
+                <span class="node-name">Quality Control</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">QC Station</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Verify video/audio quality (resolution, framerate, audio level, A/V sync)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">MAM registered original source</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">QC PASS source (or FAIL for re-request)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Cut Editing</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Workflow</span>
+                <span>QC PASS approved</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 10 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 10</span>
+                <span class="node-name">Cut Editing</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Cut Editing Station</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Extract required segments, remove dead air, build timeline, mark ad insertion points</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">QC PASS original source</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Cut-edited timeline (EDL/XML) + edited version</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Feature Table Hand Arrangement</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">NLE Timeline</span>
+                <span>EDL/XML + Proxy</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 11 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 11</span>
+                <span class="node-name">Feature Table Hand Arrangement</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Feature Table Hand Arrangement Station</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Select highlight hands, arrange feature table sequence, build storyline</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Cut-edited timeline + hand metadata</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Feature table sequence (hand arrangement complete)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Subtitle</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Sequence</span>
+                <span>Arranged timeline</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 12 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 12</span>
+                <span class="node-name">Subtitle</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Subtitle/Localization Station</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Generate 20-language subtitles, localize poker terminology, sync timing</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Feature table sequence + transcript</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Subtitle files (SRT/WebVTT/TTML) - 20 languages</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Soft Content Placement</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">File</span>
+                <span>Video + SRT/VTT/TTML</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 13 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 13</span>
+                <span class="node-name">Soft Content Placement</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Soft Content Placement Station</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Insert sponsor logos, promos, interstitials, SCTE-35 ad markers</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Subtitled sequence + soft content assets</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Soft content placed sequence</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Final Master Render</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Timeline</span>
+                <span>Complete sequence</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 14 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 14</span>
+                <span class="node-name">Final Master Render</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Final Master Rendering System</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Render final master video with all edits, subtitles, and soft content</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Soft content placed sequence</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Final Master Video (ProRes 422 HQ, 1080p)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">ABR Transcoding</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">File / Watch Folder</span>
+                <span>ProRes 422 HQ</span>
+                <span>~200 Mbps</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION D: Transcoding & Packaging ===== -->
+        <div class="section-header">SECTION D: Transcoding & Packaging (3 Nodes)</div>
+
+        <!-- NODE 15 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 15</span>
+                <span class="node-name">ABR Transcoding</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Adaptive Bitrate Transcoder</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Convert single master to multiple resolutions/bitrates (1080p~240p, 8~0.3Mbps)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Final Master Video (ProRes/H.264 Mezzanine)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">ABR Ladder: HLS/DASH segments (Clear, unencrypted)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">DRM Packaging</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Internal Pipeline</span>
+                <span>HLS/DASH (Clear)</span>
+                <span>0.3-8 Mbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 16 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 16</span>
+                <span class="node-name">DRM Packaging</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">DRM Encryption Packaging System</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Encrypt content with Widevine/FairPlay/PlayReady DRM, integrate license key issuance</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Clear (unencrypted) HLS/DASH segments</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">CENC/SAMPLE-AES encrypted segments + DRM Manifest</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Origin Server</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">S3 PUT</span>
+                <span>Encrypted fMP4 + Manifest</span>
+                <span>Variable</span>
+            </div>
+        </div>
+
+        <!-- NODE 17 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 17</span>
+                <span class="node-name">Origin Server</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Origin Storage Server (S3 + Origin Shield)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Store encrypted content, serve origin to YouTube RTMP and WSOPTV CDN</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">DRM packaged HLS/DASH content</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">YouTube RTMP (Branch 1) + WSOPTV CDN Pull (Branch 2)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">YouTube RTMP Ingest / CDN Ingest (SPLIT)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split Arrow -->
+        <div class="split-arrow">
+            <div class="split-arrow-line">------------ DISTRIBUTION SPLIT ------------</div>
+            <div style="display: flex; justify-content: space-around; margin-top: 5px;">
+                <span style="font-size: 10px; color: #555;"><- YouTube Path (Free/Teaser)</span>
+                <span style="font-size: 10px; color: #555;">WSOPTV Path (Paid/Full) -></span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION E: Distribution Split ===== -->
+        <div class="branch-container">
+            <!-- E-1: YouTube Path -->
+            <div class="branch-left">
+                <div class="branch-header">SECTION E-1: YouTube Path (3 Nodes)</div>
+
+                <!-- NODE 18 -->
+                <div class="node" style="border-right: none;">
+                    <div class="node-header">
+                        <span class="node-number">NODE 18</span>
+                        <span class="node-name">YouTube RTMP Ingest</span>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-row">
+                            <span class="label">WHAT</span>
+                            <span class="value">YouTube Live Streaming Ingest</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">ROLE</span>
+                            <span class="value">Send RTMP stream to YouTube Live for free viewer acquisition</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">INPUT</span>
+                            <span class="value">Origin Server live stream (single quality)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">OUTPUT</span>
+                            <span class="value">YouTube Live platform delivery</span>
+                        </div>
+                        <div class="node-row next">
+                            <span class="label">-> NEXT</span>
+                            <span class="value">YouTube Live</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow" style="border-right: none;">
+                    <div class="arrow-line">|</div>
+                    <div class="arrow-info">
+                        <span class="protocol">RTMP</span>
+                        <span>1080p single</span>
+                    </div>
+                </div>
+
+                <!-- NODE 19 -->
+                <div class="node" style="border-right: none;">
+                    <div class="node-header">
+                        <span class="node-number">NODE 19</span>
+                        <span class="node-name">YouTube Live</span>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-row">
+                            <span class="label">WHAT</span>
+                            <span class="value">YouTube Live Streaming Platform</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">ROLE</span>
+                            <span class="value">Provide teaser live to free viewers, funnel to WSOPTV subscription</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">INPUT</span>
+                            <span class="value">YouTube RTMP stream</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">OUTPUT</span>
+                            <span class="value">YouTube viewer screen</span>
+                        </div>
+                        <div class="node-row next">
+                            <span class="label">-> NEXT</span>
+                            <span class="value">YouTube Viewer (End)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow" style="border-right: none;">
+                    <div class="arrow-line">|</div>
+                </div>
+
+                <!-- NODE 20 -->
+                <div class="node" style="border-right: none;">
+                    <div class="node-header">
+                        <span class="node-number">NODE 20</span>
+                        <span class="node-name">YouTube Viewer (END)</span>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-row">
+                            <span class="label">WHAT</span>
+                            <span class="value">YouTube Viewer (Free)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">ROLE</span>
+                            <span class="value">Watch teaser content, target for WSOPTV conversion</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">INPUT</span>
+                            <span class="value">YouTube Live stream</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">OUTPUT</span>
+                            <span class="value">(End - Viewer)</span>
+                        </div>
+                        <div class="node-row next">
+                            <span class="label">-> NEXT</span>
+                            <span class="value">(End)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="branch-features" style="border-right: none;">
+                    <span class="tag">DVR: OFF</span>
+                    <span class="tag">Post-Live: Private</span>
+                    <span class="tag">FREE</span>
+                </div>
+            </div>
+
+            <!-- E-2: WSOPTV Path -->
+            <div class="branch-right">
+                <div class="branch-header">SECTION E-2: WSOPTV Path (3 Nodes)</div>
+
+                <!-- NODE 21 -->
+                <div class="node">
+                    <div class="node-header">
+                        <span class="node-number">NODE 21</span>
+                        <span class="node-name">CDN Ingest</span>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-row">
+                            <span class="label">WHAT</span>
+                            <span class="value">CDN Ingest Point (Multi-CDN)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">ROLE</span>
+                            <span class="value">Pull content from Origin for global distribution</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">INPUT</span>
+                            <span class="value">Origin Server HLS/DASH content</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">OUTPUT</span>
+                            <span class="value">CDN internal distribution network</span>
+                        </div>
+                        <div class="node-row next">
+                            <span class="label">-> NEXT</span>
+                            <span class="value">Edge Cache</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow">
+                    <div class="arrow-line">|</div>
+                    <div class="arrow-info">
+                        <span class="protocol">CDN Internal</span>
+                        <span>HLS/DASH</span>
+                    </div>
+                </div>
+
+                <!-- NODE 22 -->
+                <div class="node">
+                    <div class="node-header">
+                        <span class="node-number">NODE 22</span>
+                        <span class="node-name">Edge Cache</span>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-row">
+                            <span class="label">WHAT</span>
+                            <span class="value">CDN Edge Cache Server (Global POP)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">ROLE</span>
+                            <span class="value">Cache and deliver content close to viewers (US, EU, APAC, LATAM)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">INPUT</span>
+                            <span class="value">Content replicated from CDN Ingest</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">OUTPUT</span>
+                            <span class="value">HTTPS streaming data to WSOPTV viewers</span>
+                        </div>
+                        <div class="node-row next">
+                            <span class="label">-> NEXT</span>
+                            <span class="value">WSOPTV Viewer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow">
+                    <div class="arrow-line">|</div>
+                    <div class="arrow-info">
+                        <span class="protocol">HTTPS (TLS 1.3)</span>
+                        <span>Encrypted HLS/DASH</span>
+                    </div>
+                </div>
+
+                <!-- NODE 23 -->
+                <div class="node">
+                    <div class="node-header">
+                        <span class="node-number">NODE 23</span>
+                        <span class="node-name">WSOPTV Viewer</span>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-row">
+                            <span class="label">WHAT</span>
+                            <span class="value">WSOPTV Viewer (Paid Subscriber)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">ROLE</span>
+                            <span class="value">Full-feature viewing (DVR, Multi-view, Advanced Mode)</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">INPUT</span>
+                            <span class="value">CDN Edge Cache stream</span>
+                        </div>
+                        <div class="node-row">
+                            <span class="label">OUTPUT</span>
+                            <span class="value">WSOPTV Player (Section F)</span>
+                        </div>
+                        <div class="node-row next">
+                            <span class="label">-> NEXT</span>
+                            <span class="value">WSOPTV Player (Section F)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="branch-features">
+                    <span class="tag positive">DVR: ON</span>
+                    <span class="tag positive">Permanent Archive</span>
+                    <span class="tag positive">PAID</span>
+                    <span class="tag positive">Multi-view</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION F: Client Playback (WSOPTV Only) ===== -->
+        <div class="section-header">SECTION F: Client Playback - WSOPTV Only (3 Nodes)</div>
+
+        <!-- NODE 24 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 24</span>
+                <span class="node-name">WSOPTV Player</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">WSOPTV Client Video Player (Web, iOS, Android, Samsung TV, LG TV)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Receive HLS/DASH stream, parse manifest, ABR quality selection, DRM handling, Multi-view support</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Encrypted stream from CDN Edge (HLS/DASH)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">DRM decryption request (License Challenge) + encrypted segments</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">DRM Decryption</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Platform API</span>
+                <span>Encrypted Media</span>
+                <span>N/A (Local)</span>
+            </div>
+        </div>
+
+        <!-- NODE 25 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 25</span>
+                <span class="node-name">DRM Decryption</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">DRM Decryption Module (CDM: Content Decryption Module)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Acquire key from license server, decrypt content (Secure Video Path)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Encrypted media samples + License Response (Content Key)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Decrypted media samples (Clear H.264/H.265 frames)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">Video Rendering</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">|</div>
+            <div class="arrow-info">
+                <span class="protocol">Media Pipeline</span>
+                <span>Decrypted H.264/H.265</span>
+                <span>N/A (Local)</span>
+            </div>
+        </div>
+
+        <!-- NODE 26 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 26</span>
+                <span class="node-name">Video Rendering (END)</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Video Rendering Engine (Hardware Decoder + Display)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Decode frames (H.264->YUV->RGB), composite subtitles/UI, render to screen</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Decrypted media samples (H.264/H.265 compressed frames)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">Viewer screen display (1080p, 60fps)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">-> NEXT</span>
+                    <span class="value">VIEWER (End)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- END -->
+        <div class="end-node">
+            <div class="label">END: Viewer Experience</div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">26</div>
+                    <div class="desc">Total Nodes</div>
+                </div>
+                <div class="stat">
+                    <div class="num">7</div>
+                    <div class="desc">Sections</div>
+                </div>
+                <div class="stat">
+                    <div class="num">15-30s</div>
+                    <div class="desc">Live Latency</div>
+                </div>
+                <div class="stat">
+                    <div class="num">&lt;1s</div>
+                    <div class="desc">VOD Latency</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>YouTube</th>
+                    <th>WSOPTV</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Purpose</td>
+                    <td class="youtube-col">Teaser / Acquisition</td>
+                    <td class="wsoptv-col">Main Service</td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td class="youtube-col">Free</td>
+                    <td class="wsoptv-col">Paid Subscription</td>
+                </tr>
+                <tr>
+                    <td>DVR</td>
+                    <td class="youtube-col">OFF</td>
+                    <td class="wsoptv-col">ON (Timeshift, Catch-up)</td>
+                </tr>
+                <tr>
+                    <td>Post-Live</td>
+                    <td class="youtube-col">Private (hidden)</td>
+                    <td class="wsoptv-col">Permanent Archive (VOD)</td>
+                </tr>
+                <tr>
+                    <td>Multi-view</td>
+                    <td class="youtube-col">N/A</td>
+                    <td class="wsoptv-col">Supported</td>
+                </tr>
+                <tr>
+                    <td>Advanced Mode</td>
+                    <td class="youtube-col">N/A</td>
+                    <td class="wsoptv-col">3-Tier Supported</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

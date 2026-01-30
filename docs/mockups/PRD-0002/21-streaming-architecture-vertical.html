@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV - Video Streaming Architecture (Vertical)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #000;
+        }
+
+        /* Layer Common Styles */
+        .layer {
+            border: 2px solid #000;
+            margin-bottom: 0;
+            background: #fff;
+        }
+        .layer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f5f5f5;
+            border-bottom: 2px solid #000;
+        }
+        .layer-header h3 {
+            font-size: 16px;
+            margin: 0;
+        }
+        .layer-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border: 1px solid #000;
+            background: #fff;
+        }
+        .layer-badge.location {
+            background: #eee;
+        }
+        .layer-body {
+            padding: 15px;
+        }
+
+        /* Components Grid */
+        .components {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .component {
+            border: 1px solid #999;
+            padding: 10px 15px;
+            text-align: center;
+            min-width: 120px;
+            background: #fafafa;
+        }
+        .component.main {
+            border: 2px solid #000;
+            background: #f0f0f0;
+        }
+        .component .name {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        .component .detail {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Annotation Box */
+        .annotation {
+            margin-top: 12px;
+            padding: 10px;
+            background: #fafafa;
+            border: 1px dashed #ccc;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        .annotation strong {
+            color: #333;
+        }
+        .annotation-row {
+            display: flex;
+            margin-bottom: 3px;
+        }
+        .annotation-label {
+            min-width: 80px;
+            font-weight: bold;
+            color: #555;
+        }
+        .annotation-value {
+            color: #333;
+        }
+
+        /* Flow Arrow */
+        .flow-arrow {
+            text-align: center;
+            padding: 8px 0;
+            font-size: 24px;
+            color: #000;
+            background: #fff;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
+        }
+        .flow-arrow .protocol {
+            display: block;
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .flow-arrow .latency {
+            display: block;
+            font-size: 10px;
+            color: #999;
+        }
+
+        /* Partner Grid */
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .partner {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: center;
+        }
+        .partner .name {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        .partner .event {
+            font-size: 10px;
+            color: #666;
+        }
+
+        /* Process Flow */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .process-step {
+            border: 1px solid #999;
+            padding: 8px 12px;
+            font-size: 11px;
+            text-align: center;
+            background: #fafafa;
+        }
+        .process-arrow {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* AWS Components */
+        .aws-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .aws-component {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: center;
+        }
+        .aws-component .icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .aws-component .name {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        .aws-component .tech {
+            font-size: 10px;
+            color: #666;
+        }
+
+        /* CDN Grid */
+        .cdn-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .cdn {
+            border: 1px solid #999;
+            padding: 15px 25px;
+            text-align: center;
+        }
+        .cdn.primary {
+            border: 2px solid #000;
+            background: #f0f0f0;
+        }
+        .cdn .name {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .cdn .role {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Client Grid */
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .client {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: center;
+        }
+        .client .platform {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        .client .tech {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+        .client .drm {
+            font-size: 9px;
+            color: #999;
+            border-top: 1px dashed #ccc;
+            padding-top: 3px;
+            margin-top: 3px;
+        }
+
+        /* Total Latency */
+        .total-latency {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px solid #000;
+            background: #f5f5f5;
+            text-align: center;
+        }
+        .total-latency .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .total-latency .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .total-latency .note {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Region Badges */
+        .regions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .region {
+            font-size: 10px;
+            padding: 3px 8px;
+            border: 1px solid #999;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Video Streaming Architecture</div>
+        <div class="subtitle">Camera to Viewer | End-to-End Data Flow (Vertical Layout)</div>
+
+        <!-- Layer 1: On-Site -->
+        <div class="layer">
+            <div class="layer-header">
+                <h3>Layer 1: On-Site (현장)</h3>
+                <span class="layer-badge location">📍 Las Vegas / Prague / Bahamas</span>
+            </div>
+            <div class="layer-body">
+                <div class="components">
+                    <div class="component">
+                        <div class="name">📷 Main PGM</div>
+                        <div class="detail">Program Camera</div>
+                    </div>
+                    <div class="component">
+                        <div class="name">📷 Player Cam</div>
+                        <div class="detail">Face Close-up</div>
+                    </div>
+                    <div class="component">
+                        <div class="name">📷 Table Cam</div>
+                        <div class="detail">Overhead View</div>
+                    </div>
+                    <div class="component main">
+                        <div class="name">🎛️ Switcher</div>
+                        <div class="detail">Video Mixing</div>
+                    </div>
+                    <div class="component main">
+                        <div class="name">📤 Encoder</div>
+                        <div class="detail">RTMP/SRT Output</div>
+                    </div>
+                </div>
+                <div class="annotation">
+                    <div class="annotation-row">
+                        <span class="annotation-label">카메라:</span>
+                        <span class="annotation-value">HD/4K Broadcast Camera (Sony, Canon, Blackmagic)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">스위처:</span>
+                        <span class="annotation-value">Tricaster / Blackmagic ATEM (멀티캠 믹싱, GFX 오버레이)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">인코더:</span>
+                        <span class="annotation-value">H.264/H.265, 8-15 Mbps, 1080p60</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">출력:</span>
+                        <span class="annotation-value">RTMP or SRT → Production Partner</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div class="flow-arrow">
+            ↓
+            <span class="protocol">SDI / RTMP</span>
+            <span class="latency">Real-time</span>
+        </div>
+
+        <!-- Layer 2: Production Partners -->
+        <div class="layer">
+            <div class="layer-header">
+                <h3>Layer 2: Production Partners</h3>
+                <span class="layer-badge">중계권 보유 파트너</span>
+            </div>
+            <div class="layer-body">
+                <div class="partner-grid">
+                    <div class="partner">
+                        <div class="name">ESPN</div>
+                        <div class="event">WSOP Vegas<br>Main Event</div>
+                    </div>
+                    <div class="partner">
+                        <div class="name">PokerGO</div>
+                        <div class="event">WSOP Vegas<br>(ME 외 전체)</div>
+                    </div>
+                    <div class="partner">
+                        <div class="name">Triton Poker</div>
+                        <div class="event">WSOP Paradise<br>(바하마)</div>
+                    </div>
+                    <div class="partner">
+                        <div class="name">PokerCaster</div>
+                        <div class="event">WSOPE<br>(유럽)</div>
+                    </div>
+                </div>
+                <div class="annotation">
+                    <div class="annotation-row">
+                        <span class="annotation-label">ESPN:</span>
+                        <span class="annotation-value">1년 후 WSOP TV 이관 / Fiber or Satellite 전송</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">PokerGO:</span>
+                        <span class="annotation-value">계약 조건 따라 이관 / Fiber or IP 전송</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">Triton:</span>
+                        <span class="annotation-value">직접 수령 (Clean Feed) / SRT or RTMP</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">PokerCaster:</span>
+                        <span class="annotation-value">직접 수령 (Clean Feed) / SRT or RTMP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arrow 2 -->
+        <div class="flow-arrow">
+            ↓
+            <span class="protocol">SRT / RTMP</span>
+            <span class="latency">Latency: 1-5초</span>
+        </div>
+
+        <!-- Layer 3: GG Production -->
+        <div class="layer">
+            <div class="layer-header">
+                <h3>Layer 3: GG Production (종편)</h3>
+                <span class="layer-badge location">📍 Seoul, Korea</span>
+            </div>
+            <div class="layer-body">
+                <div class="process-flow">
+                    <div class="process-step">📥 수령</div>
+                    <span class="process-arrow">→</span>
+                    <div class="process-step">🔍 검수</div>
+                    <span class="process-arrow">→</span>
+                    <div class="process-step">💬 자막<br><small>20개국</small></div>
+                    <span class="process-arrow">→</span>
+                    <div class="process-step">🎨 GFX<br><small>POT/HUD</small></div>
+                    <span class="process-arrow">→</span>
+                    <div class="process-step">🎬 인코딩</div>
+                    <span class="process-arrow">→</span>
+                    <div class="process-step">🏷️ 태깅<br><small>메타데이터</small></div>
+                </div>
+                <div class="annotation">
+                    <div class="annotation-row">
+                        <span class="annotation-label">품질 검수:</span>
+                        <span class="annotation-value">해상도, 오디오 레벨, 프레임 레이트, 동기화 확인</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">자막 작업:</span>
+                        <span class="annotation-value">20개국 다국어 SRT/VTT 자막 제작</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">GFX 오버레이:</span>
+                        <span class="annotation-value">POT (팟 사이즈), BOARD (커뮤니티 카드), HUD (플레이어 스탯)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">인코딩:</span>
+                        <span class="annotation-value">FFmpeg / AWS MediaConvert (ABR Ladder: 1080p/720p/480p/360p)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">핸드 태깅:</span>
+                        <span class="annotation-value">핸드 번호, 플레이어, 홀카드, 보드, 승자 → CMS 메타데이터</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arrow 3 -->
+        <div class="flow-arrow">
+            ↓
+            <span class="protocol">RTMP / S3 Upload</span>
+            <span class="latency">Latency: 5-10초</span>
+        </div>
+
+        <!-- Layer 4: AWS Cloud -->
+        <div class="layer">
+            <div class="layer-header">
+                <h3>Layer 4: AWS Cloud</h3>
+                <span class="layer-badge location">📍 us-east-1 (Primary)</span>
+            </div>
+            <div class="layer-body">
+                <div class="aws-grid">
+                    <div class="aws-component">
+                        <div class="icon">⚙️</div>
+                        <div class="name">Transcoder</div>
+                        <div class="tech">AWS Elemental (Live)<br>MediaConvert (VOD)</div>
+                    </div>
+                    <div class="aws-component">
+                        <div class="icon">🗄️</div>
+                        <div class="name">Origin Server</div>
+                        <div class="tech">S3 + CloudFront<br>Origin Shield</div>
+                    </div>
+                    <div class="aws-component">
+                        <div class="icon">🔐</div>
+                        <div class="name">DRM License</div>
+                        <div class="tech">BuyDRM KeyOS<br>/ PallyCon</div>
+                    </div>
+                </div>
+                <div class="annotation">
+                    <div class="annotation-row">
+                        <span class="annotation-label">Transcoder:</span>
+                        <span class="annotation-value">Live: AWS Elemental MediaLive / VOD: MediaConvert</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">출력 포맷:</span>
+                        <span class="annotation-value">HLS (fMP4) + DASH / ABR Ladder: 8Mbps → 4 → 2 → 1 → 0.5 Mbps</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">Origin:</span>
+                        <span class="annotation-value">S3 버킷 + CloudFront Origin Shield (캐시 최적화)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">DRM 패키징:</span>
+                        <span class="annotation-value">Widevine (Chrome/Android) + FairPlay (Safari/iOS) + PlayReady (Edge/TV)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">세그먼트:</span>
+                        <span class="annotation-value">HLS: 2-6초 / DASH: 2-4초 / DVR Window: 4시간</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arrow 4 -->
+        <div class="flow-arrow">
+            ↓
+            <span class="protocol">HLS / DASH</span>
+            <span class="latency">Latency: 2-5초</span>
+        </div>
+
+        <!-- Layer 5: CDN Edge -->
+        <div class="layer">
+            <div class="layer-header">
+                <h3>Layer 5: CDN Edge</h3>
+                <span class="layer-badge">Global Distribution</span>
+            </div>
+            <div class="layer-body">
+                <div class="cdn-grid">
+                    <div class="cdn primary">
+                        <div class="name">Akamai</div>
+                        <div class="role">Primary CDN<br>Video Streaming 전문</div>
+                    </div>
+                    <div class="cdn">
+                        <div class="name">CloudFront</div>
+                        <div class="role">Backup CDN<br>AWS 네이티브 통합</div>
+                    </div>
+                </div>
+                <div class="regions">
+                    <span class="region">🇺🇸 US East/West</span>
+                    <span class="region">🇪🇺 EU West</span>
+                    <span class="region">🇯🇵 APAC</span>
+                    <span class="region">🇦🇺 Oceania</span>
+                </div>
+                <div class="annotation">
+                    <div class="annotation-row">
+                        <span class="annotation-label">Akamai:</span>
+                        <span class="annotation-value">Media Delivery Network / HLS 세그먼트 Edge 캐싱</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">CloudFront:</span>
+                        <span class="annotation-value">Failover CDN / AWS 네이티브 / 비용 효율</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">캐시 전략:</span>
+                        <span class="annotation-value">Manifest: 2초 TTL / Segments: 1시간 TTL / VOD: 24시간 TTL</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">Multi-CDN:</span>
+                        <span class="annotation-value">DNS 기반 자동 페일오버 / 지역별 최적 POP 라우팅</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arrow 5 -->
+        <div class="flow-arrow">
+            ↓
+            <span class="protocol">HLS / DASH (Encrypted)</span>
+            <span class="latency">Latency: 5-15초</span>
+        </div>
+
+        <!-- Layer 6: Client Apps -->
+        <div class="layer">
+            <div class="layer-header">
+                <h3>Layer 6: Client Apps (시청자)</h3>
+                <span class="layer-badge">5 Platforms</span>
+            </div>
+            <div class="layer-body">
+                <div class="client-grid">
+                    <div class="client">
+                        <div class="platform">🌐 Web</div>
+                        <div class="tech">Next.js<br>Video.js + hls.js</div>
+                        <div class="drm">Widevine</div>
+                    </div>
+                    <div class="client">
+                        <div class="platform">📱 iOS</div>
+                        <div class="tech">SwiftUI<br>AVKit</div>
+                        <div class="drm">FairPlay</div>
+                    </div>
+                    <div class="client">
+                        <div class="platform">📱 Android</div>
+                        <div class="tech">Kotlin<br>ExoPlayer</div>
+                        <div class="drm">Widevine</div>
+                    </div>
+                    <div class="client">
+                        <div class="platform">📺 Samsung</div>
+                        <div class="tech">Tizen<br>AVPlay API</div>
+                        <div class="drm">PlayReady</div>
+                    </div>
+                    <div class="client">
+                        <div class="platform">📺 LG</div>
+                        <div class="tech">webOS<br>LG Media API</div>
+                        <div class="drm">PlayReady</div>
+                    </div>
+                </div>
+                <div class="annotation">
+                    <div class="annotation-row">
+                        <span class="annotation-label">Web:</span>
+                        <span class="annotation-value">Video.js + hls.js / Widevine L1-L3 / Chrome, Firefox, Edge</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">iOS:</span>
+                        <span class="annotation-value">AVKit + FairPlay DRM / iOS 15.0+ / iPhone, iPad, Apple TV</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">Android:</span>
+                        <span class="annotation-value">ExoPlayer + Widevine DRM / Android 8.0+ (API 26)</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">Samsung TV:</span>
+                        <span class="annotation-value">Tizen 5.0+ / AVPlay API + PlayReady DRM</span>
+                    </div>
+                    <div class="annotation-row">
+                        <span class="annotation-label">LG TV:</span>
+                        <span class="annotation-value">webOS 5.0+ / LG Media API + PlayReady DRM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Latency Summary -->
+        <div class="total-latency">
+            <div class="label">Total End-to-End Latency (Live Streaming)</div>
+            <div class="value">15 - 30초</div>
+            <div class="note">On-Site Camera → Viewer App (의도적 지연 방송 기준)</div>
+        </div>
+
+    </div>
+</body>
+</html>
