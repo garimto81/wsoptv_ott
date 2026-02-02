@@ -16,6 +16,7 @@ _script_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(_script_dir / "sync"))
 
 from sync.slack_sync import sync_slack_to_log  # noqa: E402
+from sync.gmail_sync import sync_gmail_to_log  # noqa: E402
 
 app = typer.Typer(help="WSOPTV Management Synchronization Tool")
 console = Console()
@@ -41,11 +42,30 @@ def sync(
 
     results = {}
 
-    # Gmail sync (placeholder - not yet implemented)
+    # Gmail sync
     if sync_gmail:
         console.print("[bold cyan]Gmail 동기화 중...[/bold cyan]")
-        console.print("  [yellow]Gmail 동기화는 아직 구현되지 않았습니다.[/yellow]")
-        results["gmail"] = None
+
+        try:
+            email_log_path = Path("C:/claude/wsoptv_ott/docs/management/EMAIL-LOG.md")
+            result = sync_gmail_to_log(
+                log_path=email_log_path,
+                query="label:wsoptv",
+                days=days,
+                dry_run=dry_run,
+            )
+
+            results["gmail"] = result
+
+            # Summary
+            console.print(f"  [green]{result.added}개 추가, {result.skipped}개 스킵[/green]")
+
+            if result.errors > 0:
+                console.print(f"  [yellow]{result.errors}개 에러[/yellow]")
+
+        except Exception as e:
+            console.print(f"  [red]Gmail 동기화 실패: {e}[/red]")
+            results["gmail"] = None
 
     # Slack sync
     if sync_slack:
