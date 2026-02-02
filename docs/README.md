@@ -1,8 +1,8 @@
 # WSOPTV OTT 문서 인덱스
 
-**Version**: 6.0.0
-**Last Updated**: 2026-01-30
-**Major Update**: PRD-0002 v10.0 용어 재정의, STRAT-0009/TECH-0001 분리 생성
+**Version**: 6.1.0
+**Last Updated**: 2026-02-02
+**Major Update**: 프로젝트 관리 시스템 추가 (메일/슬랙/업체/기획 관리)
 
 ---
 
@@ -129,6 +129,21 @@
 
 ---
 
+## 프로젝트 관리 시스템 ★ NEW
+
+프로젝트 진행 상태를 추적하고 관리하는 시스템
+
+| 시스템 | 파일 | 용도 |
+|--------|------|------|
+| 📧 메일 관리 | [EMAIL-LOG.md](management/EMAIL-LOG.md) | 업체별 이메일 커뮤니케이션 추적 |
+| 💬 슬랙 관리 | [SLACK-LOG.md](management/SLACK-LOG.md) | 의사결정/액션 아이템 추적 |
+| 🏢 업체 관리 | [VENDOR-DASHBOARD.md](management/VENDOR-DASHBOARD.md) | RFP 진행 상태/평가 대시보드 |
+| 📄 기획 관리 | [DOCUMENT-TRACKER.md](management/DOCUMENT-TRACKER.md) | 문서 버전/동기화 관리 |
+
+**인덱스**: [management/README.md](management/README.md)
+
+---
+
 ## 폴더 구조
 
 ```
@@ -156,6 +171,15 @@ docs/
 │   ├── ADR-0001-multiview-3layer-rationale.md
 │   └── ADR-0002-database-schema-design.md
 ├── reports/                     # 리포트
+├── templates/                   # 템플릿
+│   ├── vendor-evaluation-matrix.md
+│   └── rfp-feedback-request-templates.md
+├── management/                  # 프로젝트 관리 시스템 ★ NEW
+│   ├── README.md                # 관리 시스템 인덱스
+│   ├── EMAIL-LOG.md             # 메일 관리
+│   ├── SLACK-LOG.md             # 슬랙 관리
+│   ├── VENDOR-DASHBOARD.md      # 업체 관리 대시보드
+│   └── DOCUMENT-TRACKER.md      # 기획 문서 추적기
 ├── archive/                     # 아카이브
 ├── images/                      # 이미지
 └── mockups/                     # HTML 목업
@@ -174,4 +198,4 @@ docs/
 
 ---
 
-*Last Updated: 2026-01-30 (PRD-0002 v10.0 용어 재정의, STRAT-0009/TECH-0001 분리 생성)*
+*Last Updated: 2026-02-02 (프로젝트 관리 시스템 추가)*
