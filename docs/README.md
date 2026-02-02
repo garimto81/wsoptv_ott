@@ -51,8 +51,9 @@
 | [PRD-0002-executive-summary](prds/PRD-0002-executive-summary.md) | **Executive Summary** - 경영진 보고용 (v6.4) | Active |
 | [PRD-0006](prds/PRD-0006-advanced-mode.md) | **Feature** - Advanced Mode (4-layer) | Active |
 | [STRAT-0007](strategies/STRAT-0007-content-sourcing.md) | **Content** - 콘텐츠 소싱 | Active |
-| [STRAT-0009](strategies/STRAT-0009-gg-ecosystem-strategy.md) | **Business** - GG 생태계 비즈니스 전략 ⭐ NEW | Active |
-| [TECH-0001](tech/TECH-0001-streaming-infrastructure.md) | **Tech** - Streaming 기술 인프라 ⭐ NEW | Active |
+| [STRAT-0009](strategies/STRAT-0009-gg-ecosystem-strategy.md) | **Business** - GG 생태계 비즈니스 전략 | Active |
+| [TECH-0001](tech/TECH-0001-streaming-infrastructure.md) | **Tech** - Streaming 기술 인프라 | Active |
+| [TECH-0002](tech/TECH-0002-production-vs-wsoptv-scope.md) | **Tech** - 프로덕션 vs WSOPTV 영역 구분 ⭐ NEW | Draft |
 
 ### YouTube 대비 핵심 차별점 (STRAT-0001)
 
@@ -63,12 +64,13 @@
 | 3 | **Advanced Mode** | 없음 | Player Cam + StatsView (VIBLE 확정) |
 | 4 | **검색** (Phase 2) | 없음 | 핸드/선수 검색 |
 
-### 용어 재정의 (v10.0)
+### 용어 재정의 (v10.1)
 
 | 용어 | 정의 | 출처 | 상태 |
 |------|------|:----:|:----:|
+| **Selected View** | 사용자가 원하는 테이블/스트림을 **직접 선택**하여 시청 (기본 인터랙션) | 일반 OTT | ✅ 확정 |
 | **Player Cam** | 한 테이블의 메인 방송 + 각 플레이어 직캠 (아이돌 직캠) | 📜 VIBLE | ✅ 확정 |
-| **Table Multi-view** | 서로 다른 테이블 동시 시청 (2x2 그리드) | 📋 MOSES | ⬜ 확인 필요 |
+| **Table Multi-view** | 서로 다른 테이블 동시 시청 (2x2 그리드) | 📋 MOSES | ✅ 확정 |
 | **StatsView** | 플레이어 통계가 표시된 **영상** (View Mode) | 📜 VIBLE | ✅ 확정 |
 
 > **⚠️ 주의**: VIBLE 원문의 "Multi-view"는 현재 문서의 "Player Cam"에 해당합니다.
@@ -92,7 +94,7 @@
 
 ---
 
-## Tier 3: 참조 문서 (3개)
+## Tier 3: 참조 문서 (4개)
 
 읽기 전용 원천 자료
 
@@ -100,7 +102,8 @@
 |------|------|
 | [michael_note.md](vible/michael_note.md) | Michael 아이디어 원본 (Vible) |
 | [tony_note.md](vible/tony_note.md) | Tony 아이디어 원본 (Moses Commentary) |
-| [NBA TV 분석](reports/REPORT-2026-01-19-nbatv-reference-analysis.md) | UX 참조 |
+| [NBA TV 분석](reports/REPORT-2026-01-19-nbatv-reference-analysis.md) | UX 참조 (4분할 Multi-view) |
+| [NFL/MLB/ESPN+ 분석](reports/REPORT-2026-02-02-nfl-mlb-ott-reference.md) | OTT 가격/기능 벤치마크 ⭐ NEW |
 
 ---
 
