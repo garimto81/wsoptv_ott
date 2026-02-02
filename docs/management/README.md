@@ -29,22 +29,38 @@
 
 Gmail과 Slack 메시지를 자동으로 로그 파일에 동기화합니다.
 
-### 명령어
+### 명령어 (daily_sync.py)
 
 ```powershell
-# 전체 동기화
-python scripts/sync_management.py sync
+# 전체 동기화 (Slack + Gmail + Lists + 요약 포스팅)
+python scripts/daily_sync.py sync
 
-# Slack만 (최근 7일)
-python scripts/sync_management.py sync --slack --days 7
+# 최초 1회 전체 수집 (과거 1년)
+python scripts/daily_sync.py sync --init
 
-# Gmail만 (wsoptv 라벨)
-python scripts/sync_management.py sync --gmail
+# 개별 동기화
+python scripts/daily_sync.py sync --slack     # Slack 메시지만
+python scripts/daily_sync.py sync --gmail     # Gmail만
+python scripts/daily_sync.py sync --lists     # Slack Lists만
 
-# Dry-run (미리보기)
-python scripts/sync_management.py sync --dry-run
+# 일일 요약 포스팅
+python scripts/daily_sync.py post
 
 # 상태 확인
+python scripts/daily_sync.py status
+
+# 데이터 분석
+python scripts/daily_sync.py analyze
+
+# Dry-run (미리보기)
+python scripts/daily_sync.py sync --dry-run
+```
+
+### 레거시 명령어 (sync_management.py)
+
+```powershell
+python scripts/sync_management.py sync --slack --days 7
+python scripts/sync_management.py sync --gmail
 python scripts/sync_management.py status
 ```
 

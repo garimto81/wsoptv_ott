@@ -12,8 +12,8 @@ WSOPTV OTT 프로젝트 이메일 커뮤니케이션 로그 및 대기 현황 �
 | 업체 | 미회신 | 대기 중 | 완료 | 최종 연락일 |
 |------|--------|---------|------|-------------|
 | Brightcove | 1 | 0 | 0 | 2026-01-28 |
-| 메가존클라우드 | 0 | 1 | 1 | 2026-02-01 |
-| **합계** | **1** | **1** | **1** | - |
+| 메가존클라우드 | 0 | 1 | 0 | 2026-01-30 |
+| **합계** | **1** | **1** | **0** | - |
 
 ### 상태 정의
 
@@ -36,6 +36,576 @@ WSOPTV OTT 프로젝트 이메일 커뮤니케이션 로그 및 대기 현황 �
 ---
 
 ## 메일 로그
+
+### 2025-12-19 (금)
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b3587b8b42193e -->
+**발신자**: Kate Han <kate.han@ggproduction.net>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Fwd: [Vimeo] 비메오 엔터프라이즈 소개 자료
+
+**요약**:
+- 아래 답변 주시고 1/19일 있는 주 미팅 잡아 주세요~ 평균 시청자 수는 WSOP Live stream 동시 접속자 기준으로 하면 될듯한데 알수 있나요? 비디오 수는 잘 모르니 대략 Trey님과 상의해서 해 주세요. ㅎㅎㅎ 예산은 안 쓰셔도 될듯합니다. ---------- Forwarded message --------- From: 심현빈 &lt;
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2025-12-20 (토)
+
+#### [SENT] Unknown
+
+<!-- email_id: 19b3a2e405bf6093 -->
+**수신자**: Kate Han <kate.han@ggproduction.net>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: [Vimeo] 비메오 엔터프라이즈 소개 자료
+
+**요약**:
+- 네, 확인 후 처리하겠습니다. 2025년 12월 19일 (금) PM 4:34, Kate Han &lt;kate.han@ggproduction.net&gt;님이 작성: 아래 답변 주시고 1/19일 있는 주 미팅 잡아 주세요~ 평균 시청자 수는 WSOP Live stream 동시 접속자 기준으로 하면 될듯한데 알수 있나요? 비디오 수는 잘 모르니 대략 Trey
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2025-12-22 (월)
+
+#### [SENT] Unknown
+
+<!-- email_id: 19b44138b8228a37 -->
+**수신자**: Kate Han <kate.han@ggproduction.net>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: [Vimeo] 비메오 엔터프라이즈 소개 자료
+
+**요약**:
+- Vimeo 측에 연락(구글폼)해두었고, 답신 대기중입니다 2025년 12월 20일 (토) PM 2:14, Aiden Kim &lt;aiden.kim@ggproduction.net&gt;님이 작성: 네, 확인 후 처리하겠습니다. 2025년 12월 19일 (금) PM 4:34, Kate Han &lt;kate.han@ggproduction.net&gt;님이 작...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2025-12-23 (화)
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b49dc316c30300 -->
+**발신자**: "Vikas Kadam (iconik Support)" <support@iconik.io>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: [iconik] Re: Recommendations for WSOP TV OTT Service Launch (Based on ICONIK MAM)
+
+**요약**:
+- Your iconik request (#310629) has been updated. To add additional comments, reply to this email. Vikas Kadam (Iconik) Dec 23, 2025, 1:18 AM EST Hi Aiden, This is Vikas from the Iconik Support Team. I
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b499eab432a5be -->
+**발신자**: iconik Support <support@iconik.io>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: [Request received] Re: Recommendations for WSOP TV OTT Service Launch (Based on ICONIK MAM)
+
+**요약**:
+- Thanks for contacting the iconik support team 👋 Our team has received your issue and will look into it as soon as possible. You can also visit our Help Center for answers to our most frequently asked
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2025-12-24 (수)
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b4ec7e769f3009 -->
+**발신자**: "Vikas Kadam (iconik Support)" <support@iconik.io>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: [iconik] Re: Recommendations for WSOP TV OTT Service Launch (Based on ICONIK MAM)
+
+**요약**:
+- Your iconik request (#310629) has been updated. To add additional comments, reply to this email. Vikas Kadam (Iconik) Dec 24, 2025, 12:14 AM EST Hi Aiden, We have forwarded your request to the success
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19b4ebd95dc4612d -->
+**수신자**: iconik Support <support@iconik.io>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: [iconik] Re: Recommendations for WSOP TV OTT Service Launch (Based on ICONIK MAM)
+
+**요약**:
+- ggp.op@ggproduction.net 2025년 12월 23일 (화) PM 3:18, Vikas Kadam (iconik Support) &lt;support@iconik.io&gt;님이 작성: Your iconik request (#310629) has been updated. To add additional comments, reply to thi...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-06 (화)
+
+#### [SENT] Unknown
+
+<!-- email_id: 19b9260900c44e71 -->
+**수신자**: hbshim@jrmax.co.kr
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 심현빈님 , 안녕하십니까. WSOP(World Series of Poker)의 공식 글로벌 동영상 스트리밍 서비스인 &#39;WSOP TV&#39; 구축 프로젝트를 진행 중입니다. 본 프로젝트는 글로벌 사용자를 대상으로 고품질 Live 중계 및 VOD 서비스를 제공하는 것을 목표로 하고 있으며 , 귀사의 OTT 솔루션 도입을 검토하고자 견적을 요청드립니다.
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-07 (수)
+
+#### [SENT] Unknown
+
+<!-- email_id: 19b981a8edd365af -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 인원 확정되는대로 이메일 주소 공유드리도록 하겠습니다! 2026년 1월 7일 (수) PM 2:25, 심현빈 &lt;hbshim@jrmax.co.kr&gt;님이 작성: 안녕하세요, 매니저님, 비메오 엔터프라이즈 한국 대리점 제이알맥스 심현빈입니다. 1월 9일 금요일 오후 2시 미팅 가능합니다. 혹시 매니저님 외 다른 PC에서 웹미팅(Google Meet) 참...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b96eb05aaf1ecb -->
+**발신자**: "심현빈" <hbshim@jrmax.co.kr>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 안녕하세요, 매니저님, 비메오 엔터프라이즈 한국 대리점 제이알맥스 심현빈입니다. 1월 9일 금요일 오후 2시 미팅 가능합니다. 혹시 매니저님 외 다른 PC에서 웹미팅(Google Meet) 참석하실 분이 계시다면 이메일 주소 알려주시면 함께 초대하도록 하겠습니다! 감사합니다. 심현빈 드림. -- 제이알맥스(주) | ㅣ심 현 빈 과장 T: 02-6933-
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19b9688769dafc01 -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 안녕하세요 지지 프로덕션의 김동수입니다 1/9 오후 2시 미팅 괜찮으세요? 참석자는 4~5명 예정입니다 2026년 1월 7일 (수) AM 9:22, 심현빈 &lt;hbshim@jrmax.co.kr&gt;님이 작성: 안녕하세요, 매니저님, 비메오 엔터프라이즈 한국 대리점 제이알맥스입니다. 상세한 설명 감사합니다. 명기해 주신 내용 비메오 본사에 전달하도록
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b95d5cfcb4a702 -->
+**발신자**: "심현빈" <hbshim@jrmax.co.kr>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 안녕하세요, 매니저님, 비메오 엔터프라이즈 한국 대리점 제이알맥스입니다. 상세한 설명 감사합니다. 명기해 주신 내용 비메오 본사에 전달하도록 하겠습니다. 견적 제공 전 사전 웹미팅이 필요할 것 같습니다. 웹미팅 희망 일정 알려주시면 본사 담당 매니저와 조율 후 회신 드리겠습니다. 감사합니다. 심현빈 드림. -- 제이알맥스(주) T: 02-6933-0115 ...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-08 (목)
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19b9b1ebf03c6ec3 -->
+**발신자**: "심현빈" <hbshim@jrmax.co.kr>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 안녕하세요, 매니저님, 감사합니다! 이메일 주소 공유해주시는대로 해당 이메일도 참석자로 초대하도록 하겠습니다! 감사합니다. 심현빈 드림. -- 제이알맥스(주) T: 02-6933-0115 | F: 02-6959-1515 Email: hbshim@jrmax.co.kr | Home: https://vimeokorea.co.kr/ 2026년 1월 7일 (수) P...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-09 (금)
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19ba2eabba3e82a5 -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 김동수 담당자님, 안녕하세요. 브라이트코브 김다연입니다. 설명 감사드리며, RFP 파일도 감사합니다. 월요일 오전 10:30 에 뵙겠습니다. 저희 박성혁 기술자문 이사님도 함께 참여해주실 예정입니다. 감사합니다. 김다연 올림 Best regards, Jessica Kim 2026년 1월 9일 (금) 오후 7:24, Aiden Kim &lt;aiden.kim...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Brightcove
+
+<!-- email_id: 19ba248ad0d40dbb -->
+**수신자**: Jessica Kim <jkim@brightcove.com>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요 GG POKER 산하 미디어 파트 담당하고 있는 GG PRODUCTION의 김동수라고 합니다 이번에 WSOP 브랜드를 인수하게 되어 이를 토대로 WSOP TV OTT 솔루션을 런칭하려고 준비하고 있습니다 이에 따라 몇개의 후보 솔루션 회사들을 검토중에 있으며, 이 분야에서 가장 유명한 브라이트코브사와도 미팅을 진행하려고 합니다 월요일 오전 중에는
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19ba22e717af8f15 -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 영문 문서 변환 버전입니다 추가 질문 요청드립니다 1. 기획/컨설팅 서비스 제공 여부 단순 기술 지원을 넘어, 저희의 추상적인 요구사항을 구체적인 기획안으로 발전시켜 줄 수 있는 전문 컨설팅 조직이나 지원이 가능한지 문의합니다. 2. Enterprise 백엔드 접근 권한 데이터 분석 등을 위해 Enterprise 백엔드(혹은 API)에 직접 접근할 수 있는
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19ba1d44726a6f15 -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: aiden.kim@ggproduction.net
+**제목**: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요? 브라이트코브 김다연이라고 합니다. 월요일에 미팅 신청 주셔서 감사합니다. 이에 사전 정보 파악을 위해 연락 드립니다:) 간략 설명을 보니 OTT 관련 미팅을 원하시는 것 같습니다. GGproduction 만의 단독 OTT를 원하시는 걸까요? 원하시는 방향성을 조금 더 설명 주시면 더 잘 준비하도록 하겠습니다. 감사합니다. Best regards...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19ba0c6b65ebfea7 -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- WSOPT TV OTT RFP 공유드립니다 2026년 1월 9일 (금) AM 11:55, Aiden Kim &lt;aiden.kim@ggproduction.net&gt;님이 작성: 고맙습니다 2시에 뵙겠습니다 2026년 1월 9일 (금) AM 11:46, 심현빈 &lt;hbshim@jrmax.co.kr&gt;님이 작성: 안녕하세요, 매니저님, 비메오 한국
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19ba0ae679fb9cfa -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 고맙습니다 2시에 뵙겠습니다 2026년 1월 9일 (금) AM 11:46, 심현빈 &lt;hbshim@jrmax.co.kr&gt;님이 작성: 안녕하세요, 매니저님, 비메오 한국 대리점 제이알맥스입니다. 요청 하신 이메일 모두 참석자로 추가 하였습니다. 있다가 오후 2시에 뵙겠습니다! 감사합니다. 심현빈 드림. -- 제이알맥스(주) T: 02-6933-011...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19ba0a63847b0925 -->
+**발신자**: "심현빈" <hbshim@jrmax.co.kr>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 안녕하세요, 매니저님, 비메오 한국 대리점 제이알맥스입니다. 요청 하신 이메일 모두 참석자로 추가 하였습니다. 있다가 오후 2시에 뵙겠습니다! 감사합니다. 심현빈 드림. -- 제이알맥스(주) T: 02-6933-0115 | F: 02-6959-1515 Email: hbshim@jrmax.co.kr | Home: https://vimeokorea.co.kr/
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19ba084a91412d6d -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>, Ken Ahn <ken.ahn@nsuslab.com>, Kate Han <kate.han@ggproduction.net>, Tony Park <tony.park@nsuslab.com>, Chris You <chris.you@nsuslab.com>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 아래 계정들도 메일 추가 부탁드립니다 @Ken Ahn @Kate Han @Tony Park @Chris You 화상 회의에서는 회의실에서 ggp.group@ggproduction.net 으로 화상회의를 진행하는데, 이분들이 참여하셔서 스케줄링 추가를 위해서 요청드립니다 2026년 1월 7일 (수) PM 7:57, Aiden Kim &lt;aiden.kim@
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-12 (월)
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19bb00d24f439ddf -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요 김동수 담당자님 브라이트코브 김다연입니다. 오늘 자료 공유드립니다. 또한, OVP 쪽 파악을 위한 질문리스트 공유드리오니, 작성 후 전달 부탁드립니다. 저희팀은 내부적으로 RFP 논의 후 본 미팅 요청 드리겠습니다. 감사합니다. 김다연 올림 Thank you, Best Regards, JESSICA KIM / 김 다연 차장 Senior Sales
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Brightcove
+
+<!-- email_id: 19baffce3e243e13 -->
+**수신자**: Jessica Kim <jkim@brightcove.com>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 미팅에 응해주셔서 감사드립니다 미팅에서 안내해주신 슬라이드 공유 및 추후 미팅 일정에 대해 안내해주시면 감사드리겠습니다 2026년 1월 9일 (금) PM 10:20, Jessica Kim &lt;jkim@brightcove.com&gt;님이 작성: 김동수 담당자님, 안녕하세요. 브라이트코브 김다연입니다. 설명 감사드리며, RFP 파일도 감사합니다. 월요일
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-13 (화)
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19bb5d3647d2f3fd -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요 김동수 담당자님, 자료 감사합니다! 내부적으로 RFP 파일 공유하였습니다. 곧 연락 드리겠습니다. 감사합니다. Best regards, Jessica Kim 2026년 1월 13일 (화) 오전 10:48, Aiden Kim &lt;aiden.kim@ggproduction.net&gt;님이 작성: 안녕하세요 지지 프로덕션의 김동수입니다 보내주신
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Brightcove
+
+<!-- email_id: 19bb509acf25e182 -->
+**수신자**: Jessica Kim <jkim@brightcove.com>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요 지지 프로덕션의 김동수입니다 보내주신 질의서에 회신드립니다 미팅 일정 수립되는대로 알려주시면, 그에 맞춰 미팅 일정 수립하도록 하겠습니다 감사합니다 2026년 1월 12일 (월) AM 11:33, Jessica Kim &lt;jkim@brightcove.com&gt;님이 작성: 안녕하세요 김동수 담당자님 브라이트코브 김다연입니다. 오늘 자료 공유
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-14 (수)
+
+#### [SENT] Unknown
+
+<!-- email_id: 19bbb88bb03ba84c -->
+**수신자**: munseok@amazon.com
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: WSOPTV OTT RFP 문서입니다
+
+**요약**:
+- 안녕하세요 지지 프로덕션의 김동수입니다 긴시간 고생 많으십니다 WSOPTV OTT RFP 문서입니다 보시고 혹시 궁금한거 있으시면 언제든지 말씀 부탁드립니다 좋은 하루되세요
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-15 (목)
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19bc175d5a1d842d -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 김동수 담당자님, 안녕하세요 브라이트코브 김다연입니다. 저희 기술 미팅을 진행하기에 앞서, 보내주신 RFP파일을 검토 후 질문 사항이 있어서 추가 질문 리스트 보내드립니다. 답변을 적어 주시면 저희가 기술 미팅 진행을 매끄럽게 할 수 있을 듯 합니다. 답변 주시면 내부 공유하고, 일자를 스케줄링 하도록 하겠습니다. 감사합니다. 김다연 올림 Thank you...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19bbfa22fa37f00c -->
+**수신자**: antaeyoung@mz.co.kr, antaeyoung@megazone.com
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: WSOPTV OTT RFP 및 사전 미팅 섭외 요청드립니다
+
+**요약**:
+- 안녕하세요, GG PRODUCTION의 김동수입니다. GG PRODUCTION 은 지지 포커의 미디어 담당 자회사입니다 WSOPTV OTT 솔루션 도입과 관련하여 사전 미팅을 요청드리고자 메일 드립니다. 이번 미팅은 Google Meet를 통한 화상 회의로 진행하기를 희망합니다. 우선 제가 먼저 미팅을 통해 저희 측 RFP와 필요 자료에 대해 상세히 설명드...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+### 2026-01-16 (금)
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19bc59cac44b71f1 -->
+**발신자**: "안태영" <antaeyoung@mz.co.kr>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: [EXT] WSOPTV OTT RFP 및 사전 미팅 섭외 요청드립니다
+
+**요약**:
+- 김동수님, 안녕하세요. 메가존클라우드 안태영입니다. 우선, 메가존클라우드에 WSOPTV OTT RFP 공유해주셔서 감사합니다. 미팅은 요청주신대로 Google Meet 으로 진행하겠습니다. 목요일(1월 22일)오전/오후, 금요일(1월 23일) 오전 중 가능하신 일정 검토 부탁드리겠습니다. 관련하여 추가 문의사항 있으시면 편히 연락주세요. 이상입니다. 감사
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19bc57fbf998c63d -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요, 김동수 담당자님 브라이트코브 김다연입니다. 금일 유선상으로 상세하게 설명주신 점 정말 감사드립니다. 내용을 바탕으로 다시 이야기한 뒤 차주에 1차 기술미팅을 스케줄링 하도록 하겠습니다. 행복한 주말 보내시길 바랍니다. 감사합니다. 김다연 올림 Thank you, Best Regards, JESSICA KIM / 김 다연 차장 Senior
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Unknown
+
+<!-- email_id: 19bc577aeb50e2d3 -->
+**수신자**: "심현빈" <hbshim@jrmax.co.kr>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOP TV 글로벌 OTT 스트리밍 서비스 구축 솔루션 문의
+
+**요약**:
+- 안녕하세요 지난번 미팅 후 피드백 대기중입니다 혹시 언제쯤 피드백 해주실수 있는지 추가 미팅은 언제 가능한지 확인 가능할까요? 2026년 1월 9일 (금) PM 6:55, Aiden Kim &lt;aiden.kim@ggproduction.net&gt;님이 작성: 영문 문서 변환 버전입니다 추가 질문 요청드립니다 1. 기획/컨설팅 서비스 제공 여부 단순 기술
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [SENT] Brightcove
+
+<!-- email_id: 19bc5258c5267447 -->
+**수신자**: Jessica Kim <jkim@brightcove.com>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- WSOPTV 관련하여 질문 주신 부분을 답변할만한 기획자가 아직 확정되지 않았습니다 러프한 단계에서 포괄적으로 해석해주시면 감사드리겠습니다 포커에 대해 생소해서 개념이해가 되지 않는 부분은 제가 설명드릴수 있을것 같습니다 좀더 구체적으로 질문해주시면, 기획에 관한 영역은 추후 답변을 드리도록 하고, 포커 룰이나 개념에 대한 부분은 제가 답변드리도록 하겠습니...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Brightcove
+
+<!-- email_id: 19bc443f9edf14f6 -->
+**발신자**: Jessica Kim <jkim@brightcove.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: 브라이트코브 입니다.
+
+**요약**:
+- 안녕하세요, 김동수 담당자님 브라이트코브 김다연입니다. 추가적 질문 사항이 있어 문의드립니다. 일전 질문리스트 답변에서 주셨던 부분 조금 더 상세하게 알려주실 수 있을까요? 한 테이블의 각 선수별 화면 재생 각각 다른 대회, 테이블 재생 동영상 Tagging 대회 영상이나 Script를 기반으로 영상 태깅 Hand 기준 참여 플레이어 각 플레이어의 Hand...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+
+
+### 2026-02-02 (월)
+
+#### [SENT] Unknown
+
+<!-- email_id: 19c1d115e33421eb -->
+**수신자**: "Choi, Munseok" <munseok@amazon.com>
+**발신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: Re: WSOPTV OTT RFP 문서입니다
+
+**요약**:
+- 최문석님, 안녕하세요. 보내주신 자료는 아직 검토 전입니다. 미팅은 구글 미트를 통한 비대면 방식을 희망합니다. 이번 주 중 가능한 일정 말씀해 주시면 조율하도록 하겠습니다. 감사합니다. 김동수 드림 2026년 2월 2일 (월) PM 2:41, Choi, Munseok &lt;munseok@amazon.com&gt;님이 작성: Aiden님 안녕하세요. AW...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
+
+#### [RECEIVED] Unknown
+
+<!-- email_id: 19c1cdee3d489c64 -->
+**발신자**: "Choi, Munseok" <munseok@amazon.com>
+**수신자**: Aiden Kim <aiden.kim@ggproduction.net>
+**제목**: RE: WSOPTV OTT RFP 문서입니다
+
+**요약**:
+- Aiden님 안녕하세요. AWS 최문석 입니다. 주말 잘 보내셨는지요? 혹시 이번주 중으로 아래 업체들과의 초도 미팅을 진행해보시는건 어떠실까요? 편하신 일정 알려주시면 업체들과 조율해서 방문 드리겠습니다. 감사합니다. 최문석 드림 Munseok Choi | Game Tech Account Manager | Amazon Web Services Korea E...
+
+**상태**: 대기 중
+**후속조치**: (확인 필요)
+
+---
 
 ### 2026-01-19 (월)
 
@@ -687,26 +1257,6 @@ WSOPTV OTT 프로젝트 이메일 커뮤니케이션 로그 및 대기 현황 �
 
 **상태**: 대기 중
 **후속조치**: (확인 필요)
-
----
-
-
-### 2026-02-01 (토)
-
-#### [RECEIVED] 메가존클라우드
-
-**발신자**: sales@megazone.com
-**수신자**: dev@wsoptv.com
-**제목**: [메가존] WSOPTV OTT 인프라 견적서 수정본 (v2.0)
-
-**요약**:
-- Cloudflare Stream 월 예상 비용: $1,200 → $950 (20% 할인 적용)
-- R2 Storage 트래픽 재계산: 월 $180 (10TB 아카이브 기준)
-- 총 월 예상 비용: $1,380 → $1,130
-- 첨부: `wsoptv-infra-quote-v2.0.pdf`
-
-**상태**: 대기 중
-**후속조치**: 경영진 검토 후 2026-02-10까지 최종 결정
 
 ---
 

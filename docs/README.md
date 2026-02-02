@@ -84,6 +84,7 @@
 | [PRD-0005](prds/PRD-0005-wsoptv-ott-rfp.md) | RFP 문서 | Active |
 | [PRD-0009](prds/PRD-0009-hand-tagging-search.md) | Hand Tagging (Phase 2) | Draft |
 | [PRD-0010](prds/PRD-0010-nbatv-ux-solutions.md) | NBA TV UX 솔루션 적용 | Draft |
+| [PRD-0011](prds/PRD-0011-daily-management-automation.md) | **일일 관리 자동화** ⭐ NEW | Draft |
 | [ADR-0001](adrs/ADR-0001-multiview-3layer-rationale.md) | Multi-view 설계 근거 | Draft |
 | [ADR-0002](adrs/ADR-0002-database-schema-design.md) | DB 스키마 설계 | Proposed |
 | [STRAT-0003](strategies/STRAT-0003-cross-promotion.md) | 프로모션 전략 | Proposal |

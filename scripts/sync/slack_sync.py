@@ -343,7 +343,7 @@ def sync_slack_to_log(
 
     # Write back
     log_path.write_text(log_content, encoding="utf-8")
-    print(f"\n✅ Synced to {log_path}")
+    print(f"\nSynced to {log_path}")
 
     return result
 
