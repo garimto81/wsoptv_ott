@@ -149,7 +149,7 @@ docs/images/PRD-NNNN/*.png     # 캡처된 스크린샷
 | 문서 | Google Docs ID | 버전 |
 |------|----------------|------|
 | **PRD-0002** (Concept Paper) | `1Y5KMRFunHJEXmR0MrXbb_flmf-_88obGnJBe0AC94_A` | v10.0 |
-| **PRD-0002-executive-summary** | `1Y_GmF6AYOEkj7TEX3CptimlFVDEGZdssRysdzXHIQDs` | v6.4 |
+| **PRD-0002-executive-summary** | `1Y_GmF6AYOEkj7TEX3CptimlFVDEGZdssRysdzXHIQDs` | v7.0 |
 
 **동기화 방법**: Google Docs 변경 시 로컬 PRD 수동 업데이트
 
