@@ -7,16 +7,6 @@
 
 ## 해결 필요 문제
 
-### PROB-001: Gmail 동기화 완전 구현
-**우선순위**: Medium
-**설명**: Gmail 메시지를 EMAIL-LOG.md에 자동 동기화하는 기능 미완성
-**영향**: 이메일 로그를 수동으로 관리해야 함
-**요구사항**:
-- wsoptv 라벨 메시지 조회
-- 업체별 그룹핑
-- email_id 기반 중복 방지
-- EMAIL-LOG.md 포맷에 맞게 삽입
-
 ### PROB-002: 요약 대시보드 자동화
 **우선순위**: Low
 **설명**: SLACK-LOG.md 상단의 요약 대시보드 카운트가 수동
@@ -41,3 +31,12 @@
 - CLAUDE.md에 동기화 설정 추가
 - docs/management/README.md에 명령어 문서화
 - .omc/notepads/wsoptv-management/에 상세 기록
+
+### SOLVED-003: Gmail 동기화 완전 구현
+**해결일**: 2026-02-02
+**설명**: Gmail 메시지를 EMAIL-LOG.md에 자동 동기화
+**결과**:
+- scripts/sync/gmail_sync.py 구현 완료
+- 48개 이메일 동기화 성공
+- 업체 자동 감지 (Brightcove, 메가존, Vimeo, 맑음소프트)
+- email_id 기반 중복 방지
