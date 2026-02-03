@@ -5,6 +5,7 @@ Syncs Slack Kanban board (Lists) with local VENDOR-DASHBOARD.md and SLACK-LOG.md
 Also updates pinned messages in the project channel.
 """
 
+import json
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -197,7 +198,7 @@ class ListsSyncManager:
                 cells.append({
                     "column_id": LISTS_CONFIG["columns"]["status"],
                     "row_id": row_id,
-                    "select_option_id": option_id,
+                    "select": [option_id],  # select는 배열 형식
                 })
 
         if quote:
@@ -211,7 +212,7 @@ class ListsSyncManager:
             cells.append({
                 "column_id": LISTS_CONFIG["columns"]["last_contact"],
                 "row_id": row_id,
-                "date": last_contact.strftime("%Y-%m-%d"),
+                "date": [last_contact.strftime("%Y-%m-%d")],  # date도 배열 형식
             })
 
         if next_action:
@@ -399,6 +400,636 @@ def post_daily_summary(dry_run: bool = False) -> bool:
         return False
 
 
+class IncrementalSyncState:
+    """Manage incremental sync state for Slack Lists updates."""
+
+    STATE_FILE = Path("C:/claude/wsoptv_ott/docs/management/.slacklist_state.json")
+
+    def __init__(self):
+        """Load existing state or initialize new."""
+        self.state = self._load_state()
+
+    def _load_state(self) -> dict:
+        """Load state from file or return default."""
+        if self.STATE_FILE.exists():
+            try:
+                return json.loads(self.STATE_FILE.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        return self._default_state()
+
+    def _default_state(self) -> dict:
+        """Return default state structure."""
+        return {
+            "version": "1.0",
+            "last_sync": None,
+            "processed": {
+                "gmail": {"last_email_date": None, "email_ids": []},
+                "slack": {"last_ts": None, "message_ts": []},
+            },
+            "vendors": {},
+            "pending_changes": [],
+        }
+
+    def save(self):
+        """Save current state to file."""
+        self.state["last_sync"] = datetime.now().isoformat()
+        self.STATE_FILE.write_text(
+            json.dumps(self.state, indent=2, ensure_ascii=False, default=str),
+            encoding="utf-8",
+        )
+
+    def is_gmail_processed(self, email_id: str) -> bool:
+        """Check if email was already processed."""
+        return email_id in self.state["processed"]["gmail"]["email_ids"]
+
+    def mark_gmail_processed(self, email_id: str):
+        """Mark email as processed."""
+        if email_id not in self.state["processed"]["gmail"]["email_ids"]:
+            self.state["processed"]["gmail"]["email_ids"].append(email_id)
+
+    def is_slack_processed(self, ts: str) -> bool:
+        """Check if Slack message was already processed."""
+        return ts in self.state["processed"]["slack"]["message_ts"]
+
+    def mark_slack_processed(self, ts: str):
+        """Mark Slack message as processed."""
+        if ts not in self.state["processed"]["slack"]["message_ts"]:
+            self.state["processed"]["slack"]["message_ts"].append(ts)
+
+    def get_last_slack_ts(self) -> Optional[str]:
+        """Get last processed Slack timestamp."""
+        return self.state["processed"]["slack"]["last_ts"]
+
+    def update_last_slack_ts(self, ts: str):
+        """Update last processed Slack timestamp."""
+        self.state["processed"]["slack"]["last_ts"] = ts
+
+    def add_pending_change(self, change: dict):
+        """Add a pending change for user review."""
+        change["detected_at"] = datetime.now().isoformat()
+        self.state["pending_changes"].append(change)
+
+    def get_pending_changes(self) -> list:
+        """Get all pending changes."""
+        return self.state["pending_changes"]
+
+    def clear_pending_changes(self):
+        """Clear pending changes after applying."""
+        self.state["pending_changes"] = []
+
+    def update_vendor(self, vendor_name: str, updates: dict):
+        """Update vendor state."""
+        if vendor_name not in self.state["vendors"]:
+            self.state["vendors"][vendor_name] = {"changes_history": []}
+
+        vendor = self.state["vendors"][vendor_name]
+        for key, value in updates.items():
+            if key != "changes_history":
+                old_value = vendor.get(key)
+                if old_value != value:
+                    vendor["changes_history"].append({
+                        "field": key,
+                        "old": old_value,
+                        "new": value,
+                        "changed_at": datetime.now().isoformat(),
+                    })
+                vendor[key] = value
+
+    def get_vendor_state(self, vendor_name: str) -> Optional[dict]:
+        """Get current vendor state."""
+        return self.state["vendors"].get(vendor_name)
+
+    def get_stats(self) -> dict:
+        """Get sync statistics."""
+        return {
+            "last_sync": self.state.get("last_sync"),
+            "gmail_processed": len(self.state["processed"]["gmail"]["email_ids"]),
+            "slack_processed": len(self.state["processed"]["slack"]["message_ts"]),
+            "vendors_tracked": len(self.state["vendors"]),
+            "pending_changes": len(self.state["pending_changes"]),
+        }
+
+
+class VendorChangeDetector:
+    """Detect vendor-related changes from Gmail and Slack messages."""
+
+    # Vendor detection patterns (domain → vendor name)
+    VENDOR_DOMAINS = {
+        "brightcove": "Brightcove",
+        "megazone": "메가존클라우드",
+        "megazonecloud": "메가존클라우드",
+        "vimeo": "Vimeo OTT",
+        "wecandeo": "맑음소프트 (WECANDEO)",
+        "malgum": "맑음소프트 (WECANDEO)",
+    }
+
+    # Status transition keywords
+    STATUS_KEYWORDS = {
+        "견적 수령": ("견적 대기", "검토 중"),
+        "견적 도착": ("견적 대기", "검토 중"),
+        "협상 시작": ("검토 중", "협상 중"),
+        "조건 협의": ("검토 중", "협상 중"),
+        "계약서 검토": ("협상 중", "계약 진행"),
+        "법무 검토": ("협상 중", "계약 진행"),
+        "미수령": ("견적 대기", "보류"),
+        "무응답": ("*", "보류"),
+        "매각": ("*", "제외"),
+        "서비스 종료": ("*", "제외"),
+    }
+
+    # Action keywords for next_action field
+    ACTION_KEYWORDS = [
+        "미팅", "회의", "연락", "확인", "검토", "요청", "피드백", "리마인더", "follow-up"
+    ]
+
+    def __init__(self):
+        """Initialize detector with pattern cache."""
+        self._changes = []
+
+    def detect_vendor_from_email(self, sender: str, subject: str) -> Optional[str]:
+        """Detect vendor from email sender or subject."""
+        email_domain = sender.split("@")[-1].lower() if "@" in sender else ""
+
+        for domain_key, vendor_name in self.VENDOR_DOMAINS.items():
+            if domain_key in email_domain or domain_key in subject.lower():
+                return vendor_name
+        return None
+
+    def detect_status_change(self, text: str) -> Optional[tuple]:
+        """Detect status change from text content."""
+        text_lower = text.lower()
+        for keyword, (from_status, to_status) in self.STATUS_KEYWORDS.items():
+            if keyword in text_lower:
+                return (from_status, to_status, keyword)
+        return None
+
+    def detect_action_item(self, text: str) -> Optional[str]:
+        """Detect action item from text content."""
+        import re
+
+        # Pattern: date-like content with action keyword
+        date_pattern = r"(\d{1,2}[-/]\d{1,2}|\d{2}-\d{2})"
+        action_pattern = "|".join(self.ACTION_KEYWORDS)
+
+        if re.search(date_pattern, text) and re.search(action_pattern, text, re.IGNORECASE):
+            # Extract the action item portion
+            lines = text.split("\n")
+            for line in lines:
+                if re.search(date_pattern, line) and re.search(action_pattern, line, re.IGNORECASE):
+                    return line.strip()[:100]  # Limit to 100 chars
+        return None
+
+    def analyze_gmail_messages(self, emails: list[dict]) -> list[dict]:
+        """
+        Analyze Gmail messages for vendor changes.
+
+        Args:
+            emails: List of email dicts with keys: sender, subject, body, date
+
+        Returns:
+            List of detected changes
+        """
+        changes = []
+
+        for email in emails:
+            vendor = self.detect_vendor_from_email(
+                email.get("sender", ""),
+                email.get("subject", "")
+            )
+            if not vendor:
+                continue
+
+            change = {
+                "source": "gmail",
+                "vendor": vendor,
+                "date": email.get("date"),
+                "subject": email.get("subject", ""),
+            }
+
+            # Check for status change
+            full_text = f"{email.get('subject', '')} {email.get('body', '')}"
+            status_change = self.detect_status_change(full_text)
+            if status_change:
+                change["status_change"] = {
+                    "from": status_change[0],
+                    "to": status_change[1],
+                    "trigger": status_change[2],
+                }
+
+            # Check for action item
+            action = self.detect_action_item(full_text)
+            if action:
+                change["next_action"] = action
+
+            # Always update last_contact for vendor emails
+            change["last_contact"] = email.get("date")
+
+            changes.append(change)
+
+        return changes
+
+    def analyze_slack_messages(self, messages: list) -> list[dict]:
+        """
+        Analyze Slack messages for vendor-related changes.
+
+        Args:
+            messages: List of SlackMessage objects or dicts with keys: text, user, ts
+
+        Returns:
+            List of detected changes
+        """
+        changes = []
+
+        for msg in messages:
+            # Handle both pydantic models and dicts
+            if hasattr(msg, "text"):
+                text = getattr(msg, "text", "")
+            else:
+                text = msg.get("text", "") if isinstance(msg, dict) else ""
+
+            # Detect vendor mentions in message
+            detected_vendor = None
+            for domain_key, vendor_name in self.VENDOR_DOMAINS.items():
+                if domain_key in text.lower() or vendor_name.lower() in text.lower():
+                    detected_vendor = vendor_name
+                    break
+
+            if not detected_vendor:
+                # Also check for vendor names in Korean
+                vendor_keywords = {
+                    "메가존": "메가존클라우드",
+                    "브라이트코브": "Brightcove",
+                    "비메오": "Vimeo OTT",
+                    "맑음소프트": "맑음소프트 (WECANDEO)",
+                }
+                for keyword, vendor_name in vendor_keywords.items():
+                    if keyword in text:
+                        detected_vendor = vendor_name
+                        break
+
+            if not detected_vendor:
+                continue
+
+            # Get ts from model or dict
+            msg_ts = getattr(msg, "ts", None) if hasattr(msg, "ts") else (msg.get("ts") if isinstance(msg, dict) else None)
+
+            change = {
+                "source": "slack",
+                "vendor": detected_vendor,
+                "ts": msg_ts,
+                "text_preview": text[:100],
+            }
+
+            # Check for status change
+            status_change = self.detect_status_change(text)
+            if status_change:
+                change["status_change"] = {
+                    "from": status_change[0],
+                    "to": status_change[1],
+                    "trigger": status_change[2],
+                }
+
+            # Check for action item
+            action = self.detect_action_item(text)
+            if action:
+                change["next_action"] = action
+
+            changes.append(change)
+
+        return changes
+
+    def merge_changes(self, gmail_changes: list[dict], slack_changes: list[dict]) -> dict[str, dict]:
+        """
+        Merge changes from Gmail and Slack by vendor.
+
+        Args:
+            gmail_changes: Changes detected from Gmail
+            slack_changes: Changes detected from Slack
+
+        Returns:
+            Dict mapping vendor name to aggregated changes
+        """
+        merged = {}
+
+        for change in gmail_changes + slack_changes:
+            vendor = change.get("vendor")
+            if not vendor:
+                continue
+
+            if vendor not in merged:
+                merged[vendor] = {
+                    "vendor": vendor,
+                    "sources": [],
+                    "status_changes": [],
+                    "next_actions": [],
+                    "last_contact": None,
+                }
+
+            merged[vendor]["sources"].append(change.get("source"))
+
+            if "status_change" in change:
+                merged[vendor]["status_changes"].append(change["status_change"])
+
+            if "next_action" in change:
+                merged[vendor]["next_actions"].append(change["next_action"])
+
+            if "last_contact" in change and change["last_contact"]:
+                if not merged[vendor]["last_contact"] or change["last_contact"] > merged[vendor]["last_contact"]:
+                    merged[vendor]["last_contact"] = change["last_contact"]
+
+        return merged
+
+
+def intelligent_update_slacklist(
+    days: int = 7,
+    dry_run: bool = False,
+    auto_approve: bool = False,
+    vendor_filter: Optional[str] = None,
+    incremental: bool = True,
+) -> dict:
+    """
+    Intelligently update Slack Lists based on Gmail and Slack message analysis.
+
+    This is the main entry point for the "/auto update slacklist" workflow.
+
+    Args:
+        days: Number of days to analyze (ignored if incremental=True and state exists)
+        dry_run: If True, show changes without applying
+        auto_approve: If True, apply changes without confirmation
+        vendor_filter: Filter to specific vendor
+        incremental: If True, only process new messages since last sync
+
+    Returns:
+        Dict with update results
+    """
+    import sys
+    sys.path.insert(0, str(Path(__file__).parents[2]))
+
+    from lib.gmail import GmailClient
+    from lib.slack import SlackClient
+
+    # Load incremental state
+    sync_state = IncrementalSyncState()
+    stats = sync_state.get_stats()
+
+    print(f"\n{'='*60}")
+    print("[SYNC] Intelligent Slack Lists Update")
+    print(f"{'='*60}")
+
+    if incremental and stats["last_sync"]:
+        print(f"Mode: INCREMENTAL (since {stats['last_sync'][:19]})")
+        print(f"  Previously processed: Gmail {stats['gmail_processed']}, Slack {stats['slack_processed']}")
+    else:
+        print(f"Mode: FULL SCAN ({days} days)")
+
+    if vendor_filter:
+        print(f"Vendor Filter: {vendor_filter}")
+
+    results = {
+        "analyzed": {"gmail": 0, "slack": 0},
+        "changes_detected": [],
+        "changes_applied": [],
+        "errors": [],
+    }
+
+    # Step 1: Collect data
+    print("\n[Step 1] Collecting data...")
+
+    # Gmail - search with multiple strategies to find vendor emails
+    try:
+        gmail_client = GmailClient()
+        from datetime import datetime, timedelta
+        after_date = (datetime.now() - timedelta(days=days)).strftime("%Y/%m/%d")
+
+        # Strategy 1: Label-based search (if label exists)
+        labeled_emails = gmail_client.list_emails(
+            query=f"label:wsoptv after:{after_date}",
+            max_results=100,
+        )
+
+        # Strategy 2: Keyword-based search (catches unlabeled emails)
+        keyword_queries = [
+            f"(WSOPTV OR WSOP) after:{after_date}",
+            f"(from:brightcove OR from:megazone OR from:vimeo) after:{after_date}",
+            f"(RFP OR OTT OR 스트리밍) after:{after_date}",
+        ]
+
+        keyword_emails = []
+        seen_ids = {getattr(e, "id", None) or getattr(e, "message_id", "") for e in labeled_emails}
+
+        for kw_query in keyword_queries:
+            try:
+                kw_results = gmail_client.list_emails(query=kw_query, max_results=50)
+                for email in kw_results:
+                    email_id = getattr(email, "id", None) or getattr(email, "message_id", "")
+                    if email_id and email_id not in seen_ids:
+                        keyword_emails.append(email)
+                        seen_ids.add(email_id)
+            except Exception:
+                pass  # Continue with other queries if one fails
+
+        all_emails = list(labeled_emails) + keyword_emails
+        if keyword_emails:
+            print(f"  [INFO] Found {len(keyword_emails)} unlabeled emails via keyword search")
+
+        # Filter out already processed emails in incremental mode
+        if incremental:
+            emails = []
+            for email in all_emails:
+                email_id = getattr(email, "id", None) or getattr(email, "message_id", "")
+                if not sync_state.is_gmail_processed(email_id):
+                    emails.append(email)
+            print(f"  [OK] Gmail: {len(emails)} new / {len(all_emails)} total")
+        else:
+            emails = all_emails
+            print(f"  [OK] Gmail: {len(emails)} emails")
+
+        results["analyzed"]["gmail"] = len(emails)
+    except Exception as e:
+        print(f"  [ERR] Gmail: {e}")
+        results["errors"].append(f"Gmail: {e}")
+        emails = []
+
+    # Slack
+    try:
+        slack_client = SlackClient()
+        all_slack_messages = slack_client.get_history(
+            channel=LISTS_CONFIG["channel_id"],
+            limit=200,
+        )
+
+        # Filter out already processed messages in incremental mode
+        if incremental:
+            slack_messages = []
+            for msg in all_slack_messages:
+                msg_ts = getattr(msg, "ts", None) if hasattr(msg, "ts") else msg.get("ts") if isinstance(msg, dict) else None
+                if msg_ts and not sync_state.is_slack_processed(msg_ts):
+                    slack_messages.append(msg)
+            print(f"  [OK] Slack: {len(slack_messages)} new / {len(all_slack_messages)} total")
+        else:
+            slack_messages = all_slack_messages
+            print(f"  [OK] Slack: {len(slack_messages)} messages")
+
+        results["analyzed"]["slack"] = len(slack_messages)
+    except Exception as e:
+        print(f"  [ERR] Slack: {e}")
+        results["errors"].append(f"Slack: {e}")
+        slack_messages = []
+
+    # Current Slack Lists
+    try:
+        manager = ListsSyncManager()
+        current_items = manager.get_list_items()
+        print(f"  [OK] Slack Lists: {len(current_items)} vendors")
+    except Exception as e:
+        print(f"  [ERR] Slack Lists: {e}")
+        results["errors"].append(f"Slack Lists: {e}")
+        current_items = []
+
+    # Step 2: Analyze changes
+    print("\n[Step 2] Analyzing changes...")
+
+    detector = VendorChangeDetector()
+
+    # Convert Gmail to expected format (GmailMessage is pydantic model)
+    gmail_formatted = []
+    for email in emails:
+        email_id = getattr(email, "id", None) or getattr(email, "message_id", "")
+        gmail_formatted.append({
+            "id": email_id,
+            "sender": getattr(email, "from_", "") or getattr(email, "sender", ""),
+            "subject": getattr(email, "subject", ""),
+            "body": getattr(email, "snippet", ""),
+            "date": getattr(email, "date", ""),
+        })
+
+    gmail_changes = detector.analyze_gmail_messages(gmail_formatted)
+    slack_changes = detector.analyze_slack_messages(slack_messages)
+
+    print(f"  Gmail changes: {len(gmail_changes)}")
+    print(f"  Slack changes: {len(slack_changes)}")
+
+    # Mark processed (will save later if not dry_run)
+    if incremental:
+        for email in emails:
+            email_id = getattr(email, "id", None) or getattr(email, "message_id", "")
+            if email_id:
+                sync_state.mark_gmail_processed(email_id)
+        for msg in slack_messages:
+            msg_ts = getattr(msg, "ts", None) if hasattr(msg, "ts") else msg.get("ts") if isinstance(msg, dict) else None
+            if msg_ts:
+                sync_state.mark_slack_processed(msg_ts)
+
+    merged = detector.merge_changes(gmail_changes, slack_changes)
+
+    # Apply vendor filter if specified
+    if vendor_filter:
+        filter_lower = vendor_filter.lower()
+        merged = {k: v for k, v in merged.items() if filter_lower in k.lower()}
+        print(f"  Filtered to: {len(merged)} vendors")
+
+    if not merged:
+        print("\n[OK] No changes detected")
+        return results
+
+    # Step 3: Generate updates
+    print("\n[Step 3] Generating updates...")
+
+    updates = []
+    for vendor_name, changes in merged.items():
+        update = {"vendor": vendor_name, "fields": {}}
+
+        # Latest next_action
+        if changes["next_actions"]:
+            update["fields"]["next_action"] = changes["next_actions"][-1]
+
+        # Latest last_contact
+        if changes["last_contact"]:
+            update["fields"]["last_contact"] = changes["last_contact"]
+
+        # Status change (if any)
+        if changes["status_changes"]:
+            latest = changes["status_changes"][-1]
+            update["fields"]["status_suggestion"] = latest
+
+        if update["fields"]:
+            updates.append(update)
+            # Safe print (handle encoding errors)
+            try:
+                vendor_display = vendor_name.encode('ascii', 'replace').decode()
+            except:
+                vendor_display = vendor_name
+            print(f"  * {vendor_display}:")
+            for key, val in update["fields"].items():
+                try:
+                    val_display = str(val).encode('ascii', 'replace').decode()
+                except:
+                    val_display = str(val)
+                print(f"    - {key}: {val_display}")
+
+    results["changes_detected"] = updates
+
+    if dry_run:
+        print("\n[DRY RUN] Changes NOT applied")
+        return results
+
+    # Step 4: Apply updates
+    if not auto_approve:
+        print("\n[SKIP] auto_approve=False - Changes NOT applied (user confirmation needed)")
+        return results
+
+    print("\n[Step 4] Applying updates...")
+
+    for update in updates:
+        vendor = update["vendor"]
+        fields = update["fields"]
+
+        try:
+            success = manager.update_item(
+                vendor_name=vendor,
+                next_action=fields.get("next_action"),
+            )
+            if success:
+                results["changes_applied"].append(update)
+                print(f"  [OK] {vendor} updated")
+            else:
+                print(f"  [FAIL] {vendor} update failed")
+        except Exception as e:
+            print(f"  [ERR] {vendor}: {e}")
+            results["errors"].append(f"{vendor}: {e}")
+
+    # Step 5: Update summary
+    print("\n[Step 5] Updating summary message...")
+    try:
+        updated_items = manager.get_list_items()
+        summary = manager.generate_summary_message(updated_items)
+        ts = manager.post_summary(summary)
+        if ts:
+            print(f"  [OK] Pinned message updated (ts: {ts})")
+        else:
+            print("  [FAIL] Pinned message update failed")
+    except Exception as e:
+        print(f"  [ERR] Summary update: {e}")
+        results["errors"].append(f"Summary: {e}")
+
+    # Save incremental state
+    if incremental and not dry_run:
+        sync_state.save()
+        print("\n[Step 6] State saved to .slacklist_state.json")
+
+    print(f"\n{'='*60}")
+    print("[DONE] Complete")
+    print(f"  Analyzed: Gmail {results['analyzed']['gmail']}, Slack {results['analyzed']['slack']}")
+    print(f"  Detected: {len(results['changes_detected'])} changes")
+    print(f"  Applied: {len(results['changes_applied'])} changes")
+    if results["errors"]:
+        print(f"  Errors: {len(results['errors'])}")
+    print(f"{'='*60}\n")
+
+    return results
+
+
 def main():
     """CLI entry point."""
     import argparse
@@ -416,14 +1047,63 @@ def main():
         help="Post summary to Slack channel",
     )
     parser.add_argument(
+        "--intelligent-update",
+        action="store_true",
+        help="Intelligently update from Gmail and Slack analysis",
+    )
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=7,
+        help="Number of days to analyze",
+    )
+    parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="Auto-approve changes without confirmation",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show what would be done without making changes",
     )
+    parser.add_argument(
+        "--vendor",
+        type=str,
+        default=None,
+        help="Filter to specific vendor (e.g., 'megazone', 'brightcove')",
+    )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Full scan mode (disable incremental, re-process all)",
+    )
+    parser.add_argument(
+        "--status",
+        action="store_true",
+        help="Show sync state status",
+    )
 
     args = parser.parse_args()
 
-    if args.post_summary:
+    if args.status:
+        state = IncrementalSyncState()
+        stats = state.get_stats()
+        print("\n[SYNC STATE]")
+        print(f"  Last sync: {stats['last_sync'] or 'Never'}")
+        print(f"  Gmail processed: {stats['gmail_processed']}")
+        print(f"  Slack processed: {stats['slack_processed']}")
+        print(f"  Vendors tracked: {stats['vendors_tracked']}")
+        print(f"  Pending changes: {stats['pending_changes']}")
+    elif args.intelligent_update:
+        intelligent_update_slacklist(
+            days=args.days,
+            dry_run=args.dry_run,
+            auto_approve=args.yes,
+            vendor_filter=args.vendor,
+            incremental=not args.full,
+        )
+    elif args.post_summary:
         post_daily_summary(dry_run=args.dry_run)
     else:
         result = sync_lists_to_dashboard(
