@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - VOD Player - B&W Wireframe</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #111;
+            color: #fff;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: #000;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .event-title { text-align: center; }
+        .event-name { font-weight: bold; font-size: 14px; }
+        .event-info { font-size: 10px; color: #888; }
+        .settings-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        /* Video Player */
+        .player-container { background: #000; position: relative; }
+        .video-area {
+            width: 100%;
+            height: 450px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Resume Overlay */
+        .resume-overlay {
+            text-align: center;
+        }
+        .resume-title {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        .resume-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .resume-btn {
+            padding: 15px 30px;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .resume-btn.primary {
+            background: #fff;
+            color: #000;
+        }
+        .resume-btn .icon { font-size: 24px; }
+        .resume-btn .label { font-weight: bold; }
+        .resume-btn .detail { font-size: 10px; opacity: 0.7; }
+
+        /* Player Controls */
+        .player-controls {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            border-top: 1px solid #333;
+        }
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .control-btns { display: flex; gap: 15px; }
+        .control-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .control-btn.active { background: #fff; color: #000; border-color: #fff; }
+        .time-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+        }
+
+        /* Progress Bar */
+        .progress-container { display: flex; align-items: center; gap: 10px; }
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: #333;
+            position: relative;
+            cursor: pointer;
+        }
+        .progress-fill { height: 100%; background: #fff; width: 35%; }
+        .progress-marker {
+            position: absolute;
+            top: -8px;
+            height: 20px;
+            width: 3px;
+            background: #fff;
+        }
+
+        /* Chapters Section */
+        .chapters-section {
+            padding: 20px;
+            background: #0a0a0a;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .section-title { font-weight: bold; font-size: 13px; }
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+        .chapter-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+        .chapter-card:hover { border-color: #fff; }
+        .chapter-card.active { border-color: #fff; background: #222; }
+        .chapter-thumb {
+            height: 60px;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid #333;
+            font-size: 10px;
+            color: #666;
+        }
+        .chapter-thumb .time {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: #000;
+            padding: 1px 4px;
+            font-size: 9px;
+        }
+        .chapter-info { padding: 8px; }
+        .chapter-title { font-size: 10px; font-weight: bold; }
+
+        /* Content Info */
+        .content-info-section {
+            padding: 20px;
+            background: #111;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        .info-main {}
+        .info-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        .info-meta { color: #888; font-size: 12px; margin-bottom: 15px; }
+        .info-desc { line-height: 1.6; color: #ccc; margin-bottom: 20px; }
+        .info-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag {
+            padding: 4px 10px;
+            border: 1px solid #555;
+            font-size: 10px;
+        }
+
+        /* Related Videos */
+        .related-section { }
+        .related-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        .related-list { display: flex; flex-direction: column; gap: 10px; }
+        .related-card {
+            display: flex;
+            gap: 10px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+        .related-card:hover { border-color: #fff; }
+        .related-thumb {
+            width: 120px;
+            height: 70px;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 10px;
+            color: #666;
+        }
+        .related-thumb .duration {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: #000;
+            padding: 1px 4px;
+            font-size: 9px;
+        }
+        .related-info { padding: 10px; flex: 1; }
+        .related-title { font-weight: bold; font-size: 11px; margin-bottom: 4px; }
+        .related-meta { font-size: 10px; color: #888; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            padding: 20px;
+            font-size: 10px;
+            color: #555;
+            background: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <a href="#" class="back-btn">← Back</a>
+        <div class="event-title">
+            <div class="event-name">MAIN EVENT DAY 6 - FULL REPLAY</div>
+            <div class="event-info">July 15, 2026 · 8h 45m</div>
+        </div>
+        <button class="settings-btn">⚙ Settings</button>
+    </div>
+
+    <!-- Video Player -->
+    <div class="player-container">
+        <div class="video-area">
+            <div class="resume-overlay">
+                <div class="resume-title">Continue watching?</div>
+                <div class="resume-buttons">
+                    <button class="resume-btn primary">
+                        <span class="icon">▶</span>
+                        <span class="label">Resume</span>
+                        <span class="detail">From 3:15:42</span>
+                    </button>
+                    <button class="resume-btn">
+                        <span class="icon">⏮</span>
+                        <span class="label">Start from Beginning</span>
+                        <span class="detail">8h 45m 30s</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Controls -->
+        <div class="player-controls">
+            <div class="controls-row">
+                <div class="control-btns">
+                    <button class="control-btn">⏮ -30s</button>
+                    <button class="control-btn">▶ Play</button>
+                    <button class="control-btn">⏭ +30s</button>
+                </div>
+                <div class="control-btns">
+                    <button class="control-btn active">📑 Chapters (24)</button>
+                    <button class="control-btn">🃏 Key Hands (47)</button>
+                </div>
+                <div class="time-display">
+                    <span>3:15:42</span>
+                    <span style="color: #555;">/</span>
+                    <span>8:45:30</span>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <div class="progress-marker" style="left: 10%;"></div>
+                    <div class="progress-marker" style="left: 22%;"></div>
+                    <div class="progress-marker" style="left: 38%;"></div>
+                    <div class="progress-marker" style="left: 55%;"></div>
+                    <div class="progress-marker" style="left: 72%;"></div>
+                    <div class="progress-marker" style="left: 88%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapters Section -->
+    <div class="chapters-section">
+        <div class="section-header">
+            <span class="section-title">📑 CHAPTERS</span>
+        </div>
+        <div class="chapters-grid">
+            <div class="chapter-card">
+                <div class="chapter-thumb">[CH1]<span class="time">0:00</span></div>
+                <div class="chapter-info"><div class="chapter-title">Day 6 Intro</div></div>
+            </div>
+            <div class="chapter-card">
+                <div class="chapter-thumb">[CH2]<span class="time">0:15:30</span></div>
+                <div class="chapter-info"><div class="chapter-title">Level 30 Start</div></div>
+            </div>
+            <div class="chapter-card">
+                <div class="chapter-thumb">[CH3]<span class="time">1:02:15</span></div>
+                <div class="chapter-info"><div class="chapter-title">First Bustout</div></div>
+            </div>
+            <div class="chapter-card active">
+                <div class="chapter-thumb">[CH4]<span class="time">3:15:42</span></div>
+                <div class="chapter-info"><div class="chapter-title">$2.4M Pot</div></div>
+            </div>
+            <div class="chapter-card">
+                <div class="chapter-thumb">[CH5]<span class="time">5:30:00</span></div>
+                <div class="chapter-info"><div class="chapter-title">Dinner Break</div></div>
+            </div>
+            <div class="chapter-card">
+                <div class="chapter-thumb">[CH6]<span class="time">7:45:00</span></div>
+                <div class="chapter-info"><div class="chapter-title">Final 9 Set</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Info -->
+    <div class="content-info-section">
+        <div class="info-main">
+            <h1 class="info-title">WSOP Main Event Day 6 - Full Replay</h1>
+            <div class="info-meta">
+                July 15, 2026 · 8h 45m · WSOP 2026 Las Vegas · Event #76
+            </div>
+            <p class="info-desc">
+                Watch the complete Day 6 coverage of the 2026 WSOP Main Event.
+                Starting with 27 players and playing down to the final 9 who will
+                return for the final table. Featuring incredible hands, dramatic
+                eliminations, and the biggest pot of the tournament so far.
+            </p>
+            <div class="info-tags">
+                <span class="tag">Main Event</span>
+                <span class="tag">WSOP 2026</span>
+                <span class="tag">Day 6</span>
+                <span class="tag">Final Table</span>
+                <span class="tag">Negreanu</span>
+                <span class="tag">Hellmuth</span>
+            </div>
+        </div>
+
+        <div class="related-section">
+            <div class="related-header">📺 UP NEXT</div>
+            <div class="related-list">
+                <div class="related-card">
+                    <div class="related-thumb">[VOD]<span class="duration">10:15:30</span></div>
+                    <div class="related-info">
+                        <div class="related-title">Main Event Day 7 - Final Table</div>
+                        <div class="related-meta">July 16, 2026</div>
+                    </div>
+                </div>
+                <div class="related-card">
+                    <div class="related-thumb">[VOD]<span class="duration">6:32:15</span></div>
+                    <div class="related-info">
+                        <div class="related-title">Main Event Day 5</div>
+                        <div class="related-meta">July 14, 2026</div>
+                    </div>
+                </div>
+                <div class="related-card">
+                    <div class="related-thumb">[VOD]<span class="duration">0:45:00</span></div>
+                    <div class="related-info">
+                        <div class="related-title">Day 6 Highlights</div>
+                        <div class="related-meta">Condensed Version</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Wireframe · VOD Player (Resume/Start + Chapters + Key Hands) · NBA TV Style Reference<br>
+        NBA Ref: Game Detail with Resume (200945)
+    </div>
+</body>
+</html>

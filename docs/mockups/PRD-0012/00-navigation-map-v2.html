@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - Navigation Map v2 (Ticker-First Philosophy)</title>
+    <style>
+        /* === B&W Wireframe Style === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fff;
+            color: #333;
+            font-size: 11px;
+            line-height: 1.4;
+            padding: 20px;
+        }
+        h1 { font-size: 18px; margin-bottom: 5px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+        h2 { font-size: 14px; margin: 25px 0 10px; color: #333; border-left: 4px solid #333; padding-left: 10px; }
+        h3 { font-size: 12px; margin: 15px 0 8px; color: #555; }
+        .subtitle { color: #666; margin-bottom: 20px; }
+
+        /* Philosophy Section */
+        .philosophy-box {
+            border: 3px solid #333;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: #f9f9f9;
+        }
+        .philosophy-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            margin: -20px -20px 20px;
+        }
+        .principle-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .principle {
+            border: 2px solid #333;
+            padding: 15px;
+            text-align: center;
+        }
+        .principle-num {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .principle-name {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        .principle-desc {
+            font-size: 10px;
+            color: #666;
+        }
+        .principle-wsoptv {
+            font-size: 9px;
+            background: #333;
+            color: #fff;
+            padding: 4px 8px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Layer Architecture */
+        .layer-architecture {
+            border: 2px solid #333;
+            margin-bottom: 30px;
+        }
+        .layer {
+            border-bottom: 1px solid #333;
+            padding: 15px;
+        }
+        .layer:last-child { border-bottom: none; }
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .layer-num {
+            background: #333;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .layer-title {
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .layer-principle {
+            font-size: 10px;
+            color: #666;
+            margin-left: auto;
+            border: 1px solid #ccc;
+            padding: 2px 8px;
+        }
+        .layer-content {
+            margin-left: 45px;
+        }
+
+        /* Ticker Visual */
+        .ticker-visual {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+        }
+        .ticker-item {
+            min-width: 100px;
+            border: 1px solid #333;
+            padding: 8px;
+            background: #fff;
+            text-align: center;
+            font-size: 10px;
+        }
+        .ticker-item .status {
+            font-size: 8px;
+            background: #333;
+            color: #fff;
+            padding: 1px 4px;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+        .ticker-item .status.live { background: #c00; }
+        .ticker-item .teams { font-weight: bold; margin: 4px 0; }
+        .ticker-item .action {
+            font-size: 8px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 4px;
+            margin-top: 4px;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            background: #1a1a1a;
+            padding: 30px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+        .hero-visual .video-area {
+            border: 2px dashed #555;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .hero-visual .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .hero-visual .btn {
+            padding: 12px 25px;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .hero-visual .btn.primary {
+            background: #fff;
+            color: #000;
+        }
+        .hero-visual .event-info {
+            margin-top: 15px;
+            font-size: 12px;
+        }
+        .hero-visual .event-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Navigation Structure */
+        .nav-structure {
+            border: 2px solid #333;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .global-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #333;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .global-nav .logo {
+            font-weight: bold;
+            border: 1px solid #fff;
+            padding: 4px 10px;
+            margin-right: 10px;
+        }
+        .global-nav .nav-item {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+        .global-nav .nav-item.active {
+            background: #fff;
+            color: #333;
+        }
+        .global-nav .nav-item.minimal {
+            color: #888;
+        }
+        .global-nav .nav-item.cta {
+            margin-left: auto;
+            background: #fff;
+            color: #333;
+            font-weight: bold;
+        }
+        .nav-note {
+            font-size: 10px;
+            color: #666;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+        }
+
+        /* Simplified Flow */
+        .flow-section {
+            border: 2px solid #333;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .flow-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .flow-badge {
+            background: #333;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 10px;
+        }
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 15px 0;
+        }
+        .flow-step {
+            min-width: 100px;
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+            background: #fff;
+        }
+        .flow-step.entry {
+            background: #333;
+            color: #fff;
+        }
+        .flow-step.action {
+            border: 2px solid #333;
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .flow-step.watch {
+            background: #333;
+            color: #fff;
+            border: 3px solid #333;
+        }
+        .flow-step .step-name {
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .flow-step .step-detail {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .flow-step.watch .step-detail { color: #ccc; }
+        .flow-arrow {
+            font-size: 14px;
+            color: #333;
+        }
+        .flow-emphasis {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+        }
+        .flow-emphasis strong {
+            background: #333;
+            color: #fff;
+            padding: 2px 6px;
+        }
+
+        /* Phase 1 Scope */
+        .scope-section {
+            border: 2px solid #333;
+            padding: 20px;
+        }
+        .scope-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .scope-column h4 {
+            background: #333;
+            color: #fff;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .scope-column.exclude h4 {
+            background: #999;
+        }
+        .feature-list {
+            list-style: none;
+        }
+        .feature-list li {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feature-list li .icon {
+            width: 20px;
+            text-align: center;
+        }
+        .feature-list li .name {
+            flex: 1;
+        }
+        .feature-list li .note {
+            font-size: 9px;
+            color: #888;
+        }
+
+        /* Screen Inventory */
+        .screen-inventory {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .screen-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        .screen-card.done {
+            border: 2px solid #333;
+            background: #f5f5f5;
+        }
+        .screen-card .num {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .screen-card .name {
+            font-size: 10px;
+            margin-top: 4px;
+        }
+        .screen-card .status {
+            font-size: 8px;
+            padding: 2px 6px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+        .screen-card .status.done {
+            background: #333;
+            color: #fff;
+        }
+        .screen-card .status.todo {
+            border: 1px solid #333;
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 2px solid #333;
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>WSOPTV Phase 1 - Navigation Map v2</h1>
+    <p class="subtitle">Ticker-First Philosophy · Based on NBA TV OTT Analysis (16 Screenshots)</p>
+
+    <!-- Core Philosophy -->
+    <div class="philosophy-box">
+        <div class="philosophy-title">🎯 NBA TV OTT 핵심 철학 (WSOPTV 적용)</div>
+        <div class="principle-list">
+            <div class="principle">
+                <div class="principle-num">1</div>
+                <div class="principle-name">TICKER FIRST</div>
+                <div class="principle-desc">모든 경기 상태를<br>한눈에 파악</div>
+                <div class="principle-wsoptv">Tournament Ticker</div>
+            </div>
+            <div class="principle">
+                <div class="principle-num">2</div>
+                <div class="principle-name">ONE-CLICK WATCH</div>
+                <div class="principle-desc">Hero 영역에서<br>즉시 시청 시작</div>
+                <div class="principle-wsoptv">Resume / Start</div>
+            </div>
+            <div class="principle">
+                <div class="principle-num">3</div>
+                <div class="principle-name">MINIMAL NAV</div>
+                <div class="principle-desc">핵심 탭만 노출<br>복잡함 제거</div>
+                <div class="principle-wsoptv">4 Primary Tabs</div>
+            </div>
+            <div class="principle">
+                <div class="principle-num">4</div>
+                <div class="principle-name">CONTEXT ON DEMAND</div>
+                <div class="principle-desc">상세 정보는<br>스크롤/탭으로</div>
+                <div class="principle-wsoptv">Chip Counts, Hands</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layer Architecture -->
+    <h2>1. 3-Layer Architecture</h2>
+    <div class="layer-architecture">
+        <!-- Layer 1: Ticker -->
+        <div class="layer">
+            <div class="layer-header">
+                <div class="layer-num">1</div>
+                <div class="layer-title">TICKER (Tournament Ticker)</div>
+                <div class="layer-principle">항상 상단 고정 · 클릭 → 즉시 이동</div>
+            </div>
+            <div class="layer-content">
+                <div class="ticker-visual">
+                    <div class="ticker-item">
+                        <span class="status live">● LIVE</span>
+                        <div class="teams">Main Event FT</div>
+                        <div>6 Players</div>
+                        <div class="action">► League Pass</div>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="status live">● LIVE</span>
+                        <div class="teams">$100K HR</div>
+                        <div>4 Players</div>
+                        <div class="action">► League Pass</div>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="status">VOD</span>
+                        <div class="teams">ME Day 6</div>
+                        <div>Full Replay</div>
+                        <div class="action">► League Pass</div>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="status">UPCOMING</span>
+                        <div class="teams">$1K Daily</div>
+                        <div>2:00 PM</div>
+                        <div class="action">SET REMINDER</div>
+                    </div>
+                </div>
+                <div class="nav-note" style="margin-top: 10px;">
+                    <strong>핵심</strong>: Ticker 클릭 한 번으로 해당 방송 페이지로 이동. 복잡한 메뉴 탐색 불필요.
+                </div>
+            </div>
+        </div>
+
+        <!-- Layer 2: Hero -->
+        <div class="layer">
+            <div class="layer-header">
+                <div class="layer-num">2</div>
+                <div class="layer-title">HERO CONTENT (즉시 시청)</div>
+                <div class="layer-principle">One-Click Watch · Resume/Start</div>
+            </div>
+            <div class="layer-content">
+                <div class="hero-visual">
+                    <div class="video-area">[VIDEO PLAYER / THUMBNAIL]</div>
+                    <div class="buttons">
+                        <button class="btn primary">▶ Resume</button>
+                        <button class="btn">Start from Beginning</button>
+                    </div>
+                    <div class="event-info">
+                        <div class="event-title">WSOP MAIN EVENT - FINAL TABLE</div>
+                        <div>6 Players Remaining · $12.1M First Place</div>
+                    </div>
+                </div>
+                <div class="nav-note" style="margin-top: 10px;">
+                    <strong>핵심</strong>: 시청자가 페이지 진입 즉시 "Resume" 또는 "처음부터" 선택 가능. 추가 탐색 불필요.
+                </div>
+            </div>
+        </div>
+
+        <!-- Layer 3: Context -->
+        <div class="layer">
+            <div class="layer-header">
+                <div class="layer-num">3</div>
+                <div class="layer-title">CONTEXTUAL INFO (스크롤로 접근)</div>
+                <div class="layer-principle">On-Demand · 보조 정보</div>
+            </div>
+            <div class="layer-content">
+                <div style="display: flex; gap: 20px; font-size: 10px;">
+                    <div style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+                        <strong>HIGHLIGHTS</strong><br>
+                        Key Hands 클립 목록<br>
+                        (스크롤 시 노출)
+                    </div>
+                    <div style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+                        <strong>CHIP COUNTS</strong><br>
+                        현재 칩 현황<br>
+                        (탭 또는 버튼)
+                    </div>
+                    <div style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+                        <strong>UP NEXT</strong><br>
+                        다음 방송 스케줄<br>
+                        (사이드바)
+                    </div>
+                    <div style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+                        <strong>RELATED</strong><br>
+                        관련 VOD/클립<br>
+                        (하단 섹션)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simplified Navigation -->
+    <h2>2. Simplified Global Navigation</h2>
+    <div class="nav-structure">
+        <div class="global-nav">
+            <span class="logo">WSOP TV</span>
+            <span class="nav-item active">Schedule</span>
+            <span class="nav-item">Players</span>
+            <span class="nav-item">Watch</span>
+            <span class="nav-item">Highlights</span>
+            <span class="nav-item cta">WSOP Plus</span>
+        </div>
+        <div class="nav-note">
+            <strong>Phase 1 핵심 탭 (4개만)</strong>: Schedule(메인), Players(선수), Watch(시청), Highlights(하이라이트)<br>
+            <span style="color: #999;">제외: Events, Stats, Standings (Phase 2+에서 추가)</span>
+        </div>
+    </div>
+
+    <!-- Primary User Flows -->
+    <h2>3. Primary User Flows (단순화)</h2>
+
+    <!-- Flow 1: Ticker-based -->
+    <div class="flow-section">
+        <div class="flow-title">
+            <span class="flow-badge">FLOW 1</span>
+            Ticker 기반 즉시 시청 (최단 경로)
+        </div>
+        <div class="flow-diagram">
+            <div class="flow-step entry">
+                <div class="step-name">ANY PAGE</div>
+                <div class="step-detail">어느 페이지든</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step action">
+                <div class="step-name">TICKER 클릭</div>
+                <div class="step-detail">상단 고정</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step watch">
+                <div class="step-name">▶ WATCH</div>
+                <div class="step-detail">즉시 시청</div>
+            </div>
+        </div>
+        <div class="flow-emphasis">
+            <strong>2 클릭</strong>으로 시청 시작 (Ticker → Watch)
+        </div>
+    </div>
+
+    <!-- Flow 2: Schedule-based -->
+    <div class="flow-section">
+        <div class="flow-title">
+            <span class="flow-badge">FLOW 2</span>
+            Schedule 기반 탐색 (날짜 선택)
+        </div>
+        <div class="flow-diagram">
+            <div class="flow-step entry">
+                <div class="step-name">SCHEDULE</div>
+                <div class="step-detail">Home</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Date Picker</div>
+                <div class="step-detail">날짜 선택</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Event Card</div>
+                <div class="step-detail">이벤트 목록</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step watch">
+                <div class="step-name">▶ WATCH</div>
+                <div class="step-detail">시청 시작</div>
+            </div>
+        </div>
+        <div class="flow-emphasis">
+            <strong>3 클릭</strong>으로 시청 시작 (Date → Card → Watch)
+        </div>
+    </div>
+
+    <!-- Flow 3: Player-based -->
+    <div class="flow-section">
+        <div class="flow-title">
+            <span class="flow-badge">FLOW 3</span>
+            Player 기반 탐색 (선수 검색)
+        </div>
+        <div class="flow-diagram">
+            <div class="flow-step entry">
+                <div class="step-name">PLAYERS</div>
+                <div class="step-detail">선수 목록</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Search</div>
+                <div class="step-detail">선수 검색</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Profile</div>
+                <div class="step-detail">선수 상세</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Videos Tab</div>
+                <div class="step-detail">클립 목록</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step watch">
+                <div class="step-name">▶ PLAY</div>
+                <div class="step-detail">재생</div>
+            </div>
+        </div>
+        <div class="flow-emphasis">
+            <strong>4 클릭</strong>으로 시청 시작 (Search → Profile → Videos → Play)
+        </div>
+    </div>
+
+    <!-- Phase 1 Scope -->
+    <h2>4. Phase 1 Scope (핵심 기능만)</h2>
+    <div class="scope-section">
+        <div class="scope-grid">
+            <div class="scope-column">
+                <h4>✅ PHASE 1 포함</h4>
+                <ul class="feature-list">
+                    <li><span class="icon">🎯</span><span class="name">Tournament Ticker</span><span class="note">상단 고정</span></li>
+                    <li><span class="icon">📅</span><span class="name">Date-based Schedule</span><span class="note">메인 진입점</span></li>
+                    <li><span class="icon">👤</span><span class="name">Player Profiles</span><span class="note">4탭 구조</span></li>
+                    <li><span class="icon">▶️</span><span class="name">One-Click Watch</span><span class="note">Resume/Start</span></li>
+                    <li><span class="icon">⏪</span><span class="name">Timeshift/DVR</span><span class="note">Vimeo 지원</span></li>
+                    <li><span class="icon">📑</span><span class="name">Chapters</span><span class="note">Key Hands</span></li>
+                    <li><span class="icon">🔥</span><span class="name">Highlights Hub</span><span class="note">클립 모음</span></li>
+                    <li><span class="icon">💳</span><span class="name">Stripe 결제</span><span class="note">구독</span></li>
+                    <li><span class="icon">🔐</span><span class="name">GGPass SSO</span><span class="note">로그인</span></li>
+                </ul>
+            </div>
+            <div class="scope-column exclude">
+                <h4>❌ PHASE 2+ 제외</h4>
+                <ul class="feature-list">
+                    <li><span class="icon">📺</span><span class="name">Table Multi-view</span><span class="note">4분할</span></li>
+                    <li><span class="icon">📹</span><span class="name">Player Cam</span><span class="note">직캠</span></li>
+                    <li><span class="icon">📊</span><span class="name">StatsView Overlay</span><span class="note">실시간</span></li>
+                    <li><span class="icon">🔍</span><span class="name">Hand Search</span><span class="note">고급 검색</span></li>
+                    <li><span class="icon">📈</span><span class="name">Stats Page</span><span class="note">상세 통계</span></li>
+                    <li><span class="icon">🏆</span><span class="name">Standings Page</span><span class="note">순위표</span></li>
+                    <li><span class="icon">⚡</span><span class="name">Real-time Alerts</span><span class="note">푸시</span></li>
+                    <li><span class="icon">🖥️</span><span class="name">Custom Player UI</span><span class="note">커스텀</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen Inventory -->
+    <h2>5. Screen Inventory (Phase 1)</h2>
+    <div class="screen-inventory">
+        <div class="screen-card done">
+            <div class="num">01</div>
+            <div class="name">Schedule View</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">02</div>
+            <div class="name">Players List</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">03</div>
+            <div class="name">Player Profile</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">04</div>
+            <div class="name">Event Detail</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">05</div>
+            <div class="name">Watch Hub</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">06</div>
+            <div class="name">Live Player</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">07</div>
+            <div class="name">VOD Player</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">08</div>
+            <div class="name">Highlights Hub</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">09</div>
+            <div class="name">Subscribe Modal</div>
+            <span class="status done">✓</span>
+        </div>
+        <div class="screen-card done">
+            <div class="num">10</div>
+            <div class="name">Sign In</div>
+            <span class="status done">✓</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Navigation Map v2 · Ticker-First Philosophy<br>
+        Based on NBA TV OTT Analysis (16 Screenshots) · Generated: 2026-02-03
+    </div>
+</body>
+</html>

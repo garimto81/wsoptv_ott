@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - Navigation Map & Workflow</title>
+    <style>
+        /* === B&W Wireframe Style === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fff;
+            color: #333;
+            font-size: 11px;
+            line-height: 1.4;
+            padding: 20px;
+        }
+        h1 { font-size: 18px; margin-bottom: 10px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+        h2 { font-size: 14px; margin: 20px 0 10px; color: #333; }
+        h3 { font-size: 12px; margin: 15px 0 8px; color: #555; }
+
+        /* Navigation Map Container */
+        .nav-map {
+            border: 2px solid #333;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: #fafafa;
+        }
+
+        /* Global Navigation */
+        .global-nav {
+            display: flex;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #333;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .global-nav .logo {
+            font-weight: bold;
+            border: 1px solid #fff;
+            padding: 4px 10px;
+            margin-right: 20px;
+        }
+        .global-nav .nav-item {
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        .global-nav .nav-item.active {
+            background: #fff;
+            color: #333;
+        }
+        .global-nav .nav-item.cta {
+            background: #fff;
+            color: #333;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        /* Page Hierarchy */
+        .hierarchy {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .page-group {
+            flex: 1;
+            min-width: 280px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            background: #fff;
+        }
+        .page-group h4 {
+            font-size: 12px;
+            background: #333;
+            color: #fff;
+            padding: 6px 10px;
+            margin: -15px -15px 15px;
+        }
+        .page-item {
+            border: 1px solid #999;
+            padding: 10px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .page-item.primary {
+            border: 2px solid #333;
+            background: #f5f5f5;
+        }
+        .page-item .page-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .page-item .page-desc {
+            font-size: 10px;
+            color: #666;
+        }
+        .page-item .nba-ref {
+            font-size: 9px;
+            color: #999;
+            margin-top: 4px;
+        }
+        .page-item .tabs {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .page-item .tab {
+            font-size: 9px;
+            padding: 2px 6px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        .page-item .tab.active {
+            background: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
+        /* User Flow */
+        .flow-section {
+            margin-top: 30px;
+            border: 2px solid #333;
+            padding: 20px;
+        }
+        .flow-diagram {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+        .flow-step {
+            min-width: 120px;
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+            background: #fff;
+        }
+        .flow-step.entry {
+            background: #333;
+            color: #fff;
+        }
+        .flow-step.action {
+            border-style: dashed;
+            background: #f9f9f9;
+        }
+        .flow-step .step-name {
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .flow-step .step-detail {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Screen List */
+        .screen-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .screen-card {
+            border: 1px solid #ccc;
+            padding: 12px;
+        }
+        .screen-card.done {
+            border-color: #333;
+            background: #f0f0f0;
+        }
+        .screen-card .screen-id {
+            font-size: 9px;
+            color: #999;
+        }
+        .screen-card .screen-name {
+            font-weight: bold;
+            margin: 4px 0;
+        }
+        .screen-card .screen-status {
+            font-size: 9px;
+            padding: 2px 6px;
+            display: inline-block;
+        }
+        .screen-card .screen-status.done {
+            background: #333;
+            color: #fff;
+        }
+        .screen-card .screen-status.todo {
+            background: #fff;
+            border: 1px solid #333;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            font-size: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #333;
+        }
+        .legend-box.primary { background: #f5f5f5; border-width: 2px; }
+        .legend-box.secondary { background: #fff; }
+        .legend-box.done { background: #333; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>WSOPTV Phase 1 - Navigation Map & Workflow</h1>
+    <p style="margin-bottom: 20px; color: #666;">Based on NBA TV Reference Analysis (16 screenshots)</p>
+
+    <!-- Global Navigation -->
+    <h2>1. Global Navigation (NBA TV 기반)</h2>
+    <div class="nav-map">
+        <div class="global-nav">
+            <span class="logo">WSOP TV</span>
+            <span class="nav-item active">Schedule</span>
+            <span class="nav-item">Players</span>
+            <span class="nav-item">Events</span>
+            <span class="nav-item">Watch</span>
+            <span class="nav-item">Highlights</span>
+            <span class="nav-item">Stats</span>
+            <span class="nav-item cta">WSOP Plus</span>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-box primary"></div> Primary Pages (P1)</div>
+            <div class="legend-item"><div class="legend-box secondary"></div> Secondary Pages</div>
+            <div class="legend-item"><div class="legend-box done"></div> Wireframe Complete</div>
+        </div>
+    </div>
+
+    <!-- Page Hierarchy -->
+    <h2>2. Page Hierarchy</h2>
+    <div class="hierarchy">
+        <!-- Schedule Group -->
+        <div class="page-group">
+            <h4>📅 SCHEDULE (메인 진입점)</h4>
+            <div class="page-item primary">
+                <div class="page-name">Schedule View (Home)</div>
+                <div class="page-desc">날짜별 이벤트 목록 + Featured Players</div>
+                <div class="nba-ref">📷 NBA Ref: Games & Scores (201617)</div>
+                <div class="tabs">
+                    <span class="tab active">Schedule</span>
+                    <span class="tab">Players</span>
+                    <span class="tab">Events</span>
+                    <span class="tab">Standings</span>
+                </div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Event Detail</div>
+                <div class="page-desc">이벤트 상세 + Watch/Results</div>
+                <div class="nba-ref">📷 NBA Ref: Game Detail (200945)</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Event Results</div>
+                <div class="page-desc">Line Scores + Hand History</div>
+                <div class="nba-ref">📷 NBA Ref: Game Info (201033)</div>
+            </div>
+        </div>
+
+        <!-- Players Group -->
+        <div class="page-group">
+            <h4>👤 PLAYERS (선수 기반 탐색)</h4>
+            <div class="page-item primary">
+                <div class="page-name">Players List</div>
+                <div class="page-desc">선수 목록 + 검색/필터</div>
+                <div class="nba-ref">📷 NBA Ref: Players Index</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Player Profile</div>
+                <div class="page-desc">선수 상세 + Profile/Stats/Bio/Videos</div>
+                <div class="nba-ref">📷 NBA Ref: Player Profile (201113~201233)</div>
+                <div class="tabs">
+                    <span class="tab active">Profile</span>
+                    <span class="tab">Stats</span>
+                    <span class="tab">Bio</span>
+                    <span class="tab">Videos</span>
+                </div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Player Stats</div>
+                <div class="page-desc">시즌별/토너먼트별 통계</div>
+                <div class="nba-ref">📷 NBA Ref: Player Stats (201138)</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Player Videos</div>
+                <div class="page-desc">선수 관련 클립 그리드</div>
+                <div class="nba-ref">📷 NBA Ref: Player Videos (201233)</div>
+            </div>
+        </div>
+
+        <!-- Watch Group -->
+        <div class="page-group">
+            <h4>▶️ WATCH (시청)</h4>
+            <div class="page-item primary">
+                <div class="page-name">Watch Hub</div>
+                <div class="page-desc">Featured + Live + VOD 허브</div>
+                <div class="nba-ref">📷 NBA Ref: Watch Page (200506)</div>
+                <div class="tabs">
+                    <span class="tab active">Featured</span>
+                    <span class="tab">WSOP TV</span>
+                </div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Live Player</div>
+                <div class="page-desc">라이브 스트림 + Timeshift</div>
+                <div class="nba-ref">Vimeo Player (DVR 지원)</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">VOD Player</div>
+                <div class="page-desc">VOD + Resume/처음부터</div>
+                <div class="nba-ref">📷 NBA Ref: Game Detail (200945)</div>
+            </div>
+        </div>
+
+        <!-- Highlights Group -->
+        <div class="page-group">
+            <h4>🔥 HIGHLIGHTS</h4>
+            <div class="page-item">
+                <div class="page-name">Highlights Hub</div>
+                <div class="page-desc">Trending + Top Hands + Recaps</div>
+                <div class="nba-ref">📷 NBA Ref: HIGHLIGHTS Section (201033)</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Clip Player</div>
+                <div class="page-desc">하이라이트 클립 재생</div>
+            </div>
+        </div>
+
+        <!-- Auth Group -->
+        <div class="page-group">
+            <h4>🔐 AUTH & SUBSCRIPTION</h4>
+            <div class="page-item">
+                <div class="page-name">Sign In</div>
+                <div class="page-desc">NBA ID 스타일 로그인</div>
+                <div class="nba-ref">📷 NBA Ref: Sign In (200700, 200709)</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Subscribe</div>
+                <div class="page-desc">구독 플랜 선택 + Stripe 결제</div>
+                <div class="nba-ref">📷 NBA Ref: Subscribe Modal (200534)</div>
+            </div>
+            <div class="page-item">
+                <div class="page-name">Profile Settings</div>
+                <div class="page-desc">My Account + Hide Scores 토글</div>
+                <div class="nba-ref">📷 NBA Ref: User Menu (200700)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Flows -->
+    <h2>3. Primary User Flows</h2>
+
+    <!-- Flow 1: Schedule-based Discovery -->
+    <div class="flow-section">
+        <h3>Flow 1: 날짜 기반 탐색 (Schedule → Watch)</h3>
+        <div class="flow-diagram">
+            <div class="flow-step entry">
+                <div class="step-name">HOME</div>
+                <div class="step-detail">Schedule View</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Date Select</div>
+                <div class="step-detail">날짜 피커</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Game Card</div>
+                <div class="step-detail">이벤트 목록</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step action">
+                <div class="step-name">▶ WATCH</div>
+                <div class="step-detail">Live/VOD</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Player</div>
+                <div class="step-detail">Vimeo Player</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flow 2: Player-based Discovery -->
+    <div class="flow-section">
+        <h3>Flow 2: 선수 기반 탐색 (Players → Videos)</h3>
+        <div class="flow-diagram">
+            <div class="flow-step entry">
+                <div class="step-name">PLAYERS</div>
+                <div class="step-detail">선수 목록</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Search/Filter</div>
+                <div class="step-detail">이름/국적</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Player Profile</div>
+                <div class="step-detail">프로필 탭</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Videos Tab</div>
+                <div class="step-detail">클립 그리드</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step action">
+                <div class="step-name">▶ PLAY</div>
+                <div class="step-detail">클립 재생</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flow 3: Subscription -->
+    <div class="flow-section">
+        <h3>Flow 3: 구독 전환 (Free → Subscriber)</h3>
+        <div class="flow-diagram">
+            <div class="flow-step entry">
+                <div class="step-name">Paywall</div>
+                <div class="step-detail">프리미엄 콘텐츠</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Subscribe CTA</div>
+                <div class="step-detail">WSOP Plus</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">Plan Select</div>
+                <div class="step-detail">월간/연간</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step action">
+                <div class="step-name">Stripe</div>
+                <div class="step-detail">결제</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <div class="step-name">✓ Access</div>
+                <div class="step-detail">콘텐츠 해금</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen Inventory -->
+    <h2>4. Screen Inventory (Phase 1)</h2>
+    <div class="screen-list">
+        <div class="screen-card done">
+            <div class="screen-id">01</div>
+            <div class="screen-name">Home - Schedule View</div>
+            <span class="screen-status done">✓ DONE</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">02</div>
+            <div class="screen-name">Players List</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">03</div>
+            <div class="screen-name">Player Profile</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">04</div>
+            <div class="screen-name">Event Detail</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">05</div>
+            <div class="screen-name">Watch Hub</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">06</div>
+            <div class="screen-name">Live Player</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">07</div>
+            <div class="screen-name">VOD Player</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">08</div>
+            <div class="screen-name">Highlights Hub</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">09</div>
+            <div class="screen-name">Subscribe Modal</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+        <div class="screen-card">
+            <div class="screen-id">10</div>
+            <div class="screen-name">Sign In</div>
+            <span class="screen-status todo">TODO</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Navigation Map & Workflow · Based on NBA TV Reference (16 Screenshots)<br>
+        Generated: 2026-02-03 · B&W Wireframe System
+    </div>
+</body>
+</html>
