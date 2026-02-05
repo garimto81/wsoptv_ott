@@ -1,0 +1,12 @@
+{
+  "role": "sync",
+  "active": false,
+  "last_active": null,
+  "current_task": null,
+  "last_sync": {
+    "gmail": null,
+    "slack": null,
+    "slacklist": null
+  },
+  "notes": "Sync Node - 스크립트/동기화/자동화 담당"
+}

@@ -524,19 +524,35 @@ class VendorChangeDetector:
         "malgum": "맑음소프트 (WECANDEO)",
     }
 
-    # Status transition keywords
-    STATUS_KEYWORDS = {
+    # Status transition keywords - categorized by direction
+    # POSITIVE: Status should improve or stay active
+    POSITIVE_KEYWORDS = {
         "견적 수령": ("견적 대기", "검토 중"),
         "견적 도착": ("견적 대기", "검토 중"),
+        "견적서 첨부": ("견적 대기", "검토 중"),
+        "견적 전달": ("견적 대기", "검토 중"),
         "협상 시작": ("검토 중", "협상 중"),
         "조건 협의": ("검토 중", "협상 중"),
         "계약서 검토": ("협상 중", "계약 진행"),
         "법무 검토": ("협상 중", "계약 진행"),
-        "미수령": ("견적 대기", "보류"),
-        "무응답": ("*", "보류"),
-        "매각": ("*", "제외"),
-        "서비스 종료": ("*", "제외"),
+        "미팅 예정": ("*", "협상 중"),
+        "회의 예정": ("*", "협상 중"),
     }
+
+    # NEGATIVE: Status should decline (requires explicit approval)
+    NEGATIVE_KEYWORDS = {
+        "프로젝트 취소": ("*", "제외"),
+        "진행 불가": ("*", "제외"),
+        "서비스 종료": ("*", "제외"),
+        "매각 진행": ("*", "제외"),  # More specific than just "매각"
+        "협력 중단": ("*", "제외"),
+    }
+
+    # NEUTRAL: Just informational, no automatic status change
+    NEUTRAL_KEYWORDS = ["미수령", "무응답", "대기 중", "검토 중", "확인 중"]
+
+    # Legacy combined dict for backward compatibility
+    STATUS_KEYWORDS = {**POSITIVE_KEYWORDS, **NEGATIVE_KEYWORDS}
 
     # Action keywords for next_action field
     ACTION_KEYWORDS = [
@@ -556,12 +572,40 @@ class VendorChangeDetector:
                 return vendor_name
         return None
 
-    def detect_status_change(self, text: str) -> Optional[tuple]:
-        """Detect status change from text content."""
+    def detect_status_change(
+        self,
+        text: str,
+        is_vendor_email: bool = False,
+    ) -> Optional[tuple]:
+        """
+        Detect status change from text content.
+
+        Args:
+            text: Message text to analyze
+            is_vendor_email: True if this is an email FROM the vendor (not TO)
+
+        Returns:
+            Tuple of (from_status, to_status, keyword, direction) or None
+            direction: "positive", "negative", or None
+        """
         text_lower = text.lower()
-        for keyword, (from_status, to_status) in self.STATUS_KEYWORDS.items():
+
+        # Check positive keywords first (higher priority)
+        for keyword, (from_status, to_status) in self.POSITIVE_KEYWORDS.items():
             if keyword in text_lower:
-                return (from_status, to_status, keyword)
+                return (from_status, to_status, keyword, "positive")
+
+        # Check negative keywords (requires explicit approval)
+        for keyword, (from_status, to_status) in self.NEGATIVE_KEYWORDS.items():
+            if keyword in text_lower:
+                return (from_status, to_status, keyword, "negative")
+
+        # If vendor sent us an email, that's a positive signal (active communication)
+        # Don't suggest status decline just because neutral keywords exist
+        if is_vendor_email:
+            # Vendor email = active communication, no automatic status decline
+            return None
+
         return None
 
     def detect_action_item(self, text: str) -> Optional[str]:
@@ -593,28 +637,38 @@ class VendorChangeDetector:
         changes = []
 
         for email in emails:
-            vendor = self.detect_vendor_from_email(
-                email.get("sender", ""),
-                email.get("subject", "")
-            )
+            sender = email.get("sender", "")
+            subject = email.get("subject", "")
+
+            vendor = self.detect_vendor_from_email(sender, subject)
             if not vendor:
                 continue
+
+            # Check if email is FROM the vendor (not TO the vendor)
+            # Vendor email = positive signal (active communication)
+            sender_domain = sender.split("@")[-1].lower() if "@" in sender else ""
+            is_vendor_email = any(
+                domain_key in sender_domain
+                for domain_key in self.VENDOR_DOMAINS.keys()
+            )
 
             change = {
                 "source": "gmail",
                 "vendor": vendor,
                 "date": email.get("date"),
-                "subject": email.get("subject", ""),
+                "subject": subject,
+                "is_vendor_email": is_vendor_email,
             }
 
-            # Check for status change
-            full_text = f"{email.get('subject', '')} {email.get('body', '')}"
-            status_change = self.detect_status_change(full_text)
+            # Check for status change (with vendor email context)
+            full_text = f"{subject} {email.get('body', '')}"
+            status_change = self.detect_status_change(full_text, is_vendor_email=is_vendor_email)
             if status_change:
                 change["status_change"] = {
                     "from": status_change[0],
                     "to": status_change[1],
                     "trigger": status_change[2],
+                    "direction": status_change[3],  # positive or negative
                 }
 
             # Check for action item
@@ -681,13 +735,14 @@ class VendorChangeDetector:
                 "text_preview": text[:100],
             }
 
-            # Check for status change
-            status_change = self.detect_status_change(text)
+            # Check for status change (Slack messages are internal, not vendor emails)
+            status_change = self.detect_status_change(text, is_vendor_email=False)
             if status_change:
                 change["status_change"] = {
                     "from": status_change[0],
                     "to": status_change[1],
                     "trigger": status_change[2],
+                    "direction": status_change[3],
                 }
 
             # Check for action item
@@ -937,6 +992,8 @@ def intelligent_update_slacklist(
     print("\n[Step 3] Generating updates...")
 
     updates = []
+    negative_changes_skipped = []
+
     for vendor_name, changes in merged.items():
         update = {"vendor": vendor_name, "fields": {}}
 
@@ -948,10 +1005,21 @@ def intelligent_update_slacklist(
         if changes["last_contact"]:
             update["fields"]["last_contact"] = changes["last_contact"]
 
-        # Status change (if any)
+        # Status change (if any) - only apply POSITIVE changes automatically
         if changes["status_changes"]:
             latest = changes["status_changes"][-1]
-            update["fields"]["status_suggestion"] = latest
+            direction = latest.get("direction", "positive")
+
+            if direction == "positive":
+                update["fields"]["status_suggestion"] = latest
+            else:
+                # Negative status changes require explicit user approval
+                negative_changes_skipped.append({
+                    "vendor": vendor_name,
+                    "change": latest,
+                })
+                print(f"  [SKIP] {vendor_name}: Negative status change skipped (requires manual approval)")
+                print(f"         Trigger: '{latest.get('trigger')}' → {latest.get('to')}")
 
         if update["fields"]:
             updates.append(update)
@@ -986,9 +1054,23 @@ def intelligent_update_slacklist(
         fields = update["fields"]
 
         try:
+            # Parse last_contact date if present
+            last_contact_dt = None
+            if fields.get("last_contact"):
+                lc = fields["last_contact"]
+                if isinstance(lc, datetime):
+                    last_contact_dt = lc
+                elif isinstance(lc, str):
+                    try:
+                        from dateutil.parser import parse
+                        last_contact_dt = parse(lc)
+                    except Exception:
+                        pass
+
             success = manager.update_item(
                 vendor_name=vendor,
                 next_action=fields.get("next_action"),
+                last_contact=last_contact_dt,
             )
             if success:
                 results["changes_applied"].append(update)

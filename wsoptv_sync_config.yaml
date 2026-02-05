@@ -1,0 +1,94 @@
+# WSOPTV Slack Lists Sync Configuration v2.0
+# 이 파일은 wsoptv_ott 프로젝트의 동기화 설정을 정의합니다.
+
+project_name: "WSOPTV OTT"
+gmail_label: "wsoptv"
+slack_channel_id: "C09TX3M1J2W"
+
+vendors:
+  - name: "메가존클라우드"
+    domains: ["megazone.com", "megazonecloud.com"]
+    keywords: ["메가존", "MegazoneCloud"]
+    slack_list_row_id: "Rec0AC9KQD7TQ"
+
+  - name: "Brightcove"
+    domains: ["brightcove.com"]
+    keywords: ["브라이트코브"]
+    slack_list_row_id: "Rec0AC9KQQEDC"
+
+  - name: "맑음소프트"
+    domains: ["malgum.com", "wecandeo.com", "malgumsoft.com"]
+    keywords: ["맑음", "WECANDEO", "웨칸두"]
+    slack_list_row_id: "Rec0ACBM3P1PC"
+
+  - name: "Vimeo OTT"
+    domains: ["vimeo.com"]
+    keywords: ["비메오", "Vimeo"]
+    slack_list_row_id: "Rec0ACQJY2W65"
+
+slack_lists:
+  list_id: "F0ACQJS6KND"
+  team_id: "T03QGJ73GBB"
+  channel_id: "C09TX3M1J2W"
+  pinned_message_ts: "1770011097.422069"
+  columns:
+    vendor_name: "Col0ACBLXEU66"
+    status: "Col0ABWF6TEQP"
+    quote: "Col0ACQRUJ073"
+    last_contact: "Col0ACQRVGHKK"
+    next_action: "Col0ABWF0K4DV"
+    notes: "Col0ABWF1LL9M"
+  status_options:
+    "검토 중": "OptN4JBLQ9C"
+    "견적 대기": "Opt2QCAWCYN"
+    "협상 중": "OptZSZEAEHJ"
+    "보류": "OptBAAGMVM4"
+    "RFP 검토": "Opt987UPKAJ"
+
+status_rules:
+  # 양방향 통신 감지 시 협상 중으로 승격
+  - from_status: "*"
+    to_status: "negotiating"
+    triggers: ["active_thread_detected", "bidirectional_communication"]
+    direction: "positive"
+    auto_apply: true
+
+  # 견적 수령 시 검토 중으로
+  - from_status: "quote_waiting"
+    to_status: "reviewing"
+    triggers: ["견적 수령", "견적 도착", "견적서 첨부", "quote_received"]
+    direction: "positive"
+    auto_apply: true
+
+  # 협상 시작
+  - from_status: "reviewing"
+    to_status: "negotiating"
+    triggers: ["협상 시작", "조건 협의", "미팅 예정"]
+    direction: "positive"
+    auto_apply: true
+
+  # 계약 진행
+  - from_status: "negotiating"
+    to_status: "contract_review"
+    triggers: ["계약서 검토", "법무 검토", "contract_review"]
+    direction: "positive"
+    auto_apply: true
+
+  # 부정 상태 변경 (수동 승인 필요)
+  - from_status: "*"
+    to_status: "excluded"
+    triggers: ["서비스 종료", "매각 진행", "프로젝트 취소"]
+    direction: "negative"
+    auto_apply: false
+
+  - from_status: "*"
+    to_status: "on_hold"
+    triggers: ["진행 보류", "검토 중단"]
+    direction: "negative"
+    auto_apply: false
+
+attachments_dir: "C:/claude/wsoptv_ott/attachments"
+state_file: "C:/claude/wsoptv_ott/docs/management/.sync_state_v2.json"
+
+enable_ai_analysis: false
+ai_model: "claude-3-haiku"
