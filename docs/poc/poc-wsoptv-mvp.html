@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV OTT Platform - Proof of Concept</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #000;
+            background: #fff;
+            line-height: 1.6;
+        }
+
+        /* A4 Page Layout */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 25mm;
+            margin: 0 auto;
+            background: #fff;
+            position: relative;
+            page-break-after: always;
+        }
+
+        /* Print Optimizations */
+        @media print {
+            .page {
+                margin: 0;
+                border: none;
+                width: 100%;
+                height: 297mm;
+            }
+        }
+
+        /* Page Footer (Page Numbers) */
+        .page-footer {
+            position: absolute;
+            bottom: 15mm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10pt;
+            color: #999;
+        }
+
+        /* Cover Page */
+        .cover {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+
+        .cover h1 {
+            font-size: 42pt;
+            font-weight: 700;
+            margin-bottom: 15mm;
+            color: #000;
+        }
+
+        .cover h2 {
+            font-size: 20pt;
+            font-weight: 400;
+            margin-bottom: 30mm;
+            color: #333;
+        }
+
+        .cover .meta {
+            font-size: 12pt;
+            color: #666;
+            line-height: 2;
+        }
+
+        .cover .subtitle {
+            font-size: 16pt;
+            color: #000;
+            margin-top: 30mm;
+            font-weight: 500;
+        }
+
+        .cover .confidential {
+            position: absolute;
+            bottom: 20mm;
+            font-size: 10pt;
+            color: #999;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 24pt;
+            font-weight: 700;
+            margin-bottom: 8mm;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 3mm;
+        }
+
+        h2 {
+            font-size: 18pt;
+            font-weight: 700;
+            margin-top: 8mm;
+            margin-bottom: 5mm;
+            color: #000;
+        }
+
+        h3 {
+            font-size: 14pt;
+            font-weight: 600;
+            margin-top: 5mm;
+            margin-bottom: 3mm;
+            color: #333;
+        }
+
+        p {
+            font-size: 11pt;
+            color: #333;
+            margin-bottom: 3mm;
+        }
+
+        ul, ol {
+            margin-left: 6mm;
+            margin-bottom: 5mm;
+        }
+
+        li {
+            font-size: 11pt;
+            color: #333;
+            margin-bottom: 2mm;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8mm;
+            font-size: 10pt;
+        }
+
+        th {
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 3mm;
+            text-align: left;
+            font-weight: 600;
+            color: #000;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 3mm;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            padding: 2mm;
+            margin-bottom: 5mm;
+        }
+
+        .image-caption {
+            font-size: 9pt;
+            color: #666;
+            text-align: center;
+            margin-top: -3mm;
+            margin-bottom: 5mm;
+        }
+
+        /* Status Icons */
+        .status-icon {
+            display: inline-block;
+            width: 4mm;
+            height: 4mm;
+            border-radius: 50%;
+            margin-right: 2mm;
+            vertical-align: middle;
+        }
+
+        .status-done {
+            background: #000;
+        }
+
+        .status-pending {
+            background: #ccc;
+            border: 1px solid #999;
+        }
+
+        /* Feature Comparison Box */
+        .comparison-box {
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 5mm;
+            margin-bottom: 8mm;
+        }
+
+        /* Section Divider */
+        .divider {
+            border-top: 1px solid #e0e0e0;
+            margin: 8mm 0;
+        }
+
+        /* Two-Column Layout */
+        .two-col {
+            display: flex;
+            gap: 5mm;
+            margin-bottom: 5mm;
+        }
+
+        .two-col .col {
+            flex: 1;
+        }
+
+        /* Highlight Box */
+        .highlight {
+            background: #f5f5f5;
+            border-left: 3px solid #000;
+            padding: 4mm;
+            margin-bottom: 5mm;
+        }
+
+        /* Questions List */
+        .questions-list {
+            background: #f5f5f5;
+            padding: 5mm;
+            border: 1px solid #ccc;
+        }
+
+        .questions-list ol {
+            margin-left: 5mm;
+        }
+
+        .questions-list li {
+            margin-bottom: 3mm;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER -->
+<div class="page">
+    <div class="cover">
+        <h1>WSOPTV OTT Platform</h1>
+        <h2>Proof of Concept</h2>
+
+        <div class="meta">
+            <p><strong>Prepared for:</strong> Vimeo OTT Technical Team</p>
+            <p><strong>Date:</strong> February 2026</p>
+            <p><strong>Version:</strong> 1.0</p>
+        </div>
+
+        <div class="subtitle">
+            WSOP (World Series of Poker)<br>
+            Official OTT Streaming Platform
+        </div>
+
+        <div class="confidential">
+            Confidential - For Vimeo Technical Review Only
+        </div>
+    </div>
+    <div class="page-footer">Page 1 of 5</div>
+</div>
+
+<!-- PAGE 2: EXECUTIVE SUMMARY + CURRENT STATUS -->
+<div class="page">
+    <h1>EXECUTIVE SUMMARY</h1>
+
+    <h2>Project Overview</h2>
+    <p>WSOPTV is the official OTT streaming platform for the World Series of Poker (WSOP). The platform will deliver live tournament streams, VOD replays, and highlights to poker fans worldwide.</p>
+
+    <h2>Key Differentiators (vs YouTube)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>YouTube</th>
+                <th>WSOPTV</th>
+                <th>Phase</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Timeshift</strong></td>
+                <td>N/A</td>
+                <td>Rewind during live broadcast</td>
+                <td>MVP</td>
+            </tr>
+            <tr>
+                <td><strong>Archive</strong></td>
+                <td>Private</td>
+                <td>Permanent VOD preservation</td>
+                <td>MVP</td>
+            </tr>
+            <tr>
+                <td><strong>Selected View</strong></td>
+                <td>Limited</td>
+                <td>Choose from multiple live streams</td>
+                <td>MVP</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight">
+        <p><strong>Target Launch:</strong> Q3 2026 (MVP)</p>
+        <p><strong>Platform:</strong> Vimeo OTT (SaaS-based)</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2>CURRENT STATUS</h2>
+    <ul>
+        <li><span class="status-icon status-done"></span> Videos uploaded to Vimeo OTT trial (wsoptv.vhx.tv)</li>
+        <li><span class="status-icon status-done"></span> Collections organized by series/event type</li>
+        <li><span class="status-icon status-done"></span> Basic site configuration completed</li>
+        <li><span class="status-icon status-pending"></span> Subscription plans configuration</li>
+        <li><span class="status-icon status-pending"></span> Custom branding / theme</li>
+        <li><span class="status-icon status-pending"></span> App deployment (iOS, Android, tvOS, Roku, Web)</li>
+    </ul>
+
+    <div class="page-footer">Page 2 of 5</div>
+</div>
+
+<!-- PAGE 3: TECHNICAL REQUIREMENTS -->
+<div class="page">
+    <h1>TECHNICAL REQUIREMENTS</h1>
+
+    <h2>Feature Requirements for Vimeo OTT Integration</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Requirement</th>
+                <th>Priority</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Live Streaming (HLS/DASH)</td>
+                <td>P0 - Must Have</td>
+                <td>Timeshift/DVR included</td>
+            </tr>
+            <tr>
+                <td>VOD Archive</td>
+                <td>P0 - Must Have</td>
+                <td>Permanent storage</td>
+            </tr>
+            <tr>
+                <td>5-Platform Apps</td>
+                <td>P0 - Must Have</td>
+                <td>iOS/Android/Web/tvOS/Roku</td>
+            </tr>
+            <tr>
+                <td>Subscription (Stripe)</td>
+                <td>P0 - Must Have</td>
+                <td>Monthly/Annual plans</td>
+            </tr>
+            <tr>
+                <td>Collections/Categories</td>
+                <td>P1 - Important</td>
+                <td>By series, event type</td>
+            </tr>
+            <tr>
+                <td>Chapters/Markers</td>
+                <td>P1 - Important</td>
+                <td>Key Hands markers</td>
+            </tr>
+            <tr>
+                <td>SSO Integration</td>
+                <td>P2 - Nice to Have</td>
+                <td>GGPass SAML 2.0</td>
+            </tr>
+            <tr>
+                <td>Analytics API</td>
+                <td>P2 - Nice to Have</td>
+                <td>Viewership data</td>
+            </tr>
+            <tr>
+                <td>Custom Player Branding</td>
+                <td>P2 - Nice to Have</td>
+                <td>WSOPTV theme</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Subscription Plans (2-Tier)</h2>
+    <div class="comparison-box">
+        <h3>WSOP Plus - $14.99/month or $99.99/year</h3>
+        <ul>
+            <li>Live events access</li>
+            <li>Full replays and VOD archive</li>
+            <li>Timeshift/DVR capability</li>
+            <li>5 platform support (iOS, Android, Web, tvOS, Roku)</li>
+        </ul>
+    </div>
+
+    <div class="comparison-box">
+        <h3>Free Tier</h3>
+        <ul>
+            <li>Highlights and clips only</li>
+            <li>Ad-supported</li>
+        </ul>
+    </div>
+
+    <div class="page-footer">Page 3 of 5</div>
+</div>
+
+<!-- PAGE 4: LAYOUT WIREFRAME -->
+<div class="page">
+    <h1>MVP LAYOUT WIREFRAME</h1>
+
+    <h2>Three-Tier Layout Structure</h2>
+    <p>The platform follows the NBA TV style with a three-tier layout structure optimized for sports content discovery and viewing.</p>
+
+    <img src="poc-layout-wireframe.png" alt="WSOPTV Layout Wireframe - Three-Tier Structure">
+    <p class="image-caption">Figure 1: Three-tier layout structure for the OTT platform</p>
+
+    <h2>Layout Components</h2>
+    <ol>
+        <li><strong>Live Ticker (Top)</strong> - Horizontal tournament status bar displaying live events, similar to NBA TV's score strip. Provides instant access to ongoing tournaments.</li>
+        <li><strong>Video Player (Middle)</strong> - 16:9 aspect ratio with Timeshift capability. Features live/VOD playback with chapter navigation and stream selection.</li>
+        <li><strong>Content Section (Bottom)</strong> - Highlights, categories, and related content organized by series, events, and player focus.</li>
+    </ol>
+
+    <div class="highlight">
+        <p><strong>Design Philosophy:</strong> Minimize clicks to content. Users should reach live streams or VOD content within 2-3 clicks from any page.</p>
+    </div>
+
+    <div class="page-footer">Page 4 of 5</div>
+</div>
+
+<!-- PAGE 5: NEXT STEPS + Q&A -->
+<div class="page">
+    <h1>NEXT STEPS</h1>
+
+    <h2>1. Technical Validation</h2>
+    <ul>
+        <li>Confirm Timeshift/DVR support for live streams</li>
+        <li>Verify Chapters/Markers API availability</li>
+        <li>Test Stripe BYOP (Bring Your Own Payment) integration</li>
+    </ul>
+
+    <h2>2. Content Setup</h2>
+    <ul>
+        <li><span class="status-icon status-done"></span> Sample videos uploaded to wsoptv.vhx.tv</li>
+        <li><span class="status-icon status-done"></span> Collections organized</li>
+        <li><span class="status-icon status-pending"></span> Configure subscription access rules</li>
+        <li><span class="status-icon status-pending"></span> Set up live streaming test</li>
+    </ul>
+
+    <h2>3. App Deployment</h2>
+    <ul>
+        <li><span class="status-icon status-pending"></span> iOS/Android app submission</li>
+        <li><span class="status-icon status-pending"></span> tvOS/Roku app configuration</li>
+        <li><span class="status-icon status-pending"></span> Web theme customization</li>
+    </ul>
+
+    <h2>4. Timeline</h2>
+    <ul>
+        <li><strong>Feb 2026:</strong> Technical validation + POC</li>
+        <li><strong>Mar-May 2026:</strong> Development + Content migration</li>
+        <li><strong>Jun 2026:</strong> Beta testing</li>
+        <li><strong>Q3 2026:</strong> Public launch</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <h1>QUESTIONS FOR VIMEO TECHNICAL TEAM</h1>
+    <div class="questions-list">
+        <ol>
+            <li>Does Vimeo OTT support Timeshift/DVR for live HLS streams?</li>
+            <li>Are Chapters and Key Hands markers available via API?</li>
+            <li>Can we use Stripe directly (BYOP) for subscriptions?</li>
+            <li>What level of player UI customization is supported?</li>
+            <li>Is SAML 2.0 SSO integration available for GGPass?</li>
+        </ol>
+    </div>
+
+    <div class="highlight" style="margin-top: 8mm;">
+        <p><strong>Trial Site:</strong> https://wsoptv.vhx.tv (Site ID: 264812)</p>
+        <p><strong>Contact:</strong> WSOPTV Technical Team</p>
+    </div>
+
+    <div class="page-footer">Page 5 of 5</div>
+</div>
+
+</body>
+</html>

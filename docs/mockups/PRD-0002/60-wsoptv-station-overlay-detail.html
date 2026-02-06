@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1000, initial-scale=1.0">
+    <title>WSOPTV Station - 추가 워크플로우 상세</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px 10px;
+        }
+        .container { max-width: 100%; margin: 0 auto; }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #000;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        svg { display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">WSOPTV Station 추가 워크플로우</div>
+        <div class="subtitle">기존 프로덕션 → WSOPTV Station 확장 아키텍처</div>
+
+        <svg viewBox="0 0 900 550" width="900" height="550">
+            <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#000"/>
+                </marker>
+                <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#1a4d8c"/>
+                </marker>
+                <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#2e7d32"/>
+                </marker>
+            </defs>
+
+            <!-- ===== 왼쪽: 기존 프로덕션 워크플로우 (축소) ===== -->
+            <g id="existing-workflow">
+                <rect x="10" y="10" width="220" height="530" fill="#f5f5f5" stroke="#999" stroke-width="1.5" rx="5"/>
+                <text x="120" y="32" text-anchor="middle" font-size="12" font-weight="bold" fill="#666">기존 프로덕션</text>
+                <text x="120" y="46" text-anchor="middle" font-size="9" fill="#999">(축소 표시)</text>
+
+                <!-- Section A: On-site -->
+                <g transform="translate(20, 60)">
+                    <rect width="200" height="100" fill="#fff" stroke="#666" stroke-width="1" rx="3"/>
+                    <text x="100" y="15" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">A: 현장 (Las Vegas)</text>
+
+                    <!-- Feature Tables 축소 -->
+                    <rect x="10" y="25" width="45" height="30" fill="#e8e8e8" stroke="#666" stroke-width="1" rx="2"/>
+                    <text x="32" y="38" text-anchor="middle" font-size="7">FT 1</text>
+                    <text x="32" y="50" text-anchor="middle" font-size="6" fill="#666">Cam×4</text>
+
+                    <rect x="60" y="25" width="45" height="30" fill="#e8e8e8" stroke="#666" stroke-width="1" rx="2"/>
+                    <text x="82" y="38" text-anchor="middle" font-size="7">FT 2</text>
+                    <text x="82" y="50" text-anchor="middle" font-size="6" fill="#666">Cam×4</text>
+
+                    <text x="118" y="42" font-size="10" fill="#666">...</text>
+
+                    <!-- Switcher -->
+                    <rect x="60" y="65" width="80" height="25" fill="#fff" stroke="#333" stroke-width="1" rx="2"/>
+                    <text x="100" y="82" text-anchor="middle" font-size="8" font-weight="bold">Switcher</text>
+
+                    <!-- Arrows -->
+                    <path d="M32,55 L32,60 L70,65" stroke="#666" stroke-width="1" fill="none"/>
+                    <path d="M82,55 L82,60 L100,65" stroke="#666" stroke-width="1" fill="none"/>
+                </g>
+
+                <!-- Arrow A -> B -->
+                <path d="M120,165 L120,185" stroke="#666" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+                <text x="130" y="178" font-size="7" fill="#666">LiveU</text>
+
+                <!-- Section B: LiveU Cloud -->
+                <g transform="translate(20, 190)">
+                    <rect width="200" height="70" fill="#e6f2ff" stroke="#0066cc" stroke-width="1" rx="3"/>
+                    <text x="100" y="15" text-anchor="middle" font-size="9" font-weight="bold" fill="#0066cc">B: LiveU Cloud</text>
+
+                    <rect x="15" y="28" width="55" height="25" fill="#fff" stroke="#0066cc" stroke-width="1" rx="2"/>
+                    <text x="42" y="45" text-anchor="middle" font-size="7">Channel</text>
+
+                    <rect x="80" y="28" width="50" height="25" fill="#fff" stroke="#0066cc" stroke-width="1" rx="2"/>
+                    <text x="105" y="45" text-anchor="middle" font-size="7">Matrix</text>
+
+                    <rect x="140" y="28" width="50" height="25" fill="#fff" stroke="#0066cc" stroke-width="1" rx="2"/>
+                    <text x="165" y="45" text-anchor="middle" font-size="7">Central</text>
+
+                    <path d="M70,40 L80,40" stroke="#0066cc" stroke-width="1" fill="none"/>
+                    <path d="M130,40 L140,40" stroke="#0066cc" stroke-width="1" fill="none"/>
+                </g>
+
+                <!-- Arrow B -> C -->
+                <path d="M120,265 L120,285" stroke="#666" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+                <text x="130" y="278" font-size="7" fill="#666">SRT</text>
+
+                <!-- Section C: GG Production -->
+                <g transform="translate(20, 290)">
+                    <rect width="200" height="100" fill="#fff" stroke="#333" stroke-width="1" rx="3"/>
+                    <text x="100" y="15" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">C: GG Production (서울)</text>
+
+                    <!-- Pipeline 축소 -->
+                    <g transform="translate(10, 25)">
+                        <rect x="0" y="0" width="35" height="20" fill="#f5f5f5" stroke="#666" stroke-width="1" rx="2"/>
+                        <text x="17" y="14" text-anchor="middle" font-size="6">Split</text>
+
+                        <rect x="40" y="0" width="35" height="20" fill="#f5f5f5" stroke="#666" stroke-width="1" rx="2"/>
+                        <text x="57" y="14" text-anchor="middle" font-size="6">Rating</text>
+
+                        <rect x="80" y="0" width="35" height="20" fill="#f5f5f5" stroke="#666" stroke-width="1" rx="2"/>
+                        <text x="97" y="14" text-anchor="middle" font-size="6">Select</text>
+
+                        <rect x="120" y="0" width="35" height="20" fill="#f5f5f5" stroke="#666" stroke-width="1" rx="2"/>
+                        <text x="137" y="14" text-anchor="middle" font-size="6">GFX</text>
+
+                        <rect x="160" y="0" width="25" height="20" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="2"/>
+                        <text x="172" y="14" text-anchor="middle" font-size="6">Out</text>
+                    </g>
+
+                    <!-- Delay info -->
+                    <rect x="10" y="55" width="180" height="35" fill="#fff3e0" stroke="#ef6c00" stroke-width="1" rx="2"/>
+                    <text x="100" y="70" text-anchor="middle" font-size="8" font-weight="bold" fill="#ef6c00">1-2시간 딜레이</text>
+                    <text x="100" y="83" text-anchor="middle" font-size="7" fill="#666">핸드 분할 + 편집 + 렌더</text>
+                </g>
+
+                <!-- Arrow C -> YouTube -->
+                <path d="M120,395 L120,420" stroke="#666" stroke-width="1" fill="none" marker-end="url(#arrow)"/>
+
+                <!-- YouTube -->
+                <g transform="translate(20, 425)">
+                    <rect width="200" height="50" fill="#fff" stroke="#333" stroke-width="1" rx="3"/>
+                    <text x="100" y="18" text-anchor="middle" font-size="9" font-weight="bold">YouTube 방송</text>
+                    <text x="100" y="35" text-anchor="middle" font-size="8" fill="#666">DVR OFF / 종료 후 비공개</text>
+                    <text x="100" y="46" text-anchor="middle" font-size="7" fill="#999">무료 티저 콘텐츠</text>
+                </g>
+
+                <!-- 기존 워크플로우 한계 -->
+                <g transform="translate(20, 485)">
+                    <rect width="200" height="45" fill="#ffebee" stroke="#c62828" stroke-width="1" rx="3"/>
+                    <text x="100" y="15" text-anchor="middle" font-size="8" font-weight="bold" fill="#c62828">기존 한계</text>
+                    <text x="100" y="28" text-anchor="middle" font-size="7" fill="#333">• Multi-view 불가</text>
+                    <text x="100" y="40" text-anchor="middle" font-size="7" fill="#333">• Player 직캠 불가</text>
+                </g>
+            </g>
+
+            <!-- ===== 중앙 분기 화살표 ===== -->
+            <g id="split-arrow">
+                <path d="M230,120 L280,120" stroke="#1a4d8c" stroke-width="3" fill="none" marker-end="url(#arrow-blue)"/>
+                <text x="255" y="112" text-anchor="middle" font-size="9" font-weight="bold" fill="#1a4d8c">신규</text>
+                <text x="255" y="135" text-anchor="middle" font-size="8" fill="#1a4d8c">추가</text>
+            </g>
+
+            <!-- ===== 오른쪽: WSOPTV Station (확대) ===== -->
+            <g id="wsoptv-station">
+                <rect x="290" y="10" width="600" height="530" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3" rx="5"/>
+                <text x="590" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#2e7d32">WSOPTV Station 추가 워크플로우</text>
+                <text x="590" y="55" text-anchor="middle" font-size="11" fill="#1b5e20">Multi-view + Player 직캠 구현을 위한 신규 설계</text>
+
+                <!-- ===== 추가 작업 1: 현장 네트워크 증설 ===== -->
+                <g transform="translate(310, 75)">
+                    <rect width="260" height="100" fill="#fff" stroke="#1a4d8c" stroke-width="2" rx="5"/>
+                    <rect x="0" y="0" width="260" height="25" fill="#1a4d8c" rx="5 5 0 0"/>
+                    <text x="130" y="17" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">① 현장 네트워크 망 증설</text>
+
+                    <text x="15" y="45" font-size="11" fill="#333">• 10G 네트워크 인프라 확장</text>
+                    <text x="15" y="65" font-size="11" fill="#333">• 각 Feature Table → OTT 서버 직접 연결</text>
+                    <text x="15" y="85" font-size="10" fill="#666">※ 기존 방송망과 별도의 OTT 전용망 구축</text>
+                </g>
+
+                <!-- ===== 추가 작업 2: Player 카메라 1:1 매칭 ===== -->
+                <g transform="translate(310, 185)">
+                    <rect width="260" height="130" fill="#fff" stroke="#1a4d8c" stroke-width="2" rx="5"/>
+                    <rect x="0" y="0" width="260" height="25" fill="#1a4d8c" rx="5 5 0 0"/>
+                    <text x="130" y="17" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">② Player 카메라 1:1 매칭</text>
+
+                    <text x="15" y="45" font-size="11" fill="#333">• Feature Table별 P1~P8 개별 카메라</text>
+                    <text x="15" y="65" font-size="11" fill="#333">• 8인 테이블 기준 8대 추가 카메라</text>
+
+                    <!-- 카메라 아이콘들 -->
+                    <g transform="translate(20, 75)">
+                        <rect x="0" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="13" y="14" text-anchor="middle" font-size="8" font-weight="bold">P1</text>
+
+                        <rect x="30" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="43" y="14" text-anchor="middle" font-size="8" font-weight="bold">P2</text>
+
+                        <rect x="60" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="73" y="14" text-anchor="middle" font-size="8" font-weight="bold">P3</text>
+
+                        <rect x="90" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="103" y="14" text-anchor="middle" font-size="8" font-weight="bold">P4</text>
+
+                        <rect x="120" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="133" y="14" text-anchor="middle" font-size="8" font-weight="bold">P5</text>
+
+                        <rect x="150" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="163" y="14" text-anchor="middle" font-size="8" font-weight="bold">P6</text>
+
+                        <rect x="180" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="193" y="14" text-anchor="middle" font-size="8" font-weight="bold">P7</text>
+
+                        <rect x="210" y="0" width="26" height="20" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="223" y="14" text-anchor="middle" font-size="8" font-weight="bold">P8</text>
+                    </g>
+
+                    <text x="15" y="115" font-size="10" fill="#c62828" font-weight="bold">※ Phase 4 (플레이어 직캠) 구현 필수</text>
+                </g>
+
+                <!-- ===== 추가 작업 3: PGM 추가 전송 ===== -->
+                <g transform="translate(590, 75)">
+                    <rect width="280" height="100" fill="#fff" stroke="#1a4d8c" stroke-width="2" rx="5"/>
+                    <rect x="0" y="0" width="280" height="25" fill="#1a4d8c" rx="5 5 0 0"/>
+                    <text x="140" y="17" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">③ PGM → OTT 서버 추가 전송</text>
+
+                    <text x="15" y="45" font-size="11" fill="#333">• Feature Table PGM 스트림 분기</text>
+                    <text x="15" y="65" font-size="11" fill="#333">• 기존 YouTube 송출과 동시에 OTT 서버로 전송</text>
+                    <text x="15" y="85" font-size="10" fill="#666">※ 실시간 PGM 스트림 병렬 분배</text>
+                </g>
+
+                <!-- ===== 추가 작업 4: 시간 동기화 ===== -->
+                <g transform="translate(590, 185)">
+                    <rect width="280" height="130" fill="#fff" stroke="#1a4d8c" stroke-width="2" rx="5"/>
+                    <rect x="0" y="0" width="280" height="25" fill="#1a4d8c" rx="5 5 0 0"/>
+                    <text x="140" y="17" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">④ OTT 소스 시간대 동기화</text>
+
+                    <text x="15" y="45" font-size="11" fill="#333">• LTC Timecode 기반 동기화</text>
+                    <text x="15" y="65" font-size="11" fill="#333">• Frame-accurate Sync 필수</text>
+
+                    <!-- 동기화 다이어그램 -->
+                    <g transform="translate(15, 75)">
+                        <rect x="0" y="0" width="55" height="22" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="27" y="15" text-anchor="middle" font-size="8">PGM</text>
+
+                        <rect x="70" y="0" width="55" height="22" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="97" y="15" text-anchor="middle" font-size="8">P1~P8</text>
+
+                        <rect x="140" y="0" width="55" height="22" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="2"/>
+                        <text x="167" y="15" text-anchor="middle" font-size="8">Stats</text>
+
+                        <path d="M55,11 L70,11" stroke="#1565c0" stroke-width="1" fill="none"/>
+                        <path d="M125,11 L140,11" stroke="#1565c0" stroke-width="1" fill="none"/>
+
+                        <rect x="200" y="-5" width="50" height="32" fill="#2e7d32" stroke="#1b5e20" stroke-width="1" rx="3"/>
+                        <text x="225" y="8" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">SYNC</text>
+                        <text x="225" y="20" text-anchor="middle" font-size="6" fill="#fff">LTC</text>
+
+                        <path d="M195,11 L200,11" stroke="#1565c0" stroke-width="1" fill="none"/>
+                    </g>
+
+                    <text x="15" y="115" font-size="10" fill="#666">※ 모든 소스가 동일 타임라인에서 재생</text>
+                </g>
+
+                <!-- ===== OTT 서버 영역 ===== -->
+                <g transform="translate(310, 330)">
+                    <rect width="560" height="90" fill="#fff" stroke="#2e7d32" stroke-width="2" rx="5"/>
+                    <rect x="0" y="0" width="560" height="28" fill="#2e7d32" rx="5 5 0 0"/>
+                    <text x="280" y="19" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">OTT 서버 (메가존클라우드)</text>
+
+                    <!-- 기능들 -->
+                    <g transform="translate(20, 40)">
+                        <rect x="0" y="0" width="100" height="38" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="3"/>
+                        <text x="50" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">Multi-view</text>
+                        <text x="50" y="32" text-anchor="middle" font-size="9" fill="#333">2×2 동시 시청</text>
+                    </g>
+
+                    <g transform="translate(135, 40)">
+                        <rect x="0" y="0" width="100" height="38" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="3"/>
+                        <text x="50" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">Player Cam</text>
+                        <text x="50" y="32" text-anchor="middle" font-size="9" fill="#333">직캠 스트림</text>
+                    </g>
+
+                    <g transform="translate(250, 40)">
+                        <rect x="0" y="0" width="100" height="38" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="3"/>
+                        <text x="50" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">Timeshift</text>
+                        <text x="50" y="32" text-anchor="middle" font-size="9" fill="#333">라이브 되감기</text>
+                    </g>
+
+                    <g transform="translate(365, 40)">
+                        <rect x="0" y="0" width="100" height="38" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="3"/>
+                        <text x="50" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">StatsView</text>
+                        <text x="50" y="32" text-anchor="middle" font-size="9" fill="#333">통계 오버레이</text>
+                    </g>
+
+                    <g transform="translate(480, 40)">
+                        <rect x="0" y="0" width="65" height="38" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="3"/>
+                        <text x="32" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">DVR</text>
+                        <text x="32" y="32" text-anchor="middle" font-size="9" fill="#333">24hr</text>
+                    </g>
+                </g>
+
+                <!-- ===== WSOPTV 출력 ===== -->
+                <g transform="translate(310, 435)">
+                    <rect width="560" height="90" fill="#fff" stroke="#000" stroke-width="2" rx="5"/>
+                    <text x="280" y="22" text-anchor="middle" font-size="14" font-weight="bold">WSOPTV 유료 플랫폼</text>
+
+                    <g transform="translate(30, 40)">
+                        <rect x="0" y="0" width="150" height="38" fill="#f5f5f5" stroke="#333" stroke-width="1" rx="3"/>
+                        <text x="75" y="16" text-anchor="middle" font-size="11" font-weight="bold">Standard Mode</text>
+                        <text x="75" y="32" text-anchor="middle" font-size="9" fill="#666">$9.99/월</text>
+                    </g>
+
+                    <g transform="translate(200, 40)">
+                        <rect x="0" y="0" width="150" height="38" fill="#1a1a2e" stroke="#000" stroke-width="2" rx="3"/>
+                        <text x="75" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Advanced Mode</text>
+                        <text x="75" y="32" text-anchor="middle" font-size="9" fill="#ddd">$49.99/월</text>
+                    </g>
+
+                    <g transform="translate(370, 40)">
+                        <rect x="0" y="0" width="170" height="38" fill="#f5f5f5" stroke="#333" stroke-width="1" rx="3"/>
+                        <text x="85" y="16" text-anchor="middle" font-size="10" font-weight="bold">핵심 차별점</text>
+                        <text x="85" y="32" text-anchor="middle" font-size="9" fill="#2e7d32">Multi-view + Player 직캠</text>
+                    </g>
+                </g>
+
+                <!-- 화살표: OTT 서버 -> WSOPTV -->
+                <path d="M590,420 L590,435" stroke="#2e7d32" stroke-width="2" fill="none" marker-end="url(#arrow-green)"/>
+            </g>
+
+            <!-- ===== 범례 ===== -->
+            <g transform="translate(10, 545)">
+                <text x="0" y="0" font-size="9" font-weight="bold">범례:</text>
+                <rect x="40" y="-10" width="14" height="14" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
+                <text x="58" y="0" font-size="8">기존 워크플로우</text>
+                <rect x="140" y="-10" width="14" height="14" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+                <text x="158" y="0" font-size="8">WSOPTV Station (신규)</text>
+                <rect x="270" y="-10" width="14" height="14" fill="#1a4d8c"/>
+                <text x="288" y="0" font-size="8">추가 작업 항목</text>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>
