@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Node
+node_modules/
+
+# OMC state (session-specific)
+.omc/
+
+# Attachments cache
+attachments/
+
+# Broken filenames
+C\357\200\272*
+
+# bkit state
+docs/.bkit-memory.json
+docs/.pdca-snapshots/
+docs/.pdca-status.json
+
+# Stitch API cache
+stitch/

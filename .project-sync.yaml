@@ -1,0 +1,67 @@
+# .project-sync.yaml - Project Context Discovery 설정
+# /auto --daily 실행 시 이 프로젝트에 맞는 워크플로우를 자동 선택합니다.
+#
+# Discovery 순서:
+#   1. CWD에서 .project-sync.yaml 탐색
+#   2. 부모 디렉토리 1단계까지 확인
+#   3. 없으면 범용 daily 스킬로 fallback
+
+version: "1.0"
+project_name: "WSOPTV OTT"
+
+# ── Daily Sync 라우팅 ──
+daily:
+  # 프로젝트 전용 스킬 (범용 "daily" 대신 호출)
+  skill: "daily-sync"
+  default_args: ""
+
+  # 데이터 소스 선언
+  sources:
+    gmail:
+      enabled: true
+      label: "wsoptv"
+      label_id: "Label_8829124364241731876"
+      vendor_domains:
+        - "vimeo.com"
+        - "brightcove.com"
+        - "megazone.com"
+        - "mz.co.kr"
+        - "jrmax.co.kr"
+        - "amazon.com"
+        - "malgum.com"
+        - "wecandeo.com"
+      search_strategy: "3-step"  # label -> domain -> keyword
+      exclude_senders:
+        - "vimeo@vimeo.com"      # 시스템 알림
+        - "noreply@"
+        - "no-reply@"
+        - "notifications@"
+
+    slack:
+      enabled: true
+      channel_id: "C09TX3M1J2W"
+      channel_name: "#wsoptv"
+
+    slack_lists:
+      enabled: true
+      list_id: "F0ACQJS6KND"
+      team_id: "T03QGJ73GBB"
+
+    calendar:
+      enabled: false
+
+    github:
+      enabled: false
+
+  # 프로젝트 내부 상세 설정 (daily-sync 스킬이 참조)
+  config_file: "wsoptv_sync_config.yaml"
+
+  # 출력 대상
+  output:
+    report_dir: "docs/management"
+    slack_channel: "C09TX3M1J2W"
+
+  # Gmail Housekeeping (Phase 4)
+  housekeeping:
+    gmail_label_auto: true
+    inbox_cleanup: "confirm"  # "auto" | "confirm" | "skip"
