@@ -4,7 +4,7 @@ description: >
   WSOPTV 프로젝트 일일 동기화 스킬. Gmail/Slack 데이터를 Claude Code가 직접 분석하여
   업체 상태, 견적, 회신 필요 여부를 추론하고 Slack Lists를 업데이트합니다.
   별도 API 호출 없이 Claude Code 세션 내에서 분석합니다.
-version: 1.1.0
+version: 1.4.0
 
 triggers:
   keywords:
@@ -38,6 +38,7 @@ capabilities:
   - status_inference_ai
   - slack_lists_update
   - attachment_analysis
+  - quote_formatting
 
 model_preference: sonnet
 auto_trigger: true
@@ -356,6 +357,168 @@ cd C:\claude\wsoptv_ott && python scripts/sync/lists_sync.py update --vendor "Me
 
 ---
 
+## Phase 4: Gmail Housekeeping
+
+Phase 1~3 완료 후, Gmail 라벨 관리 및 INBOX 정리를 자동 수행합니다.
+
+### 4a. 라벨 자동 적용 (자동 실행)
+
+Phase 1의 Step 2/3에서 발견된 업체 이메일 중 WSOPTV 라벨이 없는 것을 자동으로 라벨링합니다.
+
+```python
+# Gmail API로 직접 라벨 추가
+import json
+from pathlib import Path
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
+
+token_path = Path('C:/claude/json/token_gmail.json')
+token_data = json.loads(token_path.read_text())
+creds = Credentials(
+    token=token_data['token'],
+    refresh_token=token_data['refresh_token'],
+    token_uri=token_data.get('token_uri', 'https://oauth2.googleapis.com/token'),
+    client_id=token_data['client_id'],
+    client_secret=token_data['client_secret'],
+    scopes=token_data.get('scopes', ['https://mail.google.com/'])
+)
+if creds.expired:
+    creds.refresh(Request())
+
+service = build('gmail', 'v1', credentials=creds)
+WSOPTV_LABEL_ID = 'Label_8829124364241731876'
+```
+
+**필터 규칙:**
+
+| 대상 | 처리 |
+|------|------|
+| 업체 담당자 이메일 (도메인 매칭) | WSOPTV 라벨 추가 |
+| `vimeo@vimeo.com` (시스템 알림) | 제외 |
+| `noreply`, `no-reply` 주소 | 제외 |
+| `drive-shares` (Google Docs 공유) | 제외 |
+| `notifications@` 주소 | 제외 |
+
+**검증 쿼리:**
+```python
+# 30일 내 업체 도메인 이메일 중 라벨 없는 것 전체 점검
+queries = [
+    'from:vimeo.com newer_than:30d -label:WSOPTV',
+    'from:brightcove.com newer_than:30d -label:WSOPTV',
+    'from:megazone.com OR from:mz.co.kr newer_than:30d -label:WSOPTV',
+    'from:jrmax.co.kr newer_than:30d -label:WSOPTV',
+    'from:amazon.com newer_than:30d -label:WSOPTV',
+]
+```
+
+### 4b. INBOX 정리 (사용자 확인 후 실행)
+
+WSOPTV 라벨이 적용된 메일을 INBOX에서 제거하여 WSOPTV 폴더에서만 보이도록 합니다.
+
+```python
+# WSOPTV + INBOX에 있는 이메일 찾기
+result = service.users().messages().list(
+    userId='me',
+    q='label:WSOPTV label:INBOX',
+    maxResults=100
+).execute()
+
+# 사용자 확인 후 INBOX 라벨 제거 (archive)
+for msg_info in messages:
+    service.users().messages().modify(
+        userId='me',
+        id=msg_info['id'],
+        body={'removeLabelIds': ['INBOX']}
+    ).execute()
+```
+
+**안전장치:**
+
+| 조건 | 동작 |
+|------|------|
+| UNREAD 메일 | AskUserQuestion으로 사용자 확인 필수 |
+| READ 메일 | `--auto-archive` 시 자동 이동, 기본은 확인 |
+| `--keep-inbox` 플래그 | Phase 4b 완전 건너뛰기 |
+
+### 4c. 결과 보고
+
+보고서 마지막에 Gmail 정리 결과를 추가합니다:
+
+```
+### Gmail 정리
+- WSOPTV 라벨 적용: 3건 (Vimeo 2, Brightcove 1)
+- INBOX → WSOPTV 이동: 3건
+- 건너뛴 시스템 메일: 45건 (Vimeo 업로드 알림)
+```
+
+### Phase 4 옵션
+
+| 플래그 | 기본값 | 설명 |
+|--------|--------|------|
+| `--no-label` | false | Phase 4a 건너뛰기 (라벨 적용 안함) |
+| `--auto-archive` | false | Phase 4b 사용자 확인 없이 자동 이동 |
+| `--keep-inbox` | false | Phase 4b 완전 건너뛰기 (INBOX 유지) |
+
+---
+
+### Phase 5: Slack Lists 갱신 (`--slack` 옵션 시)
+
+`/auto --daily --slack` 실행 시, Phase 1~4 완료 후 Slack Lists 업체 현황을 자동 갱신합니다.
+
+**트리거**: `/auto --daily --slack` 또는 `.project-sync.yaml`의 `daily.sources.slack_lists.enabled: true`
+
+#### 5a. 분석 결과 → Slack Lists 업데이트
+
+Phase 2 AI 분석 결과를 기반으로 업체별 필드를 업데이트합니다.
+
+```python
+# ListsSyncManager로 업체별 업데이트
+from scripts.sync.lists_sync import ListsSyncManager
+
+manager = ListsSyncManager()
+manager.update_item('Vimeo OTT',
+    status='협상 중',
+    quote='Fixed $115K/yr + Infra $10K-$275K/yr',
+    last_contact='2026-02-06',
+    next_action='수정 견적 대기')
+```
+
+**업데이트 필드 매핑:**
+
+| AI 분석 결과 | Slack Lists 필드 | 규칙 |
+|-------------|-----------------|------|
+| 협상 상태 | `status` | `wsoptv_sync_config.yaml` status_options 매핑 |
+| 견적 금액 | `quote` | QuoteFormatter 3줄 이내 |
+| 마지막 연락일 | `last_contact` | 최신 이메일 날짜 |
+| 권장 액션 | `next_action` | AI 권장 사항 |
+
+**안전장치:**
+
+| 조건 | 동작 |
+|------|------|
+| status가 부정 방향 (on_hold, excluded) | AskUserQuestion 확인 필수 |
+| 견적 금액 변경 | 기존 → 새 값 비교 출력 후 적용 |
+| 새 업체 발견 | 자동 추가 안함, 사용자 확인 |
+
+#### 5b. 요약 메시지 Slack 채널 포스팅
+
+```python
+manager.generate_summary_message()
+manager.post_summary()
+```
+
+#### 5c. 결과 보고
+
+```
+### Slack Lists 갱신 결과
+- Vimeo OTT: status → "협상 중", quote 업데이트
+- Brightcove: last_contact → "2026-02-06"
+- 요약 메시지: #wsoptv 채널에 포스팅 완료
+```
+
+---
+
 ## 토큰 효율성
 
 ### 증분 분석
@@ -406,6 +569,29 @@ cd C:\claude && python -m lib.slack login
 ---
 
 ## 변경 로그
+
+### v1.4.0 (2026-02-06)
+
+- Phase 5: Slack Lists 자동 갱신 추가 (--slack 옵션 연동)
+- `.project-sync.yaml` 기반 Project Context Discovery 연동
+- ListsSyncManager를 통한 업체 상태/견적/next_action 자동 업데이트
+- 안전장치: 부정 상태 변경 시 사용자 확인, 견적 변경 비교 출력
+
+### v1.3.0 (2026-02-06)
+
+- Phase 4: Gmail Housekeeping 추가
+- 4a: 업체 이메일 WSOPTV 라벨 자동 적용 (시스템 메일 필터링)
+- 4b: INBOX → WSOPTV 폴더 이동 (사용자 확인 후)
+- 4c: 라벨/이동 결과 보고서 추가
+- 옵션: `--no-label`, `--auto-archive`, `--keep-inbox`
+
+### v1.2.0 (2026-02-05)
+
+- QuoteFormatter 시스템 추가 (상황 적응형 포맷)
+- USD 기준 통화 통일 (환율 1,375원/USD 고정)
+- 예산 비교는 요약 메시지에서만 표시
+- Slack Lists quote 필드 3줄 이내 최적화
+- 업체별 자동 포맷 전략 선택 (decision/negotiation/hybrid)
 
 ### v1.1.0 (2026-02-04)
 

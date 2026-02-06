@@ -11,6 +11,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+# Windows cp949 인코딩 에러 방지
+if sys.stdout and hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 # Add C:\claude to path for lib.slack import
 _script_dir = Path(__file__).resolve().parent
 _wsoptv_root = _script_dir.parents[1]
@@ -24,6 +31,33 @@ try:
     from .models import SyncResult
 except ImportError:
     from models import SyncResult
+
+# Import attachment/parser/extractor modules
+try:
+    from .collectors.attachment_downloader import AttachmentDownloader
+    from .parsers.pdf_parser import get_pdf_parser
+    from .parsers.excel_parser import get_excel_parser
+    from .extractors.quote_extractor import get_quote_extractor
+except ImportError:
+    try:
+        from collectors.attachment_downloader import AttachmentDownloader
+        from parsers.pdf_parser import get_pdf_parser
+        from parsers.excel_parser import get_excel_parser
+        from extractors.quote_extractor import get_quote_extractor
+    except ImportError:
+        AttachmentDownloader = None
+        get_pdf_parser = None
+        get_excel_parser = None
+        get_quote_extractor = None
+
+# QuoteFormatter import
+try:
+    from .formatters.quote_formatter import QuoteFormatter
+except ImportError:
+    try:
+        from formatters.quote_formatter import QuoteFormatter
+    except ImportError:
+        QuoteFormatter = None
 
 
 # Slack Lists Configuration (from slack-kanban-config.md)
@@ -54,6 +88,498 @@ LISTS_CONFIG = {
         "Vimeo OTT": "Rec0ACQJY2W65",
     },
 }
+
+
+# 상태 우선순위 (숫자가 높을수록 진행된 상태)
+STATUS_PRIORITY = {
+    "보류": 0,        # 특수 상태 - 다른 상태로의 전환 허용
+    "견적 대기": 1,
+    "검토 중": 2,
+    "RFP 검토": 2,
+    "협상 중": 3,
+    "계약 진행": 4,
+}
+
+
+class QuoteAnalyzer:
+    """첨부파일 AI 분석 기반 견적 추론 파이프라인."""
+
+    def __init__(self, cache_dir: Path = None, gmail_client=None):
+        """
+        Args:
+            cache_dir: 첨부파일 저장 디렉토리
+            gmail_client: GmailClient 인스턴스 (없으면 자동 생성)
+        """
+        self.cache_dir = cache_dir or Path("C:/claude/wsoptv_ott/attachments")
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.gmail_client = gmail_client
+        self._downloader = None
+        self._pdf_parser = None
+        self._excel_parser = None
+        self._quote_extractor = None
+
+    def _get_downloader(self):
+        """AttachmentDownloader lazy init."""
+        if self._downloader is None:
+            if AttachmentDownloader is None:
+                raise ImportError("AttachmentDownloader not available")
+            self._downloader = AttachmentDownloader(
+                gmail_client=self.gmail_client,
+                cache_dir=self.cache_dir,
+            )
+        return self._downloader
+
+    def _get_pdf_parser(self):
+        """PDFParser lazy init."""
+        if self._pdf_parser is None:
+            if get_pdf_parser is None:
+                raise ImportError("PDFParser not available")
+            self._pdf_parser = get_pdf_parser()
+        return self._pdf_parser
+
+    def _get_excel_parser(self):
+        """ExcelParser lazy init."""
+        if self._excel_parser is None:
+            if get_excel_parser is None:
+                raise ImportError("ExcelParser not available")
+            self._excel_parser = get_excel_parser()
+        return self._excel_parser
+
+    def _get_quote_extractor(self):
+        """QuoteExtractor lazy init."""
+        if self._quote_extractor is None:
+            if get_quote_extractor is None:
+                raise ImportError("QuoteExtractor not available")
+            self._quote_extractor = get_quote_extractor()
+        return self._quote_extractor
+
+    def analyze_quote_emails(
+        self,
+        emails: list[dict],
+        changes: list[dict],
+    ) -> dict[str, dict]:
+        """
+        견적 감지된 이메일의 첨부파일을 분석.
+
+        Args:
+            emails: Gmail 원본 이메일 객체 리스트 (gmail_formatted 형식)
+            changes: VendorChangeDetector.analyze_gmail_messages() 결과
+
+        Returns:
+            vendor별 분석 결과 dict
+            {
+                "Vimeo OTT": {
+                    "files_analyzed": 2,
+                    "quote_summary": "$42.5K ~ $388K",
+                    "options": [...QuoteOption...],
+                    "raw_texts": [...],
+                },
+                ...
+            }
+        """
+        # 견적 감지된 변경만 필터
+        quote_changes = [c for c in changes if c.get("quote_detected")]
+        if not quote_changes:
+            return {}
+
+        # email_id → email 매핑
+        email_map = {}
+        for email in emails:
+            eid = email.get("id", "")
+            if eid:
+                email_map[eid] = email
+
+        # vendor별 분석 대상 email 수집
+        vendor_emails = {}
+        for change in quote_changes:
+            vendor = change.get("vendor", "")
+            if not vendor:
+                continue
+
+            # 같은 vendor의 email 중 quote_detected인 것 찾기
+            # change에 직접 email_id가 없으면 subject로 매칭
+            matched_email_ids = []
+            for eid, email in email_map.items():
+                email_vendor = self._detect_vendor_from_email(email)
+                if email_vendor == vendor and email.get("has_attachments"):
+                    matched_email_ids.append(eid)
+
+            if vendor not in vendor_emails:
+                vendor_emails[vendor] = set()
+            vendor_emails[vendor].update(matched_email_ids)
+
+        # vendor별 첨부파일 다운로드 및 분석
+        results = {}
+        for vendor, email_ids in vendor_emails.items():
+            vendor_result = {
+                "files_analyzed": 0,
+                "quote_summary": "N/A",
+                "options": [],
+                "raw_texts": [],
+                "errors": [],
+            }
+
+            for email_id in email_ids:
+                try:
+                    attachments = self._download_attachments(email_id)
+                    for att_path in attachments:
+                        try:
+                            # Excel 파일은 직접 추출, PDF는 파싱 후 추출
+                            if att_path.suffix.lower() in (".xlsx", ".xls"):
+                                quotes = self._extract_quotes_from_excel(att_path)
+                                vendor_result["files_analyzed"] += 1
+                                vendor_result["options"].extend(quotes)
+                            else:
+                                parsed_text = self._parse_file(att_path)
+                                if parsed_text:
+                                    vendor_result["raw_texts"].append(parsed_text)
+                                    vendor_result["files_analyzed"] += 1
+
+                                    # 금액 추출
+                                    quotes = self._extract_quotes(parsed_text, vendor)
+                                    vendor_result["options"].extend(quotes)
+                        except Exception as e:
+                            vendor_result["errors"].append(
+                                f"Parse error ({att_path.name}): {e}"
+                            )
+                except Exception as e:
+                    vendor_result["errors"].append(
+                        f"Download error (email {email_id[:8]}): {e}"
+                    )
+
+            # 견적 요약 생성
+            vendor_result["quote_summary"] = self._generate_ai_summary(
+                vendor=vendor,
+                parsed_content="\n---\n".join(vendor_result["raw_texts"]),
+                extracted_quotes=vendor_result["options"],
+            )
+
+            results[vendor] = vendor_result
+
+        return results
+
+    def _detect_vendor_from_email(self, email: dict) -> Optional[str]:
+        """이메일에서 vendor 감지 (VendorChangeDetector 로직 재사용)."""
+        sender = email.get("sender", "")
+        subject = email.get("subject", "")
+        email_domain = sender.split("@")[-1].lower() if "@" in sender else ""
+
+        vendor_domains = {
+            "brightcove": "Brightcove",
+            "megazone": "메가존클라우드",
+            "megazonecloud": "메가존클라우드",
+            "mz.co.kr": "메가존클라우드",
+            "vimeo": "Vimeo OTT",
+            "jrmax": "Vimeo OTT",
+            "wecandeo": "맑음소프트 (WECANDEO)",
+            "malgum": "맑음소프트 (WECANDEO)",
+        }
+
+        for domain_key, vendor_name in vendor_domains.items():
+            if domain_key in email_domain or domain_key in subject.lower():
+                return vendor_name
+        return None
+
+    def _download_attachments(self, email_id: str) -> list[Path]:
+        """
+        이메일 첨부파일 다운로드 (캐시 활용).
+
+        Args:
+            email_id: Gmail message ID
+
+        Returns:
+            다운로드된 파일 경로 리스트 (PDF/Excel만)
+        """
+        downloader = self._get_downloader()
+        attachments = downloader.get_quote_attachments(email_id)
+
+        paths = []
+        for att in attachments:
+            if att.local_path:
+                path = Path(att.local_path)
+                if path.exists():
+                    paths.append(path)
+
+        return paths
+
+    def _parse_file(self, file_path: Path) -> str:
+        """
+        PDF/Excel 파일 파싱하여 텍스트 반환.
+
+        Args:
+            file_path: 파일 경로
+
+        Returns:
+            추출된 텍스트 내용
+        """
+        suffix = file_path.suffix.lower()
+
+        if suffix == ".pdf":
+            parser = self._get_pdf_parser()
+            result = parser.extract_all(file_path)
+            text_parts = [result.get("text", "")]
+
+            # 테이블 데이터도 텍스트로 변환
+            for table in result.get("tables", []):
+                try:
+                    import pandas as pd
+                    if isinstance(table, pd.DataFrame):
+                        text_parts.append(table.to_string())
+                    else:
+                        for row in table:
+                            text_parts.append(" | ".join(str(c) for c in row if c))
+                except Exception:
+                    if isinstance(table, list):
+                        for row in table:
+                            text_parts.append(
+                                " | ".join(str(c) for c in row if c)
+                            )
+
+            return "\n".join(text_parts)
+
+        elif suffix in (".xlsx", ".xls"):
+            parser = self._get_excel_parser()
+            sheets = parser.parse(file_path)
+            text_parts = []
+
+            for sheet_name, data in sheets.items():
+                text_parts.append(f"[Sheet: {sheet_name}]")
+                try:
+                    import pandas as pd
+                    if isinstance(data, pd.DataFrame):
+                        text_parts.append(data.to_string())
+                    else:
+                        for row in data:
+                            text_parts.append(
+                                " | ".join(str(c) for c in row if c is not None)
+                            )
+                except Exception:
+                    if isinstance(data, list):
+                        for row in data:
+                            text_parts.append(
+                                " | ".join(str(c) for c in row if c is not None)
+                            )
+
+            return "\n".join(text_parts)
+
+        return ""
+
+    def _extract_quotes(self, text: str, vendor: str) -> list:
+        """
+        규칙 기반 금액 추출.
+
+        Args:
+            text: 파싱된 텍스트
+            vendor: 업체명
+
+        Returns:
+            QuoteOption 리스트
+        """
+        import re
+
+        extractor = self._get_quote_extractor()
+        options = extractor.extract_from_text(text)
+
+        # $ 접두사 금액을 원본 텍스트에서 추출하여 USD 보정
+        dollar_amounts = set()
+        for m in re.finditer(r'\$\s*([\d,]+(?:\.\d+)?)', text):
+            try:
+                amt = float(m.group(1).replace(",", ""))
+                dollar_amounts.add(amt)
+            except ValueError:
+                pass
+
+        for opt in options:
+            # currency 보정: 원본에 $ 접두사가 있으면 USD
+            if opt.total_amount is not None:
+                opt_amt = float(opt.total_amount)
+                if opt_amt in dollar_amounts:
+                    opt.currency = "USD"
+
+            # source_file에 vendor 정보 추가
+            if not opt.source_file:
+                opt.source_file = f"attachment:{vendor}"
+
+        return options
+
+    def _extract_quotes_from_excel(self, file_path: Path) -> list:
+        """
+        Excel 시트에서 견적 금액을 직접 추출.
+
+        총합/정가/금액 키워드가 있는 행에서 숫자 셀을 찾아 추출.
+        통화는 금액 범위로 추론 (1000~1M = USD, 1M+ = KRW).
+
+        Args:
+            file_path: Excel 파일 경로
+
+        Returns:
+            QuoteOption 리스트
+        """
+        try:
+            from openpyxl import load_workbook
+        except ImportError:
+            raise ImportError("openpyxl not available: pip install openpyxl")
+
+        # Import QuoteOption
+        try:
+            from models_v2 import QuoteOption
+        except ImportError:
+            try:
+                from .models_v2 import QuoteOption
+            except ImportError:
+                return []
+
+        options = []
+        wb = load_workbook(file_path, data_only=True)
+
+        # 키워드 패턴
+        quote_keywords = ["총합", "정가", "금액", "할인", "이용", "annual", "total", "pricing"]
+        discount_keywords = ["할인", "discount", "적용"]
+
+        for sheet_name in wb.sheetnames:
+            ws = wb[sheet_name]
+
+            # 시트별 옵션명 추출
+            sheet_option_name = sheet_name
+
+            # 시트별로 후보 행 수집 (할인가 vs 정가)
+            discount_candidates = []
+            regular_candidates = []
+
+            # 각 행을 순회하며 키워드 + 숫자 셀 찾기
+            for row_idx, row in enumerate(ws.iter_rows(min_row=1, values_only=True), start=1):
+                if not row:
+                    continue
+
+                # 행 내용을 문자열로 변환
+                row_text = " ".join(str(cell).lower() for cell in row if cell is not None)
+
+                # 키워드가 있는지 확인
+                has_quote_keyword = any(kw in row_text for kw in quote_keywords)
+                if not has_quote_keyword:
+                    continue
+
+                # 행에서 숫자 셀 추출 (float/int)
+                amounts = []
+                for cell_idx, cell in enumerate(row):
+                    if isinstance(cell, (int, float)):
+                        # 1000 미만은 단가로 간주하여 무시
+                        if cell >= 1000:
+                            amounts.append(cell)
+
+                if not amounts:
+                    continue
+
+                # 할인가 우선 사용 (할인 키워드가 있고 금액이 1개 이상)
+                is_discount_row = any(kw in row_text for kw in discount_keywords)
+
+                # 한 행당 하나의 금액만 추출 (가장 큰 값 = 총합)
+                amount = max(amounts)
+
+                if is_discount_row:
+                    discount_candidates.append((amount, row_idx))
+                else:
+                    regular_candidates.append((amount, row_idx))
+
+            # 시트당 1개 옵션만 추출 (할인가 우선, 없으면 정가)
+            if discount_candidates:
+                # 할인가 중 가장 큰 금액 사용
+                amount, row_idx = max(discount_candidates, key=lambda x: x[0])
+                currency = "USD" if 1_000 <= amount < 1_000_000 else "KRW"
+                option_name = f"{sheet_option_name} (할인가)"
+            elif regular_candidates:
+                # 정가 중 가장 큰 금액 사용
+                amount, row_idx = max(regular_candidates, key=lambda x: x[0])
+                currency = "USD" if 1_000 <= amount < 1_000_000 else "KRW"
+                option_name = f"{sheet_option_name}"
+            else:
+                # 해당 시트에서 금액 없음
+                continue
+
+            # QuoteOption 생성
+            option = QuoteOption(
+                option_id=f"{sheet_name}_{row_idx}",
+                option_name=option_name[:50],
+                total_amount=amount,
+                currency=currency,
+                source_file=f"{file_path.name} - {sheet_name}",
+                extracted_at=datetime.now(),
+                extraction_method="excel_direct",
+                confidence=0.9,
+            )
+            options.append(option)
+
+        return options
+
+    def _generate_ai_summary(
+        self,
+        vendor: str,
+        parsed_content: str,
+        extracted_quotes: list,
+    ) -> str:
+        """
+        파싱된 내용으로 견적 요약 생성.
+
+        QuoteFormatter를 사용하여 업체별 상황에 맞는 간결한 포맷을 적용합니다.
+        QuoteFormatter 사용 불가 시 기존 인라인 로직으로 fallback합니다.
+
+        Args:
+            vendor: 업체명
+            parsed_content: 파싱된 전체 텍스트
+            extracted_quotes: QuoteOption 리스트
+
+        Returns:
+            요약 문자열 (예: "$42.5K~$388K (4옵션)")
+        """
+        if not extracted_quotes:
+            if parsed_content.strip():
+                return "첨부파일 분석 완료 (금액 미감지)"
+            return "N/A"
+
+        try:
+            if QuoteFormatter is not None:
+                formatter = QuoteFormatter()
+                return formatter.format_quote(
+                    vendor_name=vendor,
+                    options=extracted_quotes,
+                )
+        except Exception:
+            pass
+
+        # Fallback: 기존 인라인 로직
+        amounts = []
+        for opt in extracted_quotes:
+            if opt.total_amount is not None:
+                amounts.append((float(opt.total_amount), opt.currency))
+        if not amounts:
+            return "금액 미감지"
+        amounts.sort(key=lambda x: x[0])
+        if len(amounts) == 1:
+            return self._format_amount(amounts[0][0], amounts[0][1])
+        else:
+            min_amt = self._format_amount(amounts[0][0], amounts[0][1])
+            max_amt = self._format_amount(amounts[-1][0], amounts[-1][1])
+            return f"{min_amt} ~ {max_amt} ({len(amounts)}개 옵션)"
+
+    @staticmethod
+    def _format_amount(amount, currency: str = "KRW") -> str:
+        """금액을 읽기 쉬운 문자열로 변환. (Deprecated: QuoteFormatter 사용 권장)"""
+        amt = float(amount)
+
+        if currency == "USD":
+            # USD 전용 포맷
+            if amt >= 1_000_000:
+                return f"${amt / 1_000_000:.1f}M"
+            elif amt >= 1_000:
+                return f"${amt / 1_000:.1f}K"
+            return f"${amt:,.0f}"
+        else:
+            # KRW
+            if amt >= 100_000_000:
+                return f"{amt / 100_000_000:.1f}억원"
+            elif amt >= 10_000:
+                return f"{amt / 10_000:,.0f}만원"
+            return f"{amt:,.0f}원"
 
 
 class ListsSyncManager:
@@ -519,18 +1045,45 @@ class VendorChangeDetector:
         "brightcove": "Brightcove",
         "megazone": "메가존클라우드",
         "megazonecloud": "메가존클라우드",
+        "mz.co.kr": "메가존클라우드",
         "vimeo": "Vimeo OTT",
+        "jrmax": "Vimeo OTT",  # 한국 대리점
         "wecandeo": "맑음소프트 (WECANDEO)",
         "malgum": "맑음소프트 (WECANDEO)",
     }
 
+    # Quote detection patterns for subject lines
+    QUOTE_SUBJECT_PATTERNS = [
+        "pricing proposal",
+        "price quote",
+        "quotation",
+        "견적",
+        "견적서",
+        "견적 전달",
+        "견적 제안",
+        "proposal",
+    ]
+
     # Status transition keywords - categorized by direction
     # POSITIVE: Status should improve or stay active
     POSITIVE_KEYWORDS = {
+        # 한글 견적 패턴
         "견적 수령": ("견적 대기", "검토 중"),
         "견적 도착": ("견적 대기", "검토 중"),
         "견적서 첨부": ("견적 대기", "검토 중"),
         "견적 전달": ("견적 대기", "검토 중"),
+        "견적 제안": ("견적 대기", "검토 중"),
+        "견적 안내": ("견적 대기", "검토 중"),
+        "견적을": ("견적 대기", "검토 중"),  # "견적을 전달", "견적을 수정" 등
+        # 영문 견적 패턴
+        "pricing proposal": ("견적 대기", "검토 중"),
+        "price quote": ("견적 대기", "검토 중"),
+        "quotation": ("견적 대기", "검토 중"),
+        # 수정 견적 (협상 단계)
+        "수정 견적": ("검토 중", "협상 중"),
+        "revised quote": ("검토 중", "협상 중"),
+        "updated pricing": ("검토 중", "협상 중"),
+        # 기타 협상 패턴
         "협상 시작": ("검토 중", "협상 중"),
         "조건 협의": ("검토 중", "협상 중"),
         "계약서 검토": ("협상 중", "계약 진행"),
@@ -608,6 +1161,48 @@ class VendorChangeDetector:
 
         return None
 
+    def detect_quote_signal(
+        self,
+        subject: str,
+        body: str,
+        has_attachments: bool = False,
+        is_vendor_email: bool = False,
+    ) -> bool:
+        """
+        Detect quote/pricing signals from email.
+
+        Args:
+            subject: Email subject line
+            body: Email body text
+            has_attachments: Whether email has attachments
+            is_vendor_email: Whether email is from vendor
+
+        Returns:
+            True if quote is detected (2+ indicators present)
+        """
+        indicators = 0
+
+        # Indicator 1: Subject contains quote keywords
+        subject_lower = subject.lower()
+        if any(pattern in subject_lower for pattern in self.QUOTE_SUBJECT_PATTERNS):
+            indicators += 1
+
+        # Indicator 2: Has attachments (likely quote file)
+        if has_attachments:
+            indicators += 1
+
+        # Indicator 3: From vendor domain
+        if is_vendor_email:
+            indicators += 1
+
+        # Indicator 4: Body contains quote keywords
+        body_lower = body.lower()
+        if any(pattern in body_lower for pattern in self.QUOTE_SUBJECT_PATTERNS):
+            indicators += 1
+
+        # Require 2+ indicators to avoid false positives
+        return indicators >= 2
+
     def detect_action_item(self, text: str) -> Optional[str]:
         """Detect action item from text content."""
         import re
@@ -629,7 +1224,7 @@ class VendorChangeDetector:
         Analyze Gmail messages for vendor changes.
 
         Args:
-            emails: List of email dicts with keys: sender, subject, body, date
+            emails: List of email dicts with keys: sender, subject, body, date, has_attachments
 
         Returns:
             List of detected changes
@@ -639,6 +1234,8 @@ class VendorChangeDetector:
         for email in emails:
             sender = email.get("sender", "")
             subject = email.get("subject", "")
+            body = email.get("body", "")
+            has_attachments = email.get("has_attachments", False)
 
             vendor = self.detect_vendor_from_email(sender, subject)
             if not vendor:
@@ -660,10 +1257,28 @@ class VendorChangeDetector:
                 "is_vendor_email": is_vendor_email,
             }
 
+            # Enhanced quote detection
+            quote_detected = self.detect_quote_signal(
+                subject=subject,
+                body=body,
+                has_attachments=has_attachments,
+                is_vendor_email=is_vendor_email,
+            )
+
+            if quote_detected:
+                change["quote_detected"] = True
+                change["status_change"] = {
+                    "from": "견적 대기",
+                    "to": "검토 중",
+                    "trigger": "quote_signal",
+                    "direction": "positive",
+                }
+
             # Check for status change (with vendor email context)
-            full_text = f"{subject} {email.get('body', '')}"
+            full_text = f"{subject} {body}"
             status_change = self.detect_status_change(full_text, is_vendor_email=is_vendor_email)
-            if status_change:
+            if status_change and not quote_detected:
+                # Only apply text-based status change if quote signal didn't already detect it
                 change["status_change"] = {
                     "from": status_change[0],
                     "to": status_change[1],
@@ -779,6 +1394,8 @@ class VendorChangeDetector:
                     "status_changes": [],
                     "next_actions": [],
                     "last_contact": None,
+                    "quote_count": 0,
+                    "quote_emails": [],
                 }
 
             merged[vendor]["sources"].append(change.get("source"))
@@ -792,6 +1409,14 @@ class VendorChangeDetector:
             if "last_contact" in change and change["last_contact"]:
                 if not merged[vendor]["last_contact"] or change["last_contact"] > merged[vendor]["last_contact"]:
                     merged[vendor]["last_contact"] = change["last_contact"]
+
+            # 견적 감지 카운트
+            if change.get("quote_detected"):
+                merged[vendor]["quote_count"] += 1
+                merged[vendor]["quote_emails"].append({
+                    "date": change.get("date"),
+                    "subject": change.get("subject"),
+                })
 
         return merged
 
@@ -852,6 +1477,7 @@ def intelligent_update_slacklist(
     print("\n[Step 1] Collecting data...")
 
     # Gmail - search with multiple strategies to find vendor emails
+    gmail_client = None
     try:
         gmail_client = GmailClient()
         from datetime import datetime, timedelta
@@ -951,12 +1577,20 @@ def intelligent_update_slacklist(
     gmail_formatted = []
     for email in emails:
         email_id = getattr(email, "id", None) or getattr(email, "message_id", "")
+        # Check for attachments
+        has_attachments = False
+        if hasattr(email, "attachments"):
+            has_attachments = bool(getattr(email, "attachments", []))
+        elif hasattr(email, "has_attachments"):
+            has_attachments = getattr(email, "has_attachments", False)
+
         gmail_formatted.append({
             "id": email_id,
             "sender": getattr(email, "from_", "") or getattr(email, "sender", ""),
             "subject": getattr(email, "subject", ""),
             "body": getattr(email, "snippet", ""),
             "date": getattr(email, "date", ""),
+            "has_attachments": has_attachments,
         })
 
     gmail_changes = detector.analyze_gmail_messages(gmail_formatted)
@@ -988,6 +1622,47 @@ def intelligent_update_slacklist(
         print("\n[OK] No changes detected")
         return results
 
+    # Step 2.5: Analyze quote attachments
+    quote_analysis = {}
+    has_quote_changes = any(
+        v.get("quote_count", 0) > 0 for v in merged.values()
+    )
+
+    if has_quote_changes and AttachmentDownloader is not None:
+        print("\n[Step 2.5] Analyzing quote attachments...")
+        try:
+            analyzer = QuoteAnalyzer(gmail_client=gmail_client)
+            quote_analysis = analyzer.analyze_quote_emails(
+                gmail_formatted, gmail_changes
+            )
+
+            for vendor, analysis in quote_analysis.items():
+                files_count = analysis.get("files_analyzed", 0)
+                quote_summary = analysis.get("quote_summary", "N/A")
+                error_count = len(analysis.get("errors", []))
+                print(f"  {vendor}:")
+                print(f"    Files: {files_count}")
+                print(f"    Quotes: {quote_summary}")
+                if error_count:
+                    print(f"    Errors: {error_count}")
+                    for err in analysis.get("errors", []):
+                        print(f"      - {err}")
+
+            results["quote_analysis"] = {
+                vendor: {
+                    "files_analyzed": a.get("files_analyzed", 0),
+                    "quote_summary": a.get("quote_summary", "N/A"),
+                    "options_count": len(a.get("options", [])),
+                }
+                for vendor, a in quote_analysis.items()
+            }
+        except Exception as e:
+            print(f"  [ERR] Quote analysis: {e}")
+            results["errors"].append(f"Quote analysis: {e}")
+    elif has_quote_changes:
+        print("\n[Step 2.5] Quote attachments detected but AttachmentDownloader not available")
+        print("  Install dependencies: pip install pdfplumber openpyxl")
+
     # Step 3: Generate updates
     print("\n[Step 3] Generating updates...")
 
@@ -1005,13 +1680,51 @@ def intelligent_update_slacklist(
         if changes["last_contact"]:
             update["fields"]["last_contact"] = changes["last_contact"]
 
+        # 견적 정보 통합: 첨부파일 분석 결과가 있으면 quote 필드 업데이트
+        if vendor_name in quote_analysis:
+            va = quote_analysis[vendor_name]
+            new_quote_summary = va.get("quote_summary", "")
+            if new_quote_summary and new_quote_summary not in ("N/A", "금액 미감지"):
+                # 현재 Slack Lists의 quote와 비교
+                current = next(
+                    (i for i in current_items if i["vendor_name"] == vendor_name),
+                    None,
+                )
+                current_quote = current.get("quote", "") if current else ""
+
+                # 첨부파일 분석 결과가 더 상세하면 업데이트 제안
+                if len(new_quote_summary) > len(current_quote) or not current_quote.strip():
+                    update["fields"]["quote"] = new_quote_summary
+                    update["fields"]["quote_source"] = "attachment_analysis"
+
+        # 견적 횟수 메타데이터 추가
+        if changes.get("quote_count", 0) > 0:
+            update["fields"]["quote_count"] = changes["quote_count"]
+
         # Status change (if any) - only apply POSITIVE changes automatically
         if changes["status_changes"]:
             latest = changes["status_changes"][-1]
             direction = latest.get("direction", "positive")
 
             if direction == "positive":
-                update["fields"]["status_suggestion"] = latest
+                # 상태 다운그레이드 방지: 현재 상태보다 낮은 상태로의 전환은 무시
+                suggested_status = latest.get("to")
+                current = next(
+                    (i for i in current_items if i["vendor_name"] == vendor_name),
+                    None,
+                )
+
+                if current:
+                    current_status = current.get("status", "")
+                    current_priority = STATUS_PRIORITY.get(current_status, 0)
+                    suggested_priority = STATUS_PRIORITY.get(suggested_status, 0)
+
+                    if suggested_priority <= current_priority and current_priority > 0:
+                        print(f"  [SKIP] {vendor_name}: 상태 다운그레이드 방지 ({current_status} >= {suggested_status})")
+                    else:
+                        update["fields"]["status_suggestion"] = latest
+                else:
+                    update["fields"]["status_suggestion"] = latest
             else:
                 # Negative status changes require explicit user approval
                 negative_changes_skipped.append({
@@ -1019,20 +1732,20 @@ def intelligent_update_slacklist(
                     "change": latest,
                 })
                 print(f"  [SKIP] {vendor_name}: Negative status change skipped (requires manual approval)")
-                print(f"         Trigger: '{latest.get('trigger')}' → {latest.get('to')}")
+                print(f"         Trigger: '{latest.get('trigger')}' -> {latest.get('to')}")
 
         if update["fields"]:
             updates.append(update)
             # Safe print (handle encoding errors)
             try:
                 vendor_display = vendor_name.encode('ascii', 'replace').decode()
-            except:
+            except Exception:
                 vendor_display = vendor_name
             print(f"  * {vendor_display}:")
             for key, val in update["fields"].items():
                 try:
                     val_display = str(val).encode('ascii', 'replace').decode()
-                except:
+                except Exception:
                     val_display = str(val)
                 print(f"    - {key}: {val_display}")
 
@@ -1069,6 +1782,7 @@ def intelligent_update_slacklist(
 
             success = manager.update_item(
                 vendor_name=vendor,
+                quote=fields.get("quote"),
                 next_action=fields.get("next_action"),
                 last_contact=last_contact_dt,
             )
