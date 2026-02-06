@@ -327,8 +327,9 @@
 
 | 문서 | 경로 | 용도 |
 |------|------|------|
-| **평가 매트릭스** | [vendor-evaluation-matrix.md](../templates/vendor-evaluation-matrix.md) | 평가 기준 및 템플릿 |
+| **평가 매트릭스** | [vendor-evaluation-matrix.md](../archive/vendor-evaluation-matrix.md) | 평가 기준 및 템플릿 (Archive) |
 | **업체 선정** | [03-vendor-rfp](../phase0/03-vendor-rfp.md) | Vimeo 기반 업체 선정 경과 |
+| **SI 업체 RFP** | [04-vendor-rfp-si](../phase0/04-vendor-rfp-si.md) | OTT 플랫폼 구축 RFP ([PDF](../phase0/WSOP-TV-OTT-RFP_0206.pdf)) |
 | **업체 비교 리포트** | [REPORT-2026-01-19](../archive/REPORT-2026-01-19-strategy-review.md) | 초기 전략 리뷰 (Archive) |
 | **메일 로그** | [EMAIL-LOG.md](./EMAIL-LOG.md) | 업체별 이메일 이력 |
 
