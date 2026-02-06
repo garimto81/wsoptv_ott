@@ -31,7 +31,7 @@ node_modules/
 # Attachments cache
 attachments/
 
-# Broken filenames
+# Broken filenames (path encoding errors)
 C\357\200\272*
 
 # bkit state
