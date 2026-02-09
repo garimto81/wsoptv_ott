@@ -171,9 +171,9 @@
 |------|------|
 | [01-vision](01-vision.md) | 시청자 경험 비전 |
 | [02-business](02-business.md) | GG 생태계 비즈니스 전략 |
-| [VENDOR-DASHBOARD](../management/VENDOR-DASHBOARD.md) | 업체 관리 대시보드 |
+| [VENDOR-DASHBOARD](../99-archive/management/VENDOR-DASHBOARD.md) | 업체 관리 대시보드 |
 | [04-vendor-rfp-si](04-vendor-rfp-si.md) | SI 업체 RFP 문서 ([PDF](WSOP-TV-OTT-RFP_0206.pdf)) |
-| [Full-Custom RFP](../archive/PRD-0005-wsoptv-ott-rfp-fullcustom.md) | 이전 Full-Custom RFP (Archive) |
+| [Full-Custom RFP](../99-archive/PRD-0005-wsoptv-ott-rfp-fullcustom.md) | 이전 Full-Custom RFP (Archive) |
 
 ---
 

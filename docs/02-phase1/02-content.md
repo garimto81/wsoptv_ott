@@ -6,13 +6,13 @@
 | **Version** | 5.0.0 |
 | **Updated** | 2026-02-04 |
 | **Status** | Active |
-| **Depends** | [01-vision](../phase0/01-vision.md) |
+| **Depends** | [01-vision](../01-phase0/01-vision.md) |
 
 ---
 
 ## 용어 정의
 
-> 모든 문서에서 동일한 용어를 사용합니다. 상세 정의: [01-vision](../phase0/01-vision.md)
+> 모든 문서에서 동일한 용어를 사용합니다. 상세 정의: [01-vision](../01-phase0/01-vision.md)
 
 | 용어 | 정의 | Phase |
 |------|------|:-----:|
@@ -30,7 +30,7 @@
 
 WSOP TV의 핵심 가치 제안인 **콘텐츠 소싱 및 배포 전략**을 정의합니다.
 
-> **전략 기준**: [01-vision](../phase0/01-vision.md) - 콘텐츠 3단계 구조
+> **전략 기준**: [01-vision](../01-phase0/01-vision.md) - 콘텐츠 3단계 구조
 
 ### 콘텐츠 소싱 전략 요약
 
@@ -367,7 +367,7 @@ CURRENT (2016~)
 
 #### 5.6 핸드 레벨 태그 (Phase 2) - Tony 기획
 
-> **출처**: [01-vision 시청자 경험 비전](../phase0/01-vision.md) - Moses Commentary
+> **출처**: [01-vision 시청자 경험 비전](../01-phase0/01-vision.md) - Moses Commentary
 
 대회 영상을 핸드 단위로 태깅하여 정밀 검색 지원.
 
@@ -390,7 +390,7 @@ CURRENT (2016~)
 - 포카드가 로열 스트레이트 플러시에게 패한 핸드
 - 특정 핸드로 이기거나 진 상황 검색
 
-> **상세 스펙**: [PRD-0009 Hand Tagging & Search](../archive/PRD-0009-hand-tagging-search.md) (Phase 2 - Archive)
+> **상세 스펙**: [PRD-0009 Hand Tagging & Search](../99-archive/PRD-0009-hand-tagging-search.md) (Phase 2 - Archive)
 
 ---
 
@@ -572,8 +572,8 @@ Elasticsearch (전문 검색)
 
 ## References
 
-- [PRD-0002 WSOPTV Concept Paper](../archive/PRD-0002-wsoptv-concept-paper.md) - Concept Paper (Archive)
-- [PRD-0006 Advanced Mode](../archive/PRD-0006-advanced-mode.md) - Advanced Mode (Archive)
+- [PRD-0002 WSOPTV Concept Paper](../99-archive/PRD-0002-wsoptv-concept-paper.md) - Concept Paper (Archive)
+- [PRD-0006 Advanced Mode](../99-archive/PRD-0006-advanced-mode.md) - Advanced Mode (Archive)
 
 ---
 

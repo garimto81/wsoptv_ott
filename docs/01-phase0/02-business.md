@@ -36,9 +36,9 @@
 
 ## 2. GGPass 구독 구조
 
-![GGPass 생태계 구조](../images/PRD-0002/57-ggpass-ecosystem.png)
+![GGPass 생태계 구조](../99-archive/images/PRD-0002/57-ggpass-ecosystem.png)
 
-[HTML 원본](../mockups/PRD-0002/57-ggpass-ecosystem.html)
+[HTML 원본](../99-archive/mockups/PRD-0002/57-ggpass-ecosystem.html)
 
 | 구분 | 특징 | 서비스 |
 |:----:|------|--------|
@@ -98,9 +98,9 @@
 
 ## 5. Dual Flywheel: 이중 선순환 구조
 
-![Dual Flywheel](../images/PRD-0002/58-dual-flywheel.png)
+![Dual Flywheel](../99-archive/images/PRD-0002/58-dual-flywheel.png)
 
-[HTML 원본](../mockups/PRD-0002/58-dual-flywheel.html)
+[HTML 원본](../99-archive/mockups/PRD-0002/58-dual-flywheel.html)
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
@@ -194,7 +194,7 @@
 
 ### 현재: GGPoker.TV (YouTube 연동)
 
-![GGPoker.TV 섹션](../images/PRD-0002/59-ggpoker-tv-section.png)
+![GGPoker.TV 섹션](../99-archive/images/PRD-0002/59-ggpoker-tv-section.png)
 
 현재 GGPoker 앱 로비에는 **"GGPoker.TV"** 섹션이 있으며, YouTube 콘텐츠를 직접 앱 내에서 보여주고 있습니다.
 
@@ -228,9 +228,9 @@
 
 | 문서 | 설명 |
 |------|------|
-| [PRD-0002](../archive/PRD-0002-wsoptv-concept-paper.md) | 앱 기획서 (Archive) |
+| [PRD-0002](../99-archive/PRD-0002-wsoptv-concept-paper.md) | 앱 기획서 (Archive) |
 | [01-vision](01-vision.md) | 시청자 경험 비전 |
-| [STRAT-0003](../archive/STRAT-0003-cross-promotion.md) | 크로스 프로모션 전략 (Archive) |
+| [STRAT-0003](../99-archive/STRAT-0003-cross-promotion.md) | 크로스 프로모션 전략 (Archive) |
 
 ---
 

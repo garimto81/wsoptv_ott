@@ -7,13 +7,13 @@
 | **Updated** | 2026-02-04 |
 | **Status** | ⭐ Active |
 | **Target** | Q3 2026 론칭 |
-| **Depends** | [01-vision](../phase0/01-vision.md), [02-business](../phase0/02-business.md) |
+| **Depends** | [01-vision](../01-phase0/01-vision.md), [02-business](../01-phase0/02-business.md) |
 
 ---
 
 ## 용어 정의
 
-> 모든 문서에서 동일한 용어를 사용합니다. 상세 정의: [01-vision](../phase0/01-vision.md)
+> 모든 문서에서 동일한 용어를 사용합니다. 상세 정의: [01-vision](../01-phase0/01-vision.md)
 
 ### 핵심 개념
 
@@ -51,7 +51,7 @@
 
 ### NBA TV OTT 핵심 철학 (4대 원칙)
 
-![Navigation Map v2](../images/PRD-0012/00-navigation-map-v2.png)
+![Navigation Map v2](../99-archive/images/PRD-0012/00-navigation-map-v2.png)
 
 | 원칙 | NBA TV 구현 | WSOPTV Phase 1 적용 |
 |:----:|-------------|---------------------|
@@ -105,11 +105,11 @@
 
 ### 2.1 NBA TV 핵심 UI 요소
 
-![NBA TV 메인 화면](../images/nbatv-reference/slide_02.png)
+*NBA TV 메인 화면 참조 (Games & Scores 페이지)*
 
 #### 3계층 구조 (POC 기본 레이아웃)
 
-> **기본 레이아웃 와이어프레임**: [POC Layout Wireframe](../poc/poc-layout-wireframe.png)
+> **기본 레이아웃 와이어프레임**: [POC Layout Wireframe](../00-poc/poc-layout-wireframe.png)
 
 | 계층 | NBA TV | WSOPTV Phase 1 (POC 확정) |
 |:----:|--------|---------------------------|
@@ -117,11 +117,11 @@
 | **② Center - Video Player** | Hero 영역 (하이라이트/라이브) | 16:9 Video Player + Timeshift 컨트롤 |
 | **③ Bottom - Content Section** | 콘텐츠 그리드 (Stories, Trending) | Highlights/Categories/Related Videos 탭 + 썸네일 그리드 |
 
-> **POC 와이어프레임 확정 (2026-02-06)**: `docs/poc/poc-layout-wireframe.png`을 기본 레이아웃으로 채택. Vimeo 기술 팀 리뷰용 B&W 와이어프레임 기준.
+> **POC 와이어프레임 확정 (2026-02-06)**: `docs/00-poc/poc-layout-wireframe.png`을 기본 레이아웃으로 채택. Vimeo 기술 팀 리뷰용 B&W 와이어프레임 기준.
 
 ### 2.2 NBA TV 플레이어 UI
 
-![NBA TV 플레이어](../images/nbatv-reference/slide_08.png)
+*NBA TV 플레이어 참조 (Live Game Player UI)*
 
 | UI 요소 | NBA TV | WSOPTV Phase 1 |
 |---------|--------|----------------|
@@ -135,7 +135,7 @@
 
 ### 2.3 NBA TV 콘텐츠 브라우징
 
-![NBA TV 콘텐츠 허브](../images/nbatv-reference/slide_03.png)
+*NBA TV 콘텐츠 허브 참조 (Browse Content 페이지)*
 
 | 섹션 | NBA TV | WSOPTV Phase 1 |
 |------|--------|----------------|
@@ -146,7 +146,7 @@
 
 ### 2.4 NBA TV 상세 분석 (16개 스크린샷 기반)
 
-> **분석 자료**: `docs/images/aiden_temporary/` (16개 스크린샷, 2026-02-02)
+> **분석 자료**: NBA TV 앱 스크린샷 16개 기반 분석 (2026-02-02)
 
 #### Global Navigation 구조
 
@@ -234,9 +234,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 핵심 UX**: 날짜 기준(Schedule) + 선수 기준(Players) 콘텐츠 탐색
 
-![Home Page - Schedule View (NBA TV Style)](../images/PRD-0012/01-home-schedule-view.png)
+![Home Page - Schedule View (NBA TV Style)](../99-archive/images/PRD-0012/01-home-schedule-view.png)
 
-[HTML 원본](../mockups/PRD-0012/01-home-schedule-view.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/01-home-schedule-view.html)
 
 #### 핵심 UI 요소
 
@@ -280,11 +280,11 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 ### 4.2 라이브 시청 페이지 (Watch Live)
 
-![Live Player - NBA TV Style](../images/PRD-0012/02-live-player-nbatv-style.png)
+![Live Player - NBA TV Style](../99-archive/images/PRD-0012/02-live-player-nbatv-style.png)
 
-[HTML 원본](../mockups/PRD-0012/02-live-player-nbatv-style.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/02-live-player-nbatv-style.html)
 
-> **기본 레이아웃 참조**: POC 와이어프레임(`docs/poc/poc-layout-wireframe.png`)이 기본 3계층 구조의 확정 버전입니다. 아래 ASCII 다이어그램은 해당 와이어프레임의 텍스트 표현입니다.
+> **기본 레이아웃 참조**: POC 와이어프레임(`docs/00-poc/poc-layout-wireframe.png`)이 기본 3계층 구조의 확정 버전입니다. 아래 ASCII 다이어그램은 해당 와이어프레임의 텍스트 표현입니다.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -338,9 +338,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Player Index Page
 
-![Players List](../images/PRD-0012/02-players-list.png)
+![Players List](../99-archive/images/PRD-0012/02-players-list.png)
 
-[HTML 원본](../mockups/PRD-0012/02-players-list.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/02-players-list.html)
 
 #### 핵심 UI 요소
 
@@ -356,9 +356,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: DeMar DeRozan Profile (201113~201233)
 
-![Player Profile](../images/PRD-0012/03-player-profile.png)
+![Player Profile](../99-archive/images/PRD-0012/03-player-profile.png)
 
-[HTML 원본](../mockups/PRD-0012/03-player-profile.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/03-player-profile.html)
 
 #### NBA TV 탭 구조 매핑
 
@@ -381,9 +381,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Game Detail Hero (200945) + Game Info (201033)
 
-![Event Detail](../images/PRD-0012/04-event-detail.png)
+![Event Detail](../99-archive/images/PRD-0012/04-event-detail.png)
 
-[HTML 원본](../mockups/PRD-0012/04-event-detail.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/04-event-detail.html)
 
 #### NBA TV 매핑
 
@@ -409,9 +409,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **전체 네비게이션 맵 및 워크플로우 다이어그램**
 
-![Navigation Map](../images/PRD-0012/00-navigation-map.png)
+![Navigation Map](../99-archive/images/PRD-0012/00-navigation-map.png)
 
-[HTML 원본](../mockups/PRD-0012/00-navigation-map.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/00-navigation-map.html)
 
 #### Phase 1 Screen Inventory
 
@@ -432,9 +432,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Watch Page (Featured + NBA TV 24/7 + Program List)
 
-![Watch Hub](../images/PRD-0012/05-watch-hub.png)
+![Watch Hub](../99-archive/images/PRD-0012/05-watch-hub.png)
 
-[HTML 원본](../mockups/PRD-0012/05-watch-hub.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/05-watch-hub.html)
 
 #### 핵심 UI 요소
 
@@ -458,9 +458,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Live Game Player (Timeshift + Streams + Key Plays)
 
-![Live Player](../images/PRD-0012/06-live-player.png)
+![Live Player](../99-archive/images/PRD-0012/06-live-player.png)
 
-[HTML 원본](../mockups/PRD-0012/06-live-player.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/06-live-player.html)
 
 #### NBA TV 플레이어 UI 매핑
 
@@ -487,9 +487,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Game Detail Hero (200945) - Resume/Start + Chapters
 
-![VOD Player](../images/PRD-0012/07-vod-player.png)
+![VOD Player](../99-archive/images/PRD-0012/07-vod-player.png)
 
-[HTML 원본](../mockups/PRD-0012/07-vod-player.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/07-vod-player.html)
 
 #### Resume/Start 기능
 
@@ -518,9 +518,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: HIGHLIGHTS Section + Trending Now
 
-![Highlights Hub](../images/PRD-0012/08-highlights-hub.png)
+![Highlights Hub](../99-archive/images/PRD-0012/08-highlights-hub.png)
 
-[HTML 원본](../mockups/PRD-0012/08-highlights-hub.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/08-highlights-hub.html)
 
 #### 핵심 UI 요소
 
@@ -544,9 +544,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: League Pass Subscribe Modal
 
-![Subscribe Modal](../images/PRD-0012/09-subscribe-modal.png)
+![Subscribe Modal](../99-archive/images/PRD-0012/09-subscribe-modal.png)
 
-[HTML 원본](../mockups/PRD-0012/09-subscribe-modal.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/09-subscribe-modal.html)
 
 #### 플랜 비교
 
@@ -586,9 +586,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Sign In with NBA ID
 
-![Sign In](../images/PRD-0012/10-sign-in.png)
+![Sign In](../99-archive/images/PRD-0012/10-sign-in.png)
 
-[HTML 원본](../mockups/PRD-0012/10-sign-in.html)
+[HTML 원본](../99-archive/mockups/PRD-0012/10-sign-in.html)
 
 #### 로그인 방식
 
@@ -955,10 +955,10 @@ WSOPTV
 
 | 문서 | 설명 |
 |------|------|
-| [PRD-0002](../archive/PRD-0002-wsoptv-concept-paper.md) | WSOPTV Concept Paper (Archive) |
-| [PRD-0002-executive-summary](../archive/PRD-0002-executive-summary.md) | 경영진 보고용 요약 (Archive) |
-| [02-business](../phase0/02-business.md) | GG 생태계 비즈니스 전략 |
-| [REPORT-2026-01-20-nbatv-analysis](../reports/REPORT-2026-01-20-nbatv-analysis.md) | NBA TV 레퍼런스 분석 |
+| [PRD-0002](../99-archive/PRD-0002-wsoptv-concept-paper.md) | WSOPTV Concept Paper (Archive) |
+| [PRD-0002-executive-summary](../99-archive/PRD-0002-executive-summary.md) | 경영진 보고용 요약 (Archive) |
+| [02-business](../01-phase0/02-business.md) | GG 생태계 비즈니스 전략 |
+| [REPORT-2026-01-20-nbatv-analysis](../99-archive/reports/REPORT-2026-01-20-nbatv-analysis.md) | NBA TV 레퍼런스 분석 |
 
 ---
 
