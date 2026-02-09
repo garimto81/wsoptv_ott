@@ -31,8 +31,11 @@ node_modules/
 # Attachments cache
 attachments/
 
-# Broken filenames (path encoding errors)
-C\357\200\272*
+# Test results
+test-results/
+
+# Ruff cache
+.ruff_cache/
 
 # bkit state
 docs/.bkit-memory.json

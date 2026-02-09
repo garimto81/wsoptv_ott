@@ -47,6 +47,15 @@ daily:
       list_id: "F0ACQJS6KND"
       team_id: "T03QGJ73GBB"
 
+    google_drive:
+      enabled: true
+      primary_folder_id: "1U0D2y1TxiY5uaYfImrvewEPk_2Dr6RwC"
+      primary_folder_name: "WSOPTV"
+      team_drive_folder_id: "19Sbq1_K-fJOEN2LnMEaMTE9fYjAEFoou"
+      team_drive_folder_name: "WSOPTV (Team Drive)"
+      registry_file: "docs/management/DRIVE-REGISTRY.md"
+      converter_module: "lib.google_docs"
+
     calendar:
       enabled: false
 

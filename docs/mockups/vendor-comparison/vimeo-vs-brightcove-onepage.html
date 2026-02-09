@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV OTT 플랫폼 비용 비교</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        @page {
+            size: 1920px 1080px;
+            margin: 0;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            width: 1920px;
+            height: 1080px;
+            padding: 60px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        /* 배경 장식 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(26, 183, 234, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .slide-container {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 헤더 */
+        .slide-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .slide-header h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: #212529;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        .slide-header .subtitle {
+            font-size: 22px;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        /* 섹션 1: Vimeo 고정 비용 */
+        .section-fixed {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #1ab7ea, #0891b2);
+            border-radius: 2px;
+        }
+        .fixed-cost-cards {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .fixed-card {
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .fixed-card:hover {
+            border-color: #1ab7ea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 183, 234, 0.15);
+        }
+        .fixed-card.total {
+            background: linear-gradient(135deg, #1ab7ea, #0891b2);
+            border-color: #1ab7ea;
+            color: white;
+        }
+        .fixed-card-label {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .fixed-card.total .fixed-card-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .fixed-card-amount {
+            font-size: 22px;
+            font-weight: 800;
+            color: #212529;
+        }
+        .fixed-card.total .fixed-card-amount {
+            color: white;
+            font-size: 26px;
+        }
+
+        /* 섹션 2: 총 비용 비교 테이블 */
+        .section-comparison {
+            margin-bottom: 25px;
+        }
+        .comparison-table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .comparison-table th {
+            background: linear-gradient(135deg, #343a40, #495057);
+            color: white;
+            padding: 14px 12px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .comparison-table th:last-child {
+            border-right: none;
+        }
+        .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+            border-right: 1px solid #f1f3f5;
+        }
+        .comparison-table td:last-child {
+            border-right: none;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .comparison-table tr:hover td {
+            background: #f8f9fa;
+        }
+        .comparison-table td:first-child {
+            font-weight: 600;
+            color: #495057;
+            background: #f8f9fa;
+        }
+        .comparison-table .vimeo-row {
+            background: rgba(26, 183, 234, 0.03);
+        }
+        .comparison-table .brightcove-row {
+            background: rgba(255, 107, 53, 0.03);
+        }
+        .comparison-table .amount {
+            font-weight: 800;
+            font-size: 16px;
+        }
+        .comparison-table .vimeo-row .amount {
+            color: #1ab7ea;
+        }
+        .comparison-table .brightcove-row .amount {
+            color: #ff6b35;
+        }
+        .comparison-table .discount {
+            font-size: 11px;
+            color: #6c757d;
+            display: block;
+            margin-top: 2px;
+        }
+        .comparison-table .spec {
+            font-size: 12px;
+            color: #868e96;
+        }
+
+        /* 섹션 3: 비용 바 차트 */
+        .section-chart {
+            margin-bottom: 25px;
+        }
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .chart-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .chart-row:last-child {
+            margin-bottom: 0;
+        }
+        .chart-label {
+            width: 140px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            flex-shrink: 0;
+        }
+        .chart-bar-container {
+            flex: 1;
+            height: 42px;
+            background: #f1f3f5;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            margin-right: 15px;
+        }
+        .chart-bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            border-radius: 6px;
+            transition: width 1s ease-out;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .chart-bar.vimeo {
+            background: linear-gradient(90deg, #1ab7ea, #0891b2);
+        }
+        .chart-bar.brightcove {
+            background: linear-gradient(90deg, #ff6b35, #e85d47);
+        }
+        .chart-amount {
+            width: 120px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: 800;
+            color: #212529;
+            flex-shrink: 0;
+        }
+
+        /* 섹션 4: 핵심 메시지 */
+        .section-summary {
+            background: linear-gradient(135deg, #212529, #343a40);
+            padding: 25px 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        .summary-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .summary-item:last-child {
+            border-right: none;
+        }
+        .summary-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .summary-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+        }
+        .summary-value.highlight {
+            color: #1ab7ea;
+            font-size: 32px;
+        }
+        .summary-value.savings {
+            color: #51cf66;
+            font-size: 32px;
+        }
+        .summary-note {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- 헤더 -->
+        <div class="slide-header">
+            <h1>WSOPTV OTT 플랫폼 비용 비교</h1>
+            <p class="subtitle">Vimeo OTT vs Brightcove + Accedo (2026-02-06 최신 견적)</p>
+        </div>
+
+        <!-- 섹션 1: Vimeo 고정 비용 -->
+        <div class="section-fixed">
+            <div class="section-title">Vimeo OTT 고정 비용 (기능 옵션 - 모든 견적 포함)</div>
+            <div class="fixed-cost-cards">
+                <div class="fixed-card">
+                    <div class="fixed-card-label">SSO</div>
+                    <div class="fixed-card-amount">$15K</div>
+                </div>
+                <div class="fixed-card">
+                    <div class="fixed-card-label">DRM</div>
+                    <div class="fixed-card-amount">$35K</div>
+                </div>
+                <div class="fixed-card">
+                    <div class="fixed-card-label">API Access</div>
+                    <div class="fixed-card-amount">$10K</div>
+                </div>
+                <div class="fixed-card">
+                    <div class="fixed-card-label">SLA</div>
+                    <div class="fixed-card-amount">$5K</div>
+                </div>
+                <div class="fixed-card">
+                    <div class="fixed-card-label">Branded Apps (5개)</div>
+                    <div class="fixed-card-amount">$50K</div>
+                </div>
+                <div class="fixed-card total">
+                    <div class="fixed-card-label">연간 합계</div>
+                    <div class="fixed-card-amount">$115K</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 섹션 2: 총 비용 비교 테이블 -->
+        <div class="section-comparison">
+            <div class="section-title">총 비용 비교 (Storage + Bandwidth + 고정 옵션)</div>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">견적</th>
+                            <th style="width: 120px;">Storage</th>
+                            <th style="width: 120px;">BW/년</th>
+                            <th style="width: 120px;">정가</th>
+                            <th style="width: 100px;">할인율</th>
+                            <th style="width: 150px;">예상 할인가</th>
+                            <th style="width: 200px;">비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="vimeo-row">
+                            <td>견적 -1</td>
+                            <td class="spec">100TB</td>
+                            <td class="spec">300TB</td>
+                            <td>$148,000</td>
+                            <td>15%</td>
+                            <td><span class="amount">$125,000</span></td>
+                            <td>최소 구성</td>
+                        </tr>
+                        <tr class="vimeo-row">
+                            <td>견적 0</td>
+                            <td class="spec">300TB</td>
+                            <td class="spec">500TB</td>
+                            <td>$237,500</td>
+                            <td>20%</td>
+                            <td><span class="amount">$190,000</span></td>
+                            <td>기본 구성</td>
+                        </tr>
+                        <tr class="vimeo-row">
+                            <td>견적 1</td>
+                            <td class="spec">500TB</td>
+                            <td class="spec">1PB</td>
+                            <td>$334,000</td>
+                            <td>25%</td>
+                            <td><span class="amount">$250,000</span></td>
+                            <td>표준 구성</td>
+                        </tr>
+                        <tr class="vimeo-row">
+                            <td>견적 2</td>
+                            <td class="spec">1PB</td>
+                            <td class="spec">2PB</td>
+                            <td>$500,000</td>
+                            <td>30%</td>
+                            <td><span class="amount">$350,000</span></td>
+                            <td>중규모 구성</td>
+                        </tr>
+                        <tr class="vimeo-row">
+                            <td>견적 3</td>
+                            <td class="spec">1.5PB</td>
+                            <td class="spec">2PB</td>
+                            <td>$600,000</td>
+                            <td>35%</td>
+                            <td><span class="amount">$390,000</span></td>
+                            <td>대규모 구성</td>
+                        </tr>
+                        <tr class="brightcove-row">
+                            <td>Brightcove</td>
+                            <td colspan="2" class="spec">무제한</td>
+                            <td colspan="2">-</td>
+                            <td>
+                                <span class="amount">$1,735,949</span>
+                                <span class="discount">첫해 / 2년차 $585,949</span>
+                            </td>
+                            <td>개발비 포함</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 섹션 3: 비용 바 차트 -->
+        <div class="section-chart">
+            <div class="section-title">시각적 비용 비교 (Brightcove 첫해 기준 100%)</div>
+            <div class="chart-container">
+                <div class="chart-row">
+                    <div class="chart-label">견적 -1</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar vimeo" style="width: 7.2%;">7%</div>
+                    </div>
+                    <div class="chart-amount">$125K</div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-label">견적 0</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar vimeo" style="width: 10.9%;">11%</div>
+                    </div>
+                    <div class="chart-amount">$190K</div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-label">견적 1</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar vimeo" style="width: 14.4%;">14%</div>
+                    </div>
+                    <div class="chart-amount">$250K</div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-label">견적 2</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar vimeo" style="width: 20.2%;">20%</div>
+                    </div>
+                    <div class="chart-amount">$350K</div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-label">견적 3</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar vimeo" style="width: 22.5%;">22%</div>
+                    </div>
+                    <div class="chart-amount">$390K</div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-label">Brightcove 첫해</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar brightcove" style="width: 100%;">100%</div>
+                    </div>
+                    <div class="chart-amount">$1,736K</div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-label">Brightcove 2년차+</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar brightcove" style="width: 33.7%;">34%</div>
+                    </div>
+                    <div class="chart-amount">$586K</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 섹션 4: 핵심 메시지 -->
+        <div class="section-summary">
+            <div class="summary-item">
+                <div class="summary-label">Vimeo 최저가</div>
+                <div class="summary-value highlight">$125K/년</div>
+                <div class="summary-note">견적 -1 (100TB + 300TB BW)</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Vimeo 권장안</div>
+                <div class="summary-value highlight">$250K/년</div>
+                <div class="summary-note">견적 1 (500TB + 1PB BW)</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Brightcove 대비 절감</div>
+                <div class="summary-value savings">86~93%</div>
+                <div class="summary-note">첫해 기준 / 2년차 79~86%</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Brightcove 총액</div>
+                <div class="summary-value">$1.74M</div>
+                <div class="summary-note">첫해 / 이후 $586K/년</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

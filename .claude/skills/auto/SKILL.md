@@ -878,16 +878,31 @@ Architect 검증
 
 **5개 조건 모두 충족될 때까지 자동으로 반복합니다.**
 
-### Phase 2: 메인 워크플로우 (Ralph + Ultrawork)
+### Phase 2: 메인 워크플로우 (Ralph + Ultrawork + Team Coordinator)
 
 **작업이 주어지면 (`/auto "작업내용"`):**
 
-1. **Ralplan 호출** (Step 0.1의 복잡도 점수 >= 3인 경우):
+**Step 2.0: 복잡도 기반 라우팅 (10점 만점 확장)**
+
+Step 0.1의 5점 만점 복잡도 점수를 10점으로 확장합니다:
+
+| 점수 (10점) | 라우팅 경로 | 설명 |
+|:-----------:|------------|------|
+| 0-3 | 기존 경로 | Ralplan/Planner 단독 |
+| 4-5 | Team Coordinator → Dev 단독 | 단일 기능 구현 |
+| 6-7 | Team Coordinator → Dev + Quality | 기능 + 품질 검증 |
+| 8-9 | Team Coordinator → Dev + Quality + Research | 복잡한 기능 + 조사 |
+| 10 | Team Coordinator → 4팀 전체 | 대규모 프로젝트 |
+
+**5점 → 10점 변환**: `score_10 = score_5 * 2` (기본). `"teamwork"` 키워드 포함 시 자동 10점.
+
+**score < 4 (기존 경로 보존):**
+
+1. **Ralplan 호출** (score >= 3인 경우):
    ```
    Skill(skill="oh-my-claudecode:ralplan", args="작업내용")
    ```
    - Planner → Architect → Critic 합의 도달까지 반복
-   - 판단 기준: Step 0.1의 5점 만점 복잡도 점수표 참조
 
 2. **Ultrawork 모드 활성화**:
    - 모든 독립적 작업은 **병렬 실행**
@@ -904,6 +919,29 @@ Architect 검증
    | UI 작업 | `oh-my-claudecode:designer` | sonnet |
    | 테스트 | `oh-my-claudecode:qa-tester` | sonnet |
    | 빌드 에러 | `oh-my-claudecode:build-fixer` | sonnet |
+
+**score >= 4 (Team Coordinator):**
+
+```python
+from src.agents.teams import Coordinator
+
+coordinator = Coordinator()
+result = coordinator.run("작업 설명")
+```
+
+또는 OMC 에이전트로 위임:
+```
+Task(
+  subagent_type="oh-my-claudecode:executor-high",
+  model="opus",
+  prompt="Team Coordinator를 통해 멀티팀 워크플로우를 실행하세요.
+  프로젝트: {작업 설명}
+  복잡도: {score}/10
+  투입 팀: {teams}"
+)
+```
+
+**인과관계 보존**: Team Coordinator는 Tier 3 WORK의 하위에서 동작합니다. 기존 Tier 0-5 Discovery는 그대로 유지.
 
 4. **Architect 검증** (완료 전 필수):
    ```
