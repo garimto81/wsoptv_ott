@@ -234,9 +234,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 핵심 UX**: 날짜 기준(Schedule) + 선수 기준(Players) 콘텐츠 탐색
 
-![Home Page - Schedule View (NBA TV Style)](../99-archive/images/PRD-0012/01-home-schedule-view.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/01-home-schedule-view.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/01-home-schedule-view.html) | [스크린샷](../99-archive/images/PRD-0012/01-home-schedule-view.png)*
 
 #### 핵심 UI 요소
 
@@ -280,9 +278,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 ### 4.2 라이브 시청 페이지 (Watch Live)
 
-![Live Player - NBA TV Style](../99-archive/images/PRD-0012/02-live-player-nbatv-style.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/02-live-player-nbatv-style.html)
+*와이어프레임: 아래 ASCII 다이어그램 참조 (3계층 구조 텍스트 표현)*
 
 > **기본 레이아웃 참조**: POC 와이어프레임(`docs/00-poc/poc-layout-wireframe.png`)이 기본 3계층 구조의 확정 버전입니다. 아래 ASCII 다이어그램은 해당 와이어프레임의 텍스트 표현입니다.
 
@@ -338,9 +334,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Player Index Page
 
-![Players List](../99-archive/images/PRD-0012/02-players-list.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/02-players-list.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/02-players-list.html) | [스크린샷](../99-archive/images/PRD-0012/02-players-list.png)*
 
 #### 핵심 UI 요소
 
@@ -356,9 +350,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: DeMar DeRozan Profile (201113~201233)
 
-![Player Profile](../99-archive/images/PRD-0012/03-player-profile.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/03-player-profile.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/03-player-profile.html) | [스크린샷](../99-archive/images/PRD-0012/03-player-profile.png)*
 
 #### NBA TV 탭 구조 매핑
 
@@ -381,9 +373,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Game Detail Hero (200945) + Game Info (201033)
 
-![Event Detail](../99-archive/images/PRD-0012/04-event-detail.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/04-event-detail.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/04-event-detail.html) | [스크린샷](../99-archive/images/PRD-0012/04-event-detail.png)*
 
 #### NBA TV 매핑
 
@@ -432,9 +422,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Watch Page (Featured + NBA TV 24/7 + Program List)
 
-![Watch Hub](../99-archive/images/PRD-0012/05-watch-hub.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/05-watch-hub.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/05-watch-hub.html) | [스크린샷](../99-archive/images/PRD-0012/05-watch-hub.png)*
 
 #### 핵심 UI 요소
 
@@ -458,9 +446,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Live Game Player (Timeshift + Streams + Key Plays)
 
-![Live Player](../99-archive/images/PRD-0012/06-live-player.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/06-live-player.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/06-live-player.html) | [스크린샷](../99-archive/images/PRD-0012/06-live-player.png)*
 
 #### NBA TV 플레이어 UI 매핑
 
@@ -518,9 +504,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: HIGHLIGHTS Section + Trending Now
 
-![Highlights Hub](../99-archive/images/PRD-0012/08-highlights-hub.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/08-highlights-hub.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/08-highlights-hub.html) | [스크린샷](../99-archive/images/PRD-0012/08-highlights-hub.png)*
 
 #### 핵심 UI 요소
 
@@ -544,9 +528,9 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: League Pass Subscribe Modal
 
-![Subscribe Modal](../99-archive/images/PRD-0012/09-subscribe-modal.png)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/09-subscribe-modal.html) | [스크린샷](../99-archive/images/PRD-0012/09-subscribe-modal.png)*
 
-[HTML 원본](../99-archive/mockups/PRD-0012/09-subscribe-modal.html)
+> **참고**: 스크린샷은 초기 목업 가격($14.99/$99.99)을 표시합니다. 최종 가격은 아래 테이블 기준입니다. (권위 소스: [02-business](../01-phase0/02-business.md) 섹션 7)
 
 #### 플랜 비교
 
@@ -586,9 +570,7 @@ Paywall → WSOP Plus CTA → Plan Select → Stripe → Access
 
 **NBA TV 레퍼런스**: Sign In with NBA ID
 
-![Sign In](../99-archive/images/PRD-0012/10-sign-in.png)
-
-[HTML 원본](../99-archive/mockups/PRD-0012/10-sign-in.html)
+*와이어프레임: [HTML 원본](../99-archive/mockups/PRD-0012/10-sign-in.html) | [스크린샷](../99-archive/images/PRD-0012/10-sign-in.png)*
 
 #### 로그인 방식
 
