@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - Highlights Clip - NBA TV OTT Style B&W Wireframe</title>
+    <style>
+        /* === NBA TV OTT Style === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1.4;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Score Ticker */
+        .score-ticker {
+            background: #111;
+            border-bottom: 1px solid #333;
+            padding: 5px 10px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+        }
+        .score-item {
+            border: 1px solid #444;
+            padding: 4px 8px;
+            min-width: 80px;
+            background: #1a1a1a;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .score-item:hover { border-color: #fff; }
+        .score-item.live { border-color: #fff; }
+        .score-badge {
+            font-size: 6px;
+            padding: 1px 2px;
+            border: 1px solid #666;
+            display: inline-block;
+            margin-bottom: 1px;
+        }
+        .score-badge.live { background: #fff; color: #000; border-color: #fff; }
+        .score-teams .team { font-weight: bold; font-size: 8px; }
+        .score-action { font-size: 6px; margin-top: 2px; padding-top: 2px; border-top: 1px solid #333; color: #888; }
+
+        /* Video Player (Clip) */
+        .video-player {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            background: #000;
+        }
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .clip-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #333;
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 8px;
+            font-weight: bold;
+        }
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .play-btn .arrow {
+            width: 0;
+            height: 0;
+            border-left: 16px solid #fff;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 5px;
+        }
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 15px 12px 8px;
+        }
+        .progress-bar {
+            height: 3px;
+            background: #333;
+            margin-bottom: 8px;
+        }
+        .progress-fill { height: 100%; width: 45%; background: #fff; }
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .controls-left, .controls-right { display: flex; gap: 10px; align-items: center; }
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        .time-display { font-size: 8px; color: #aaa; }
+
+        /* Clip Info */
+        .clip-info {
+            padding: 12px;
+            background: #111;
+            border-bottom: 1px solid #222;
+        }
+        .clip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .clip-content { flex: 1; }
+        .clip-title { font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+        .clip-meta { font-size: 8px; color: #777; margin-bottom: 8px; }
+        .clip-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+        .clip-tag {
+            padding: 3px 8px;
+            border: 1px solid #444;
+            font-size: 7px;
+            color: #aaa;
+            background: #1a1a1a;
+        }
+        .clip-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .clip-action {
+            padding: 5px 10px;
+            border: 1px solid #444;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .clip-action:hover { border-color: #fff; }
+
+        /* More Highlights */
+        .more-section {
+            padding: 12px;
+            background: #0a0a0a;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .clip-card {
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+        .clip-card:hover { border-color: #fff; }
+        .clip-thumb {
+            height: 50px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 8px;
+            color: #555;
+        }
+        .clip-thumb .duration {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background: #000;
+            padding: 1px 4px;
+            font-size: 6px;
+        }
+        .clip-card-info { padding: 6px; }
+        .clip-card-title { font-weight: bold; font-size: 8px; margin-bottom: 2px; }
+        .clip-card-meta { font-size: 7px; color: #666; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            padding: 10px;
+            font-size: 7px;
+            color: #666;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+    <!-- Score Ticker -->
+    <div class="score-ticker">
+        <div class="score-item live">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">Main Event FT</span></div>
+            <div class="score-action">► Watch</div>
+        </div>
+        <div class="score-item live">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">$100K HR</span></div>
+            <div class="score-action">► Watch</div>
+        </div>
+        <div class="score-item">
+            <span class="score-badge">VOD</span>
+            <div class="score-teams"><span class="team">ME Day 6</span></div>
+            <div class="score-action">► Watch</div>
+        </div>
+    </div>
+
+    <!-- Clip Player -->
+    <div class="video-player">
+        <div class="video-placeholder">
+            <span class="clip-badge">🔥 TRENDING</span>
+            <div class="play-btn">
+                <div class="arrow"></div>
+            </div>
+        </div>
+        <div class="video-controls">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="controls-row">
+                <div class="controls-left">
+                    <button class="control-btn">⏸</button>
+                    <span class="time-display">2:05 / 4:32</span>
+                </div>
+                <div class="controls-right">
+                    <button class="control-btn">🔊</button>
+                    <button class="control-btn">⛶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clip Info -->
+    <div class="clip-info">
+        <div class="clip-header">
+            <div class="clip-content">
+                <h1 class="clip-title">$2.4 MILLION POT: Negreanu vs Polk</h1>
+                <div class="clip-meta">Main Event Day 7 · 125K views · 2 hours ago</div>
+                <div class="clip-tags">
+                    <span class="clip-tag">🃏 Key Hand</span>
+                    <span class="clip-tag">💰 Big Pot</span>
+                    <span class="clip-tag">🎯 4-Bet Bluff</span>
+                </div>
+            </div>
+            <div class="clip-actions">
+                <button class="clip-action">Watch Full Event</button>
+                <button class="clip-action">Share</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- More Highlights -->
+    <div class="more-section">
+        <div class="section-header">
+            <span>🔥 MORE FROM MAIN EVENT</span>
+        </div>
+        <div class="clips-grid">
+            <div class="clip-card">
+                <div class="clip-thumb">
+                    [CLIP]
+                    <span class="duration">3:15</span>
+                </div>
+                <div class="clip-card-info">
+                    <div class="clip-card-title">Hellmuth's Soul Read K-High</div>
+                    <div class="clip-card-meta">98K views · 3h ago</div>
+                </div>
+            </div>
+            <div class="clip-card">
+                <div class="clip-thumb">
+                    [CLIP]
+                    <span class="duration">2:58</span>
+                </div>
+                <div class="clip-card-info">
+                    <div class="clip-card-title">AA Cracked by Runner-Runner</div>
+                    <div class="clip-card-meta">87K views · 4h ago</div>
+                </div>
+            </div>
+            <div class="clip-card">
+                <div class="clip-thumb">
+                    [CLIP]
+                    <span class="duration">5:21</span>
+                </div>
+                <div class="clip-card-info">
+                    <div class="clip-card-title">Ivey's Epic 4-Bet Bluff</div>
+                    <div class="clip-card-meta">76K views · 5h ago</div>
+                </div>
+            </div>
+            <div class="clip-card">
+                <div class="clip-thumb">
+                    [CLIP]
+                    <span class="duration">2:45</span>
+                </div>
+                <div class="clip-card-info">
+                    <div class="clip-card-title">Set Over Set All-In</div>
+                    <div class="clip-card-meta">65K views · 6h ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Wireframe · Highlight Clip Player (NBA TV OTT Style) · B&W Wireframe<br>
+        ✅ Ticker 유지 · ✅ Clip Player · ✅ Related Clips<br>
+        NBA Ref: Highlight Player
+    </div>
+</body>
+</html>

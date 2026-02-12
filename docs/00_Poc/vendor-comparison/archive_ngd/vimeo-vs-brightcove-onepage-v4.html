@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV OTT: Vimeo vs Brightcove+Accedo v4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @page { size: A4; margin: 0; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fff;
+            width: 794px;
+            height: 1123px;
+            padding: 36px 40px 28px;
+            overflow: hidden;
+            color: #333;
+        }
+
+        /* Title */
+        .title-bar {
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #222;
+            margin-bottom: 18px;
+        }
+        .title-bar h1 { font-size: 22px; font-weight: 800; color: #111; }
+        .title-bar .sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+        /* Feature Section */
+        .feature-section {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .section-label {
+            font-size: 12px; font-weight: 700; color: #333;
+            margin-bottom: 8px; padding-bottom: 4px;
+            border-bottom: 2px solid #333;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .section-label::before {
+            content: ''; width: 3px; height: 14px;
+            background: #333; border-radius: 2px;
+        }
+
+        .common-features { flex: 0 0 46%; }
+        .feature-list { list-style: none; }
+        .feature-item {
+            display: flex; align-items: center; gap: 6px;
+            padding: 4px 8px; margin-bottom: 3px;
+            background: #f5f5f5;
+            border-radius: 3px;
+            border-left: 3px solid #999;
+            font-size: 11px;
+            color: #444;
+        }
+        .feature-item::before {
+            content: '\2713';
+            font-size: 12px; font-weight: 900; color: #666; flex-shrink: 0;
+        }
+
+        .bc-only { flex: 1; }
+        .bc-category { margin-bottom: 6px; }
+        .bc-cat-header {
+            font-size: 10px; font-weight: 700; color: #fff;
+            background: #333; padding: 3px 8px; border-radius: 2px; margin-bottom: 3px;
+        }
+        .bc-cat-count {
+            background: #666; color: #fff; font-size: 8px;
+            padding: 1px 5px; border-radius: 6px; margin-left: 4px; font-weight: 800;
+        }
+        .bc-item-list { display: flex; flex-wrap: wrap; gap: 3px; padding-left: 6px; }
+        .bc-item {
+            font-size: 9px; color: #555; background: #f8f8f8;
+            padding: 2px 6px; border-radius: 2px; border: 1px solid #e0e0e0;
+        }
+
+        /* Cost Table */
+        .cost-table-wrap {
+            border: 2px solid #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+        .cost-table { width: 100%; border-collapse: collapse; }
+        .cost-table th {
+            background: #333; color: #fff; padding: 7px 10px;
+            font-size: 11px; font-weight: 600; text-align: center;
+            border-right: 1px solid #555;
+        }
+        .cost-table th:last-child { border-right: none; }
+        .cost-table td {
+            padding: 5px 10px; font-size: 11px; text-align: center;
+            border-bottom: 1px solid #e8e8e8; border-right: 1px solid #e8e8e8;
+        }
+        .cost-table td:last-child { border-right: none; }
+        .cost-table tr:last-child td { border-bottom: none; }
+        .cost-table td:first-child {
+            text-align: left; font-weight: 600; background: #fafafa; color: #444;
+        }
+        .cost-table .group-header td {
+            background: #f0f0f0; font-weight: 700; font-size: 11px;
+            color: #222; border-bottom: 2px solid #ccc;
+        }
+        .cost-table .amount { font-weight: 800; font-size: 13px; }
+        .cost-table .amount.v { color: #666; }
+        .cost-table .amount.b { color: #222; }
+        .cost-table .sub-row td { font-size: 10px; color: #888; padding: 3px 10px; }
+        .cost-table .sub-row td:first-child { padding-left: 20px; }
+        .cost-table .highlight-row td { background: #f8f8f8; }
+        .cost-table .new-badge {
+            background: #c00; color: #fff; font-size: 8px; font-weight: 700;
+            padding: 1px 4px; border-radius: 2px; margin-left: 3px;
+        }
+
+        /* Bar Chart */
+        .bar-section { margin-bottom: 14px; }
+        .bar-title {
+            font-size: 11px; font-weight: 700; color: #333;
+            margin-bottom: 6px; padding-bottom: 3px;
+            border-bottom: 1px solid #ddd;
+        }
+        .bar-row { display: flex; align-items: center; margin-bottom: 4px; }
+        .bar-label { width: 72px; font-size: 9px; font-weight: 600; color: #555; text-align: right; padding-right: 6px; }
+        .bar-track { flex: 1; height: 16px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }
+        .bar-fill {
+            height: 100%; border-radius: 2px; display: flex; align-items: center;
+            padding-left: 4px; font-size: 8px; font-weight: 700; color: #fff;
+        }
+        .bar-fill.v { background: #777; }
+        .bar-fill.b { background: #222; }
+        .bar-amount { margin-left: 4px; font-size: 9px; color: #888; min-width: 70px; }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 2px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+            color: #999;
+        }
+        .footer .verdict { font-size: 11px; font-weight: 700; color: #111; }
+        .footer .verdict .hl { color: #c00; }
+    </style>
+</head>
+<body>
+
+<!-- Title -->
+<div class="title-bar">
+    <h1>WSOPTV OTT: Vimeo vs Brightcove+Accedo</h1>
+    <div class="sub">기능 가치 + 비용 구조 비교 | 내부 의사결정 자료 | 2026-02-09 (v4 — 수정 견적 반영)</div>
+</div>
+
+<!-- Feature Comparison -->
+<div class="feature-section">
+    <div class="common-features">
+        <div class="section-label">공통 기능 (Both Providers)</div>
+        <ul class="feature-list">
+            <li class="feature-item">VOD 호스팅 & 스트리밍</li>
+            <li class="feature-item">Live Streaming 실시간 방송</li>
+            <li class="feature-item">DRM 콘텐츠 보호 (AES-128 / Multi-DRM)</li>
+            <li class="feature-item">CDN 글로벌 전송망</li>
+            <li class="feature-item">SSO 통합 로그인 (SAML)</li>
+            <li class="feature-item">SVOD 월정액 구독</li>
+            <li class="feature-item">TVOD 건별 결제</li>
+            <li class="feature-item">AVOD 광고 기반 무료</li>
+            <li class="feature-item">Web App (반응형)</li>
+            <li class="feature-item">Search 검색</li>
+            <li class="feature-item">Favorites 즐겨찾기</li>
+            <li class="feature-item">Smart TV / Console 앱</li>
+            <li class="feature-item">CMS 콘텐츠 관리</li>
+            <li class="feature-item">Cloud Playout 클라우드 송출</li>
+            <li class="feature-item">한국어 지원</li>
+        </ul>
+    </div>
+
+    <div class="bc-only">
+        <div class="section-label">Brightcove 전용 기능</div>
+        <div class="bc-category">
+            <div class="bc-cat-header">Sports / Poker 스포츠·포커<span class="bc-cat-count">9</span></div>
+            <div class="bc-item-list">
+                <div class="bc-item">EPG 편성표</div>
+                <div class="bc-item">Multiview 다중화면</div>
+                <div class="bc-item">Hand Markers 핸드 마커</div>
+                <div class="bc-item">Chip Count Overlays 칩 카운트</div>
+                <div class="bc-item">Stats Overlays 통계 오버레이</div>
+                <div class="bc-item">Clip Highlights 하이라이트</div>
+                <div class="bc-item">Replay 다시보기</div>
+                <div class="bc-item">Side Bet 사이드 베팅</div>
+                <div class="bc-item">Player Profiles 선수 정보</div>
+            </div>
+        </div>
+        <div class="bc-category">
+            <div class="bc-cat-header">Social Interaction 소셜 기능<span class="bc-cat-count">4</span></div>
+            <div class="bc-item-list">
+                <div class="bc-item">Live Chat 실시간 채팅</div>
+                <div class="bc-item">Polls & Emoji 투표/이모지</div>
+                <div class="bc-item">Clip & Share 클립 공유</div>
+                <div class="bc-item">Community Leaderboards 랭킹</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cost Table -->
+<div class="cost-table-wrap">
+    <table class="cost-table">
+        <thead>
+            <tr>
+                <th style="width:180px">구분</th>
+                <th style="width:130px">Vimeo OTT</th>
+                <th style="width:180px">Brightcove+Accedo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="group-header"><td colspan="3">One-time Fee (일회성 개발비)</td></tr>
+            <tr>
+                <td>개발비 합계</td>
+                <td><span class="amount v">$0</span></td>
+                <td><span class="amount b">$1,150,000</span></td>
+            </tr>
+            <tr class="sub-row"><td>Phase 1 기본 OTT</td><td>-</td><td>$650,000</td></tr>
+            <tr class="sub-row"><td>Phase 2 Advanced</td><td>-</td><td>$450,000</td></tr>
+            <tr class="sub-row"><td>PM</td><td>-</td><td>$50,000</td></tr>
+            <tr class="group-header"><td colspan="3">Annual Fee (연간 운영비 — 고정 + 인프라)</td></tr>
+            <tr class="highlight-row">
+                <td>견적 -1 (저장 100TB / 전송 300TB)</td>
+                <td><span class="amount v">$125,000</span></td>
+                <td rowspan="5" style="vertical-align:middle">
+                    <span class="amount b">$585,949</span><br>
+                    <span style="font-size:9px;color:#888">Streaming $306K + 유지보수 $280K</span><br>
+                    <span style="font-size:11px;font-weight:600;color:#444;display:inline-block;margin-top:4px">(저장 40TB / 전송 21PB/년)</span>
+                </td>
+            </tr>
+            <tr class="highlight-row"><td>견적 0 (저장 300TB / 전송 500TB)</td><td><span class="amount v">$190,000</span></td></tr>
+            <tr class="highlight-row"><td>견적 1 (저장 500TB / 전송 1PB)</td><td><span class="amount v">$250,000</span></td></tr>
+            <tr class="highlight-row"><td>견적 2 (저장 1PB / 전송 2PB)</td><td><span class="amount v">$350,000</span></td></tr>
+            <tr class="highlight-row"><td>견적 3 (저장 1.5PB / 전송 2PB)</td><td><span class="amount v">$390,000</span></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bar Chart -->
+<div class="bar-section">
+    <div class="bar-title">비용 비교 (Vimeo 연간 vs Brightcove 첫해 총액 $1,736K 기준)</div>
+    <div class="bar-row">
+        <div class="bar-label">Vimeo -1</div>
+        <div class="bar-track"><div class="bar-fill v" style="width:7.2%"></div></div>
+        <div class="bar-amount">$125K (7%)</div>
+    </div>
+    <div class="bar-row">
+        <div class="bar-label">Vimeo 0</div>
+        <div class="bar-track"><div class="bar-fill v" style="width:10.9%"></div></div>
+        <div class="bar-amount">$190K (11%)</div>
+    </div>
+    <div class="bar-row">
+        <div class="bar-label">Vimeo 1</div>
+        <div class="bar-track"><div class="bar-fill v" style="width:14.4%"></div></div>
+        <div class="bar-amount">$250K (14%)</div>
+    </div>
+    <div class="bar-row">
+        <div class="bar-label">Vimeo 2</div>
+        <div class="bar-track"><div class="bar-fill v" style="width:20.2%"></div></div>
+        <div class="bar-amount">$350K (20%)</div>
+    </div>
+    <div class="bar-row">
+        <div class="bar-label">Vimeo 3</div>
+        <div class="bar-track"><div class="bar-fill v" style="width:22.5%"></div></div>
+        <div class="bar-amount">$390K (22%)</div>
+    </div>
+    <div class="bar-row">
+        <div class="bar-label" style="font-weight:800;color:#111">Brightcove</div>
+        <div class="bar-track"><div class="bar-fill b" style="width:100%"></div></div>
+        <div class="bar-amount" style="font-weight:800;color:#111">$1,736K (100%)</div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="verdict">권고: <span class="hl">Vimeo 견적 -1 ($125K/yr)</span> 기반 최종 협상 | Brightcove는 Vimeo 결렬 시 재검토</div>
+    <div>출처: Vimeo 수정 견적 (2/6) + Brightcove Proposal PDF (p.21)</div>
+</div>
+
+</body>
+</html>

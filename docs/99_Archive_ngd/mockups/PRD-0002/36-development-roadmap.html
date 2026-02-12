@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>36 - Development Roadmap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            padding: 40px 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .timeline-wrapper {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .timeline-phases {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .phase-card {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px 16px;
+            position: relative;
+        }
+
+        .phase-card.mvp {
+            border-color: #1a1a2e;
+            border-width: 3px;
+            background: white;
+        }
+
+        .phase-card.mvp::before {
+            content: "MVP";
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: #1a1a2e;
+            color: white;
+            padding: 2px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        .phase-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .phase-date {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .phase-date.confirmed {
+            color: #1a1a2e;
+            background: #f0f0f0;
+            padding: 3px 6px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-item::before {
+            content: "-";
+            margin-right: 6px;
+            color: #999;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .platform-box {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        .platform-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .platform-status {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .critical-path {
+            background: white;
+            border: 2px solid #1a1a2e;
+            border-radius: 6px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .critical-path-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+        }
+
+        .critical-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .critical-step {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 16px 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        .critical-step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        .step-number {
+            font-size: 11px;
+            font-weight: 700;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .step-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 2px;
+        }
+
+        .step-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .milestones {
+            margin-top: 24px;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 24px;
+        }
+
+        .milestones-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .milestone-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .milestone-item {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+
+        .milestone-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 2px;
+        }
+
+        .milestone-date {
+            font-size: 11px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WSOP TV Development Roadmap</h1>
+        <p class="subtitle">2027-2030 Phased Rollout</p>
+
+        <div class="timeline-wrapper">
+            <!-- Phase Cards -->
+            <div class="timeline-phases">
+                <!-- MVP Phase -->
+                <div class="phase-card mvp">
+                    <div class="phase-name">MVP</div>
+                    <div class="phase-date confirmed">2027 Q2</div>
+                    <ul class="feature-list">
+                        <li class="feature-item">Live Streaming</li>
+                        <li class="feature-item">VOD Library</li>
+                        <li class="feature-item">Timeshift</li>
+                        <li class="feature-item">Subscription</li>
+                        <li class="feature-item">GGPass SSO</li>
+                        <li class="feature-item">5 Platforms</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-card">
+                    <div class="phase-name">Phase 2</div>
+                    <div class="phase-date">2028 Q2</div>
+                    <ul class="feature-list">
+                        <li class="feature-item">Multi-view</li>
+                        <li class="feature-item">3-Layer Switch</li>
+                        <li class="feature-item">Hand Search</li>
+                        <li class="feature-item">Basic Filters</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-card">
+                    <div class="phase-name">Phase 3</div>
+                    <div class="phase-date">2029 Q2</div>
+                    <ul class="feature-list">
+                        <li class="feature-item">Player Stats</li>
+                        <li class="feature-item">Chart Overlays</li>
+                        <li class="feature-item">Advanced Search</li>
+                        <li class="feature-item">Watchlist</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="phase-card">
+                    <div class="phase-name">Phase 4</div>
+                    <div class="phase-date">2030 Q2</div>
+                    <ul class="feature-list">
+                        <li class="feature-item">Player Cam</li>
+                        <li class="feature-item">Custom Overlays</li>
+                        <li class="feature-item">Social Features</li>
+                        <li class="feature-item">AI Highlights</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Platform Support -->
+            <div class="platform-grid">
+                <div class="platform-box">
+                    <div class="platform-name">Web</div>
+                    <div class="platform-status">MVP Ready</div>
+                </div>
+                <div class="platform-box">
+                    <div class="platform-name">iOS</div>
+                    <div class="platform-status">MVP Ready</div>
+                </div>
+                <div class="platform-box">
+                    <div class="platform-name">Android</div>
+                    <div class="platform-status">MVP Ready</div>
+                </div>
+                <div class="platform-box">
+                    <div class="platform-name">Samsung TV</div>
+                    <div class="platform-status">MVP Ready</div>
+                </div>
+                <div class="platform-box">
+                    <div class="platform-name">LG TV</div>
+                    <div class="platform-status">MVP Ready</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Critical Path -->
+        <div class="critical-path">
+            <h2 class="critical-path-title">Critical Path to MVP</h2>
+            <div class="critical-steps">
+                <div class="critical-step">
+                    <div class="step-number">STEP 1</div>
+                    <div class="step-name">TEMPLE Agreement</div>
+                    <div class="step-date">2026 Q2-Q3</div>
+                </div>
+                <div class="critical-step">
+                    <div class="step-number">STEP 2</div>
+                    <div class="step-name">Live Feed Testing</div>
+                    <div class="step-date">2026 Q4</div>
+                </div>
+                <div class="critical-step">
+                    <div class="step-number">STEP 3</div>
+                    <div class="step-name">Platform Launch</div>
+                    <div class="step-date">2027 Q1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestones -->
+        <div class="milestones">
+            <h3 class="milestones-title">Key Milestones</h3>
+            <div class="milestone-list">
+                <div class="milestone-item">
+                    <div class="milestone-name">Kickoff</div>
+                    <div class="milestone-date">2026 Q2</div>
+                </div>
+                <div class="milestone-item">
+                    <div class="milestone-name">Dev Complete</div>
+                    <div class="milestone-date">2027 Q1</div>
+                </div>
+                <div class="milestone-item">
+                    <div class="milestone-name">Beta Testing</div>
+                    <div class="milestone-date">2027 Q1</div>
+                </div>
+                <div class="milestone-item">
+                    <div class="milestone-name">Public Launch</div>
+                    <div class="milestone-date">2027 Q2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GG Production Flow - Compact</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 500px;
+            padding: 30px 20px;
+        }
+
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .node {
+            background: white;
+            border: 2px solid black;
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .node-large {
+            min-width: 90px;
+        }
+
+        .node-small {
+            min-width: 70px;
+        }
+
+        .arrow {
+            width: 30px;
+            height: 2px;
+            background: black;
+            position: relative;
+            flex-shrink: 0;
+            margin: 0 4px;
+        }
+
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -3px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid black;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+
+        .philosophy {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .philosophy-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .philosophy-items {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .philosophy-item {
+            position: relative;
+        }
+
+        .philosophy-item:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flow-container">
+            <div class="node node-large">16 Cameras</div>
+            <div class="arrow"></div>
+            <div class="node node-large">4 Switchers</div>
+            <div class="arrow"></div>
+            <div class="node node-small">4 PGM</div>
+            <div class="arrow"></div>
+            <div class="node node-small">Seoul</div>
+            <div class="arrow"></div>
+            <div class="node node-large">YouTube</div>
+        </div>
+
+        <div class="philosophy">
+            <div class="philosophy-label">Production Philosophy</div>
+            <div class="philosophy-items">
+                <div class="philosophy-item">그룹 매칭</div>
+                <div class="philosophy-item">선별 송출</div>
+                <div class="philosophy-item">하이라이트</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

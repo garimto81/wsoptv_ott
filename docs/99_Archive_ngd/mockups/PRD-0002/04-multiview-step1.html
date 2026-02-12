@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WSOP TV - Multi-view Step 1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px;
+            margin: 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #000;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 11px;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            padding: 4px 8px;
+            margin-bottom: 8px;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .flow-container {
+            border: 1px solid #000;
+            padding: 10px;
+        }
+        .flow-title {
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            background: #f0f0f0;
+            padding: 4px 6px;
+        }
+        .flow-note {
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed #ccc;
+        }
+        .video-player {
+            border: 1px solid #000;
+            background: #1a1a1a;
+        }
+        .video-screen {
+            aspect-ratio: 16/9;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-label {
+            color: #666;
+            font-size: 9px;
+        }
+        .control-bar {
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;
+            background: #000;
+            gap: 5px;
+        }
+        .ctrl-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 3px 6px;
+            font-size: 8px;
+        }
+        .ctrl-btn.multiview-btn {
+            background: #444;
+            border: 1px solid #666;
+        }
+        .highlight-box {
+            border: 2px dashed #c00;
+            padding: 2px;
+        }
+        .timeline {
+            flex: 1;
+            height: 3px;
+            background: #444;
+            margin: 0 5px;
+        }
+        .timeline-progress {
+            width: 70%;
+            height: 100%;
+            background: #c00;
+        }
+        .ticker {
+            display: flex;
+            gap: 5px;
+            padding: 6px;
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            flex-wrap: wrap;
+        }
+        .ticker-item {
+            border: 1px solid #999;
+            padding: 4px 6px;
+            text-align: center;
+            min-width: 55px;
+            background: #fff;
+            font-size: 9px;
+        }
+        .ticker-item.watching {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        .ticker-item .level { font-weight: bold; font-size: 10px; }
+        .ticker-item .name { font-size: 8px; color: #666; }
+        .ticker-item.watching .name { color: #ccc; }
+        .ticker-item .badge {
+            font-size: 7px;
+            background: #c00;
+            color: #fff;
+            padding: 1px 3px;
+        }
+        .footer {
+            text-align: center;
+            padding: 8px;
+            font-size: 8px;
+            color: #999;
+            border-top: 1px solid #eee;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">MULTI-VIEW WORKFLOW - STEP 1</div>
+    <div class="subtitle">Ticker 선택 → Single Video 시청</div>
+
+    <div class="section-title">STEP 1~2: Ticker 선택 및 Single Video</div>
+    <div class="steps-grid">
+        <!-- Step 1 -->
+        <div class="flow-container">
+            <div class="flow-title">STEP 1: Ticker에서 테이블 선택 → 즉시 시청</div>
+            <div class="ticker">
+                <div class="ticker-item watching">
+                    <div class="level">L38</div>
+                    <div class="name">Main Event</div>
+                    <div class="badge">WATCHING</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="level">L25</div>
+                    <div class="name">$100K</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="level">FT</div>
+                    <div class="name">Circuit</div>
+                </div>
+            </div>
+            <div class="flow-note">클릭 즉시 Single Video 시청 시작</div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flow-container">
+            <div class="flow-title">STEP 2: Single Video 시청 중</div>
+            <div class="video-player">
+                <div class="video-screen">
+                    <div class="video-label">[Main Event - Table 1 LIVE]</div>
+                </div>
+                <div class="control-bar">
+                    <div class="ctrl-btn">||</div>
+                    <div class="timeline"><div class="timeline-progress"></div></div>
+                    <div class="ctrl-btn multiview-btn highlight-box">MultiView</div>
+                    <div class="ctrl-btn">*</div>
+                </div>
+            </div>
+            <div class="flow-note">[MultiView] 버튼 = 컨트롤 바 내 위치</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        WSOP TV Multi-view Workflow Step 1 | PRD-0002 Section 4.1 | Generated by Claude Code
+    </div>
+</body>
+</html>

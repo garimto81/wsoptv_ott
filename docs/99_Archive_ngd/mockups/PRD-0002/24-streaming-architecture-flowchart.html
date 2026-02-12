@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV - Video Streaming Architecture v4 (Flowchart)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px;
+            margin: 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+        /* Legend Section */
+        .legend-container {
+            max-width: 900px;
+            margin: 15px auto 0;
+        }
+        .legend-title {
+            background: #000;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .legend-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+        .legend-table th, .legend-table td {
+            border: 1px solid #000;
+            padding: 5px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .legend-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .legend-table .section-row {
+            background: #e8e8e8;
+            font-weight: bold;
+        }
+        .protocol-legend {
+            margin-top: 10px;
+            border: 1px solid #000;
+            padding: 8px 12px;
+        }
+        .protocol-legend-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .protocol-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 10px;
+        }
+        .protocol-item {
+            display: flex;
+            gap: 6px;
+        }
+        .protocol-item strong {
+            min-width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Video Streaming Architecture v4</div>
+    <div class="subtitle">Camera to Viewer Flowchart | 26 Nodes, 7 Sections | YouTube + WSOPTV Split</div>
+
+    <svg viewBox="0 0 900 750" width="900" height="750">
+        <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#000"/>
+            </marker>
+            <marker id="arrowhead-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#666"/>
+            </marker>
+        </defs>
+
+        <!-- ===== SECTION A: ON-SITE PRODUCTION ===== -->
+        <g id="section-a">
+            <rect x="10" y="10" width="880" height="110" fill="#fafafa" stroke="#000" stroke-width="2"/>
+            <text x="20" y="28" font-size="11" font-weight="bold">SECTION A: ON-SITE PRODUCTION (5 Nodes)</text>
+
+            <!-- Node: Cameras -->
+            <g transform="translate(30, 45)">
+                <rect width="90" height="40" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="45" y="17" text-anchor="middle" font-size="10" font-weight="bold">Cameras</text>
+                <text x="45" y="30" text-anchor="middle" font-size="8" fill="#666">(SDI output)</text>
+            </g>
+
+            <!-- Arrow: Cameras -> Switcher -->
+            <path d="M120,65 L150,65" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="135" y="58" font-size="7" fill="#333" text-anchor="middle">SDI</text>
+
+            <!-- Node: Switcher -->
+            <g transform="translate(155, 45)">
+                <rect width="90" height="40" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="45" y="17" text-anchor="middle" font-size="10" font-weight="bold">Switcher</text>
+                <text x="45" y="30" text-anchor="middle" font-size="8" fill="#666">(Video Mixer)</text>
+            </g>
+
+            <!-- Split from Switcher -->
+            <!-- Arrow: Switcher -> Combiner (PGM) -->
+            <path d="M245,55 L310,55 L310,55 L370,55" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="305" y="48" font-size="7" fill="#333" text-anchor="middle">PGM</text>
+
+            <!-- Arrow: Switcher -> PokerGFX (branch down) -->
+            <path d="M245,75 L275,75 L275,100 L310,100" stroke="#666" stroke-width="1" fill="none" marker-end="url(#arrowhead-gray)"/>
+            <text x="275" y="93" font-size="6" fill="#666" text-anchor="middle">ref</text>
+
+            <!-- Node: PokerGFX (smaller, branch) -->
+            <g transform="translate(310, 82)">
+                <rect width="80" height="32" fill="#f5f5f5" stroke="#666" stroke-width="1" rx="2"/>
+                <text x="40" y="13" text-anchor="middle" font-size="9" font-weight="bold">PokerGFX</text>
+                <text x="40" y="24" text-anchor="middle" font-size="7" fill="#666">(Overlay)</text>
+            </g>
+
+            <!-- Arrow: PokerGFX -> Combiner -->
+            <path d="M390,98 L430,98 L430,75" stroke="#666" stroke-width="1" fill="none" marker-end="url(#arrowhead-gray)"/>
+            <text x="420" y="90" font-size="6" fill="#666">GFX</text>
+
+            <!-- Node: Combiner -->
+            <g transform="translate(375, 38)">
+                <rect width="90" height="40" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="45" y="17" text-anchor="middle" font-size="10" font-weight="bold">Combiner</text>
+                <text x="45" y="30" text-anchor="middle" font-size="8" fill="#666">(Compositor)</text>
+            </g>
+
+            <!-- Arrow: Combiner -> Encoder -->
+            <path d="M465,58 L500,58" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="482" y="51" font-size="7" fill="#333" text-anchor="middle">SDI</text>
+
+            <!-- Node: Encoder -->
+            <g transform="translate(505, 38)">
+                <rect width="90" height="40" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="45" y="17" text-anchor="middle" font-size="10" font-weight="bold">Encoder</text>
+                <text x="45" y="30" text-anchor="middle" font-size="8" fill="#666">(H.264/H.265)</text>
+            </g>
+        </g>
+
+        <!-- Arrow: Section A -> Section B -->
+        <path d="M550,120 L550,135" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="558" y="130" font-size="8" fill="#333">RTMP/SRT</text>
+
+        <!-- ===== SECTION B: AWS CLOUD ===== -->
+        <g id="section-b">
+            <rect x="10" y="140" width="880" height="70" fill="#fafafa" stroke="#000" stroke-width="2"/>
+            <text x="20" y="158" font-size="11" font-weight="bold">SECTION B: AWS CLOUD (2 Nodes)</text>
+
+            <!-- Node: MediaLive -->
+            <g transform="translate(200, 165)">
+                <rect width="100" height="36" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="50" y="15" text-anchor="middle" font-size="10" font-weight="bold">MediaLive</text>
+                <text x="50" y="27" text-anchor="middle" font-size="8" fill="#666">(Ingest)</text>
+            </g>
+
+            <!-- Arrow: MediaLive -> Cloud Recording -->
+            <path d="M300,183 L380,183" stroke="#666" stroke-width="1" fill="none" marker-end="url(#arrowhead-gray)"/>
+
+            <!-- Node: Cloud Recording -->
+            <g transform="translate(385, 165)">
+                <rect width="100" height="36" fill="#f5f5f5" stroke="#666" stroke-width="1" rx="2"/>
+                <text x="50" y="15" text-anchor="middle" font-size="10" font-weight="bold">Recording</text>
+                <text x="50" y="27" text-anchor="middle" font-size="8" fill="#666">(S3 Archive)</text>
+            </g>
+        </g>
+
+        <!-- Arrow: Section B -> Section C -->
+        <path d="M250,210 L250,230" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="258" y="225" font-size="8" fill="#333">Stream</text>
+
+        <!-- ===== SECTION C: GG PRODUCTION ===== -->
+        <g id="section-c">
+            <rect x="10" y="235" width="880" height="70" fill="#fafafa" stroke="#000" stroke-width="2"/>
+            <text x="20" y="253" font-size="11" font-weight="bold">SECTION C: GG PRODUCTION - Seoul (7 Nodes)</text>
+
+            <!-- Compact horizontal pipeline -->
+            <g transform="translate(30, 262)">
+                <!-- Ingest -->
+                <rect x="0" y="0" width="55" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="27" y="13" text-anchor="middle" font-size="8" font-weight="bold">Ingest</text>
+                <text x="27" y="23" text-anchor="middle" font-size="6" fill="#666">(MAM)</text>
+            </g>
+            <path d="M85,277 L95,277" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(100, 262)">
+                <!-- QC -->
+                <rect x="0" y="0" width="45" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="22" y="13" text-anchor="middle" font-size="8" font-weight="bold">QC</text>
+                <text x="22" y="23" text-anchor="middle" font-size="6" fill="#666">(Check)</text>
+            </g>
+            <path d="M145,277 L155,277" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(160, 262)">
+                <!-- Cut -->
+                <rect x="0" y="0" width="45" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="22" y="13" text-anchor="middle" font-size="8" font-weight="bold">Cut</text>
+                <text x="22" y="23" text-anchor="middle" font-size="6" fill="#666">(Edit)</text>
+            </g>
+            <path d="M205,277 L215,277" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(220, 262)">
+                <!-- Hand Arrange -->
+                <rect x="0" y="0" width="55" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="27" y="13" text-anchor="middle" font-size="8" font-weight="bold">Hand</text>
+                <text x="27" y="23" text-anchor="middle" font-size="6" fill="#666">(Arrange)</text>
+            </g>
+            <path d="M275,277 L285,277" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(290, 262)">
+                <!-- Subtitle -->
+                <rect x="0" y="0" width="55" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="27" y="13" text-anchor="middle" font-size="8" font-weight="bold">Subtitle</text>
+                <text x="27" y="23" text-anchor="middle" font-size="6" fill="#666">(20 lang)</text>
+            </g>
+            <path d="M345,277 L355,277" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(360, 262)">
+                <!-- Soft -->
+                <rect x="0" y="0" width="50" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="25" y="13" text-anchor="middle" font-size="8" font-weight="bold">Soft</text>
+                <text x="25" y="23" text-anchor="middle" font-size="6" fill="#666">(Sponsor)</text>
+            </g>
+            <path d="M410,277 L420,277" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(425, 262)">
+                <!-- Render -->
+                <rect x="0" y="0" width="60" height="30" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="30" y="13" text-anchor="middle" font-size="8" font-weight="bold">Render</text>
+                <text x="30" y="23" text-anchor="middle" font-size="6" fill="#666">(ProRes)</text>
+            </g>
+        </g>
+
+        <!-- Arrow: Section C -> Section D -->
+        <path d="M455,305 L455,325" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+        <!-- ===== SECTION D: TRANSCODING ===== -->
+        <g id="section-d">
+            <rect x="10" y="330" width="880" height="70" fill="#fafafa" stroke="#000" stroke-width="2"/>
+            <text x="20" y="348" font-size="11" font-weight="bold">SECTION D: TRANSCODING & PACKAGING (3 Nodes)</text>
+
+            <!-- Node: ABR -->
+            <g transform="translate(180, 358)">
+                <rect width="100" height="34" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="50" y="14" text-anchor="middle" font-size="9" font-weight="bold">ABR Transcode</text>
+                <text x="50" y="26" text-anchor="middle" font-size="7" fill="#666">(HLS/DASH)</text>
+            </g>
+            <path d="M280,375 L320,375" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Node: DRM -->
+            <g transform="translate(325, 358)">
+                <rect width="100" height="34" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="50" y="14" text-anchor="middle" font-size="9" font-weight="bold">DRM Package</text>
+                <text x="50" y="26" text-anchor="middle" font-size="7" fill="#666">(Widevine/FP)</text>
+            </g>
+            <path d="M425,375 L465,375" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Node: Origin -->
+            <g transform="translate(470, 358)">
+                <rect width="100" height="34" fill="#fff" stroke="#000" stroke-width="1.5" rx="2"/>
+                <text x="50" y="14" text-anchor="middle" font-size="9" font-weight="bold">Origin Server</text>
+                <text x="50" y="26" text-anchor="middle" font-size="7" fill="#666">(S3 + Shield)</text>
+            </g>
+        </g>
+
+        <!-- Split Arrow from Origin -->
+        <path d="M520,400 L520,420" stroke="#000" stroke-width="2" fill="none"/>
+        <text x="450" y="418" font-size="9" font-weight="bold">DISTRIBUTION SPLIT</text>
+        <path d="M520,420 L300,420 L300,445" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+        <path d="M520,420 L700,420 L700,445" stroke="#000" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+        <!-- ===== SECTION E-1: YOUTUBE PATH ===== -->
+        <g id="section-e1">
+            <rect x="10" y="450" width="400" height="170" fill="#fafafa" stroke="#000" stroke-width="2"/>
+            <text x="20" y="468" font-size="10" font-weight="bold">E-1: YouTube Path (Free/Teaser)</text>
+
+            <!-- Node: YT RTMP -->
+            <g transform="translate(100, 480)">
+                <rect width="90" height="32" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="45" y="13" text-anchor="middle" font-size="9" font-weight="bold">YT RTMP</text>
+                <text x="45" y="25" text-anchor="middle" font-size="7" fill="#666">(Ingest)</text>
+            </g>
+            <path d="M145,512 L145,530" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="152" y="525" font-size="6" fill="#333">RTMP</text>
+
+            <!-- Node: YT Live -->
+            <g transform="translate(100, 535)">
+                <rect width="90" height="32" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="45" y="13" text-anchor="middle" font-size="9" font-weight="bold">YT Live</text>
+                <text x="45" y="25" text-anchor="middle" font-size="7" fill="#666">(Platform)</text>
+            </g>
+            <path d="M145,567 L145,585" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Node: YT Viewer (END) -->
+            <g transform="translate(100, 590)">
+                <rect width="90" height="32" fill="#e8e8e8" stroke="#000" stroke-width="2" rx="2"/>
+                <text x="45" y="13" text-anchor="middle" font-size="9" font-weight="bold">YT Viewer</text>
+                <text x="45" y="25" text-anchor="middle" font-size="7" fill="#333">(END - Free)</text>
+            </g>
+
+            <!-- Features box -->
+            <g transform="translate(220, 485)">
+                <rect width="170" height="75" fill="#f0f0f0" stroke="#666" stroke-width="1" rx="2"/>
+                <text x="85" y="15" text-anchor="middle" font-size="8" font-weight="bold">Features</text>
+                <text x="10" y="32" font-size="8">* DVR: OFF</text>
+                <text x="10" y="45" font-size="8">* Post-Live: Private</text>
+                <text x="10" y="58" font-size="8">* Price: FREE</text>
+                <text x="10" y="71" font-size="8">* Purpose: Acquisition</text>
+            </g>
+        </g>
+
+        <!-- ===== SECTION E-2: WSOPTV PATH ===== -->
+        <g id="section-e2">
+            <rect x="420" y="450" width="470" height="290" fill="#fafafa" stroke="#000" stroke-width="2"/>
+            <text x="430" y="468" font-size="10" font-weight="bold">E-2: WSOPTV Path (Paid/Full) + F: Client Playback</text>
+
+            <!-- Node: CDN Ingest -->
+            <g transform="translate(500, 480)">
+                <rect width="90" height="32" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="45" y="13" text-anchor="middle" font-size="9" font-weight="bold">CDN Ingest</text>
+                <text x="45" y="25" text-anchor="middle" font-size="7" fill="#666">(Multi-CDN)</text>
+            </g>
+            <path d="M545,512 L545,530" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="552" y="525" font-size="6" fill="#333">HLS</text>
+
+            <!-- Node: Edge Cache -->
+            <g transform="translate(500, 535)">
+                <rect width="90" height="32" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="45" y="13" text-anchor="middle" font-size="9" font-weight="bold">Edge Cache</text>
+                <text x="45" y="25" text-anchor="middle" font-size="7" fill="#666">(Global POP)</text>
+            </g>
+            <path d="M545,567 L545,585" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="552" y="580" font-size="6" fill="#333">HTTPS</text>
+
+            <!-- Node: WSOPTV Viewer -->
+            <g transform="translate(500, 590)">
+                <rect width="90" height="32" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="45" y="13" text-anchor="middle" font-size="9" font-weight="bold">Viewer</text>
+                <text x="45" y="25" text-anchor="middle" font-size="7" fill="#666">(Paid User)</text>
+            </g>
+
+            <!-- Section F: Client Playback -->
+            <rect x="430" y="630" width="450" height="100" fill="#f0f0f0" stroke="#666" stroke-width="1"/>
+            <text x="440" y="648" font-size="9" font-weight="bold">SECTION F: Client Playback</text>
+
+            <path d="M545,622 L545,660" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Node: Player -->
+            <g transform="translate(445, 660)">
+                <rect width="70" height="28" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="35" y="12" text-anchor="middle" font-size="8" font-weight="bold">Player</text>
+                <text x="35" y="22" text-anchor="middle" font-size="6" fill="#666">(5 Platform)</text>
+            </g>
+            <path d="M515,674 L535,674" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Node: DRM Decrypt -->
+            <g transform="translate(540, 660)">
+                <rect width="70" height="28" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="35" y="12" text-anchor="middle" font-size="8" font-weight="bold">DRM</text>
+                <text x="35" y="22" text-anchor="middle" font-size="6" fill="#666">(Decrypt)</text>
+            </g>
+            <path d="M610,674 L630,674" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Node: Render -->
+            <g transform="translate(635, 660)">
+                <rect width="70" height="28" fill="#fff" stroke="#000" stroke-width="1" rx="2"/>
+                <text x="35" y="12" text-anchor="middle" font-size="8" font-weight="bold">Render</text>
+                <text x="35" y="22" text-anchor="middle" font-size="6" fill="#666">(Display)</text>
+            </g>
+            <path d="M705,674 L725,674" stroke="#000" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- END Node -->
+            <g transform="translate(730, 655)">
+                <rect width="70" height="38" fill="#e8e8e8" stroke="#000" stroke-width="2" rx="2"/>
+                <text x="35" y="15" text-anchor="middle" font-size="9" font-weight="bold">VIEWER</text>
+                <text x="35" y="28" text-anchor="middle" font-size="7" fill="#333">(END)</text>
+            </g>
+
+            <!-- Features box -->
+            <g transform="translate(620, 480)">
+                <rect width="160" height="95" fill="#fff" stroke="#666" stroke-width="1" rx="2"/>
+                <text x="80" y="15" text-anchor="middle" font-size="8" font-weight="bold">Features</text>
+                <text x="10" y="32" font-size="8">* DVR: ON (Timeshift)</text>
+                <text x="10" y="45" font-size="8">* Archive: Permanent</text>
+                <text x="10" y="58" font-size="8">* Multi-view: Supported</text>
+                <text x="10" y="71" font-size="8">* Advanced Mode: 3-Tier</text>
+                <text x="10" y="84" font-size="8">* Price: PAID</text>
+            </g>
+        </g>
+
+        <!-- Summary Stats -->
+        <g transform="translate(10, 620)">
+            <rect width="400" height="25" fill="#fff" stroke="#000" stroke-width="1"/>
+            <text x="200" y="17" text-anchor="middle" font-size="9" font-weight="bold">Total: 26 Nodes | 7 Sections | Live Latency: 15-30s | VOD: &lt;1s</text>
+        </g>
+    </svg>
+
+    <!-- Legend Section -->
+    <div class="legend-container">
+        <div class="legend-title">Legend: Node Details (26 Nodes)</div>
+        <table class="legend-table">
+            <thead>
+                <tr>
+                    <th style="width:50px;">Sec</th>
+                    <th style="width:100px;">Node</th>
+                    <th>Full Description</th>
+                    <th style="width:200px;">Input / Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="section-row"><td colspan="4">A: On-Site Production</td></tr>
+                <tr>
+                    <td>A</td>
+                    <td>Cameras</td>
+                    <td>HD/4K Broadcast Cameras (Main PGM, Player Cam, Table Cam, Audience)</td>
+                    <td>Scene -> SDI 1080p60 (1.5Gbps)</td>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>Switcher</td>
+                    <td>Production Video Mixer/Switcher - camera source selection</td>
+                    <td>Multi SDI -> PGM + Clean Feed</td>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>PokerGFX</td>
+                    <td>Poker Graphics Overlay Generator (POT, BOARD, Hole Cards, Win %)</td>
+                    <td>PGM ref + RFID -> GFX Layer (Alpha)</td>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>Combiner</td>
+                    <td>Video Compositor - combines PGM with PokerGFX overlay</td>
+                    <td>PGM + GFX -> Combined SDI</td>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>Encoder</td>
+                    <td>On-Site Live Encoder (H.264/H.265 compression)</td>
+                    <td>SDI 1.5Gbps -> RTMP/SRT 8-15Mbps</td>
+                </tr>
+
+                <tr class="section-row"><td colspan="4">B: AWS Cloud</td></tr>
+                <tr>
+                    <td>B</td>
+                    <td>MediaLive</td>
+                    <td>AWS MediaLive Ingest - receives stream from on-site encoder</td>
+                    <td>RTMP/SRT -> Cloud Stream</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>Recording</td>
+                    <td>Cloud Archive Recording System (S3) - backup and VOD source</td>
+                    <td>Live Stream -> MP4/MKV segments</td>
+                </tr>
+
+                <tr class="section-row"><td colspan="4">C: GG Production (Seoul)</td></tr>
+                <tr>
+                    <td>C</td>
+                    <td>Ingest</td>
+                    <td>GG Production Ingest Point - registers to MAM system</td>
+                    <td>Cloud Stream -> MAM registered</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>QC</td>
+                    <td>Quality Control - verifies video/audio quality, A/V sync</td>
+                    <td>MAM source -> QC PASS</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>Cut</td>
+                    <td>Cut Editing - extract segments, remove dead air, mark ad points</td>
+                    <td>QC source -> EDL/XML timeline</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>Hand</td>
+                    <td>Feature Table Hand Arrangement - select highlights, build storyline</td>
+                    <td>Timeline + metadata -> Sequence</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>Subtitle</td>
+                    <td>Subtitle/Localization - 20 languages, poker terminology</td>
+                    <td>Sequence -> SRT/VTT (20 lang)</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>Soft</td>
+                    <td>Soft Content Placement - sponsor logos, promos, SCTE-35 markers</td>
+                    <td>Subtitled -> Sponsor/Promo added</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>Render</td>
+                    <td>Final Master Render - output final master video</td>
+                    <td>Complete seq -> ProRes 422 HQ</td>
+                </tr>
+
+                <tr class="section-row"><td colspan="4">D: Transcoding & Packaging</td></tr>
+                <tr>
+                    <td>D</td>
+                    <td>ABR</td>
+                    <td>Adaptive Bitrate Transcoder - multiple resolutions (1080p~240p)</td>
+                    <td>Master -> HLS/DASH ladder (0.3-8Mbps)</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>DRM</td>
+                    <td>DRM Packaging - Widevine/FairPlay/PlayReady encryption</td>
+                    <td>Clear segments -> Encrypted + Manifest</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>Origin</td>
+                    <td>Origin Server (S3 + Origin Shield) - serves to YouTube and CDN</td>
+                    <td>DRM packaged -> YouTube/CDN origin</td>
+                </tr>
+
+                <tr class="section-row"><td colspan="4">E-1: YouTube Path (Free)</td></tr>
+                <tr>
+                    <td>E1</td>
+                    <td>YT RTMP</td>
+                    <td>YouTube RTMP Ingest - sends stream to YouTube Live</td>
+                    <td>Origin stream -> YouTube platform</td>
+                </tr>
+                <tr>
+                    <td>E1</td>
+                    <td>YT Live</td>
+                    <td>YouTube Live Platform - provides teaser to free viewers</td>
+                    <td>RTMP -> Viewer screen</td>
+                </tr>
+                <tr>
+                    <td>E1</td>
+                    <td>YT Viewer</td>
+                    <td>YouTube Viewer (Free) - target for WSOPTV conversion</td>
+                    <td>Live stream -> (END)</td>
+                </tr>
+
+                <tr class="section-row"><td colspan="4">E-2: WSOPTV Path (Paid)</td></tr>
+                <tr>
+                    <td>E2</td>
+                    <td>CDN</td>
+                    <td>CDN Ingest (Multi-CDN) - pulls content from Origin</td>
+                    <td>Origin HLS/DASH -> CDN network</td>
+                </tr>
+                <tr>
+                    <td>E2</td>
+                    <td>Edge</td>
+                    <td>Edge Cache (Global POP) - caches near viewers (US, EU, APAC)</td>
+                    <td>CDN content -> HTTPS to viewer</td>
+                </tr>
+                <tr>
+                    <td>E2</td>
+                    <td>Viewer</td>
+                    <td>WSOPTV Viewer (Paid Subscriber) - full feature access</td>
+                    <td>Edge stream -> Section F</td>
+                </tr>
+
+                <tr class="section-row"><td colspan="4">F: Client Playback (WSOPTV Only)</td></tr>
+                <tr>
+                    <td>F</td>
+                    <td>Player</td>
+                    <td>WSOPTV Client Player (Web, iOS, Android, Samsung TV, LG TV)</td>
+                    <td>Edge stream -> DRM request</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>DRM</td>
+                    <td>DRM Decryption (CDM) - acquires key, decrypts content</td>
+                    <td>Encrypted media -> Clear frames</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>Render</td>
+                    <td>Video Rendering Engine - decode and display to screen</td>
+                    <td>Clear frames -> 1080p 60fps display</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Protocol Legend -->
+        <div class="protocol-legend">
+            <div class="protocol-legend-title">Protocol Reference</div>
+            <div class="protocol-items">
+                <div class="protocol-item">
+                    <strong>SDI</strong>
+                    <span>Serial Digital Interface (uncompressed, 1.5Gbps)</span>
+                </div>
+                <div class="protocol-item">
+                    <strong>RTMP</strong>
+                    <span>Real-Time Messaging Protocol (streaming)</span>
+                </div>
+                <div class="protocol-item">
+                    <strong>SRT</strong>
+                    <span>Secure Reliable Transport (low-latency, FEC)</span>
+                </div>
+                <div class="protocol-item">
+                    <strong>HLS</strong>
+                    <span>HTTP Live Streaming (Apple)</span>
+                </div>
+                <div class="protocol-item">
+                    <strong>DASH</strong>
+                    <span>Dynamic Adaptive Streaming over HTTP</span>
+                </div>
+                <div class="protocol-item">
+                    <strong>HTTPS</strong>
+                    <span>TLS 1.3 encrypted transport</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>옵션 2.1: 피처 테이블별 멀티뷰</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #000; padding: 6px; font-size: 12px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px; }
+        .header h1 { font-size: 18px; }
+        .header .sub { font-size: 12px; color: #666; }
+        .flow { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; padding: 6px; background: #fafafa; border: 1px solid #ddd; }
+        .box { border: 1px solid #000; padding: 4px 8px; font-size: 11px; text-align: center; background: #fff; min-height: 36px; display: flex; flex-direction: column; justify-content: center; }
+        .box.src { border-style: dashed; background: #f5f5f5; }
+        .box small { font-size: 10px; color: #666; }
+        .arrow { font-size: 16px; }
+        .tables { display: flex; gap: 4px; }
+        .tbl { border: 1px solid #999; padding: 4px 8px; font-size: 11px; background: #fff; min-height: 36px; display: flex; align-items: center; }
+        .multiview { border: 2px solid #000; padding: 4px; min-height: 36px; }
+        .mv-title { font-size: 11px; font-weight: bold; text-align: center; margin-bottom: 4px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+        .cell { border: 1px solid #999; height: 28px; font-size: 11px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; }
+        .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px; margin-bottom: 4px; }
+        .spec { font-size: 11px; line-height: 1.3; }
+        .spec strong { color: #666; }
+        .row { display: flex; gap: 8px; }
+        .col { flex: 1; border: 1px solid #ccc; padding: 4px; }
+        .col h4 { font-size: 11px; margin-bottom: 2px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+        .col ul { padding-left: 14px; margin: 0; font-size: 10px; }
+        .col li { margin-bottom: 1px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>옵션 2.1: 피처 테이블별 멀티뷰</h1>
+        <div class="sub">GG Production → 테이블별 컷편집본 → 2x2 멀티뷰 송출</div>
+    </div>
+    <div class="flow">
+        <div class="box src">🏛️ GG Production<small>스위처+GFX</small></div>
+        <span class="arrow">→</span>
+        <div class="tables"><div class="tbl">T1</div><div class="tbl">T2</div><div class="tbl">T3</div><div class="tbl">T4</div></div>
+        <span class="arrow">→</span>
+        <div class="multiview">
+            <div class="mv-title">멀티뷰 (2x2)</div>
+            <div class="grid"><div class="cell">T1 🔊</div><div class="cell">T2</div><div class="cell">T3</div><div class="cell">T4</div></div>
+        </div>
+    </div>
+    <div class="specs">
+        <div class="spec"><strong>소스:</strong> 테이블별 스위처 컷편집본 (GFX 포함)</div>
+        <div class="spec"><strong>처리:</strong> GG Production (한국)</div>
+        <div class="spec"><strong>송출:</strong> 멀티뷰 (2x2) 레이아웃</div>
+        <div class="spec"><strong>오디오:</strong> 선택 테이블 (화면 클릭 전환)</div>
+    </div>
+    <div class="row">
+        <div class="col"><h4>장점 (+)</h4><ul><li>기존 프로덕션 워크플로우 활용</li><li>추가 장비 최소화</li><li>NBA TV 방식과 동일</li></ul></div>
+        <div class="col"><h4>단점 (-)</h4><ul><li>개별 플레이어 집중 불가</li><li>테이블 수 제한 (피처 테이블만)</li></ul></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV - WSOPTV Station Architecture v9</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 15px;
+            margin: 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">WSOPTV Station Architecture v9</div>
+    <div class="subtitle">Premium Player Cam Infrastructure | Advanced Mode Multi-view | On-Premise Solution</div>
+
+    <svg viewBox="0 0 950 900" width="1425" height="1350">
+        <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#000"/>
+            </marker>
+            <marker id="arrowhead-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#666"/>
+            </marker>
+            <marker id="arrowhead-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#0066cc"/>
+            </marker>
+            <marker id="arrowhead-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#c62828"/>
+            </marker>
+        </defs>
+
+        <!-- ===== SECTION A: EXISTING YOUTUBE PATH ===== -->
+        <g id="section-a">
+            <rect x="10" y="10" width="450" height="160" fill="#fafafa" stroke="#333" stroke-width="1.5"/>
+            <text x="20" y="28" font-size="11" font-weight="bold" fill="#333">SECTION A: EXISTING YOUTUBE PATH</text>
+            <text x="20" y="42" font-size="8" fill="#666">Feature Tables → Switcher → LiveU → YouTube</text>
+
+            <!-- Simplified Flow -->
+            <g transform="translate(30, 60)">
+                <rect width="80" height="35" fill="#fff" stroke="#333" stroke-width="1" rx="2"/>
+                <text x="40" y="16" text-anchor="middle" font-size="9" font-weight="bold">Feature</text>
+                <text x="40" y="28" text-anchor="middle" font-size="8">Tables 1-N</text>
+            </g>
+            <path d="M110,77 L135,77" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(140, 60)">
+                <rect width="80" height="35" fill="#fff" stroke="#333" stroke-width="1" rx="2"/>
+                <text x="40" y="16" text-anchor="middle" font-size="9" font-weight="bold">Switcher</text>
+                <text x="40" y="28" text-anchor="middle" font-size="8">Cut+GFX</text>
+            </g>
+            <path d="M220,77 L245,77" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(250, 60)">
+                <rect width="80" height="35" fill="#fff" stroke="#0066cc" stroke-width="1.5" rx="2"/>
+                <text x="40" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#0066cc">LiveU Unit</text>
+                <text x="40" y="28" text-anchor="middle" font-size="7" fill="#666">LU800</text>
+            </g>
+
+            <!-- Characteristics Box -->
+            <g transform="translate(30, 110)">
+                <rect width="400" height="48" fill="#f5f5f5" stroke="#999" stroke-width="1" rx="2"/>
+                <text x="10" y="14" font-size="8" font-weight="bold">Characteristics:</text>
+                <text x="10" y="28" font-size="7" fill="#333">• Single PGM feed (no player cams)</text>
+                <text x="10" y="40" font-size="7" fill="#333">• YouTube DVR OFF, Post-live private</text>
+                <text x="210" y="28" font-size="7" fill="#333">• Free viewer access</text>
+                <text x="210" y="40" font-size="7" fill="#333">• Cost: ~1억/event (existing)</text>
+            </g>
+        </g>
+
+        <!-- ===== SECTION A-2: NEW WSOPTV STATION ===== -->
+        <g id="section-a2">
+            <rect x="10" y="185" width="930" height="280" fill="#f0f0f0" stroke="#c62828" stroke-width="2.5" stroke-dasharray="8,4"/>
+            <text x="20" y="203" font-size="12" font-weight="bold" fill="#c62828">SECTION A-2: WSOPTV STATION (NEW - On-Premise Infrastructure)</text>
+            <text x="20" y="217" font-size="9" fill="#666">Dedicated Player Cam Array + Multi-Encoder Bank + 10G Network → Premium Multi-view Experience</text>
+
+            <!-- NEW Badge -->
+            <rect x="850" y="190" width="80" height="24" fill="#c62828" stroke="none" rx="3"/>
+            <text x="890" y="207" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">NEW</text>
+
+            <!-- Player Cam Array (Left) -->
+            <g transform="translate(25, 235)">
+                <rect width="180" height="120" fill="#fff" stroke="#333" stroke-width="1.5" rx="3"/>
+                <text x="90" y="16" text-anchor="middle" font-size="10" font-weight="bold">Player Cam Array</text>
+                <text x="90" y="30" text-anchor="middle" font-size="8" fill="#666">Feature Table #1</text>
+                <line x1="10" y1="35" x2="170" y2="35" stroke="#ddd" stroke-width="1"/>
+
+                <!-- Camera Grid -->
+                <g transform="translate(10, 42)">
+                    <rect x="0" y="0" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="17" y="13" text-anchor="middle" font-size="6">Cam P1</text>
+                    <rect x="40" y="0" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="57" y="13" text-anchor="middle" font-size="6">Cam P2</text>
+                    <rect x="80" y="0" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="97" y="13" text-anchor="middle" font-size="6">Cam P3</text>
+                    <rect x="120" y="0" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="137" y="13" text-anchor="middle" font-size="6">Cam P4</text>
+
+                    <rect x="0" y="24" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="17" y="37" text-anchor="middle" font-size="6">Cam P5</text>
+                    <rect x="40" y="24" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="57" y="37" text-anchor="middle" font-size="6">Cam P6</text>
+                    <rect x="80" y="24" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="97" y="37" text-anchor="middle" font-size="6">Cam P7</text>
+                    <rect x="120" y="24" width="35" height="20" fill="#e8e8e8" stroke="#333" stroke-width="0.8" rx="2"/>
+                    <text x="137" y="37" text-anchor="middle" font-size="6">Cam P8</text>
+                </g>
+
+                <text x="90" y="95" text-anchor="middle" font-size="7" fill="#666">8-10 dedicated cameras</text>
+                <text x="90" y="106" text-anchor="middle" font-size="7" fill="#666">per feature table</text>
+                <text x="90" y="117" text-anchor="middle" font-size="6" fill="#999">(+Dealer/Table Wide cams)</text>
+            </g>
+
+            <!-- GFX Overlay (Below Player Cams) -->
+            <g transform="translate(25, 365)">
+                <rect width="180" height="55" fill="#fff" stroke="#666" stroke-width="1.5" rx="3"/>
+                <text x="90" y="16" text-anchor="middle" font-size="10" font-weight="bold">GFX Overlay</text>
+                <text x="90" y="30" text-anchor="middle" font-size="8" fill="#666">Fill & Key Output</text>
+                <line x1="10" y1="35" x2="170" y2="35" stroke="#ddd" stroke-width="1"/>
+                <text x="10" y="47" font-size="6" fill="#333">• POT, Cards, Win%, Player Names</text>
+            </g>
+
+            <!-- Arrows: Player Cams + GFX -> SDI Router -->
+            <path d="M205,295 L235,295" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="210" y="290" font-size="6" fill="#666">SDI</text>
+            <path d="M115,420 L115,440 L260,440 L260,310" stroke="#666" stroke-width="1.2" stroke-dasharray="3,2" fill="none" marker-end="url(#arrowhead-gray)"/>
+            <text x="170" y="437" font-size="6" fill="#666">Fill & Key</text>
+
+            <!-- SDI Router + Sync -->
+            <g transform="translate(240, 245)">
+                <rect width="150" height="100" fill="#fff" stroke="#333" stroke-width="2" rx="3"/>
+                <text x="75" y="16" text-anchor="middle" font-size="10" font-weight="bold">SDI Router + Sync</text>
+                <text x="75" y="30" text-anchor="middle" font-size="8" fill="#666">Master Clock Distribution</text>
+                <line x1="10" y1="35" x2="140" y2="35" stroke="#ddd" stroke-width="1"/>
+
+                <text x="10" y="48" font-size="7" fill="#333">• LTC/Genlock Master</text>
+                <text x="10" y="60" font-size="7" fill="#333">• Frame-level sync</text>
+                <text x="10" y="72" font-size="7" fill="#333">• All cams synced</text>
+                <text x="10" y="84" font-size="7" fill="#333">• GFX overlay sync</text>
+                <text x="10" y="96" font-size="6" fill="#999">BlackMagic / Ross / Grass Valley</text>
+            </g>
+
+            <!-- Arrow: Router -> Multi-Encoder -->
+            <path d="M390,295 L425,295" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="395" y="290" font-size="7" fill="#333">8-10x SDI</text>
+
+            <!-- Multi-Encoder Bank -->
+            <g transform="translate(430, 245)">
+                <rect width="150" height="100" fill="#fff" stroke="#333" stroke-width="2" rx="3"/>
+                <text x="75" y="16" text-anchor="middle" font-size="10" font-weight="bold">Multi-Encoder Bank</text>
+                <text x="75" y="30" text-anchor="middle" font-size="8" fill="#666">4-10 Parallel Encoders</text>
+                <line x1="10" y1="35" x2="140" y2="35" stroke="#ddd" stroke-width="1"/>
+
+                <text x="10" y="48" font-size="7" fill="#333">• H.264/HEVC 1080p60</text>
+                <text x="10" y="60" font-size="7" fill="#333">• ABR: 3Mbps ~ 6Mbps</text>
+                <text x="10" y="72" font-size="7" fill="#333">• Synced timecodes</text>
+                <text x="10" y="84" font-size="7" fill="#333">• 4-10 streams per table</text>
+                <text x="10" y="96" font-size="6" fill="#999">Dedicated HW encoders</text>
+            </g>
+
+            <!-- Network Requirements (Warning) -->
+            <g transform="translate(600, 245)">
+                <rect width="160" height="100" fill="#fff3e0" stroke="#ef6c00" stroke-width="2" rx="3"/>
+                <text x="80" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef6c00">Network Required</text>
+                <text x="80" y="30" text-anchor="middle" font-size="8" fill="#666">Bandwidth Constraint</text>
+                <line x1="10" y1="35" x2="150" y2="35" stroke="#f9a825" stroke-width="1"/>
+
+                <text x="10" y="48" font-size="7" fill="#333">Current: 1G insufficient</text>
+                <text x="10" y="60" font-size="8" font-weight="bold" fill="#ef6c00">Required: 10G Network</text>
+                <line x1="10" y1="65" x2="150" y2="65" stroke="#ddd" stroke-width="1"/>
+                <text x="10" y="77" font-size="6" fill="#666">• 10 encoders × 6Mbps = 60Mbps</text>
+                <text x="10" y="88" font-size="6" fill="#666">• 10x feature tables = 600Mbps</text>
+                <text x="10" y="99" font-size="6" fill="#999">→ 10G infrastructure mandatory</text>
+            </g>
+
+            <!-- TEMPLE Dependency (Warning) -->
+            <g transform="translate(775, 245)">
+                <rect width="155" height="100" fill="#ffebee" stroke="#c62828" stroke-width="2" rx="3"/>
+                <text x="77" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#c62828">TEMPLE Dependency</text>
+                <text x="77" y="30" text-anchor="middle" font-size="8" fill="#666">Venue Coordination</text>
+                <line x1="10" y1="35" x2="145" y2="35" stroke="#e57373" stroke-width="1"/>
+
+                <text x="10" y="48" font-size="7" font-weight="bold" fill="#c62828">Critical Requirements:</text>
+                <text x="10" y="60" font-size="6" fill="#333">• Floor space (equipment racks)</text>
+                <text x="10" y="70" font-size="6" fill="#333">• Power supply (high-capacity)</text>
+                <text x="10" y="80" font-size="6" fill="#333">• Network drops (10G ports)</text>
+                <text x="10" y="90" font-size="6" fill="#333">• Cable runs (SDI + fiber)</text>
+                <text x="10" y="100" font-size="6" fill="#999">→ Venue negotiation required</text>
+            </g>
+
+            <!-- Cost Summary (Bottom) -->
+            <g transform="translate(25, 430)">
+                <rect width="905" height="25" fill="#fff" stroke="#c62828" stroke-width="1.5" rx="2"/>
+                <text x="10" y="16" font-size="8" font-weight="bold" fill="#c62828">WSOPTV Station Cost:</text>
+                <text x="150" y="16" font-size="7" fill="#333">Equipment: 5~10억 (cameras, router, encoders)</text>
+                <text x="390" y="16" font-size="7" fill="#333">Network: 1~2억/year (10G infrastructure)</text>
+                <text x="620" y="16" font-size="7" fill="#333">Personnel: 2~3억/event (ops team)</text>
+                <text x="815" y="16" font-size="8" font-weight="bold" fill="#c62828">→ +20~30억 (3yr TCO)</text>
+            </g>
+        </g>
+
+        <!-- Arrow: Encoder -> LiveU Cloud -->
+        <path d="M505,465 L505,490" stroke="#0066cc" stroke-width="2.5" fill="none" marker-end="url(#arrowhead-blue)"/>
+        <text x="515" y="478" font-size="9" font-weight="bold" fill="#0066cc">Multi-Stream (4-10x)</text>
+
+        <!-- ===== SECTION B: LIVEU CLOUD ===== -->
+        <g id="section-b">
+            <rect x="10" y="505" width="930" height="85" fill="#e6f2ff" stroke="#0066cc" stroke-width="2"/>
+            <text x="20" y="523" font-size="11" font-weight="bold" fill="#0066cc">SECTION B: LiveU CLOUD (SaaS Platform)</text>
+            <text x="20" y="537" font-size="8" fill="#666">Cloud Channel (Decoder) → LiveU Matrix (Share/Receive/Record) → Output Protocols</text>
+
+            <!-- Simplified Flow -->
+            <g transform="translate(30, 555)">
+                <rect width="100" height="25" fill="#fff" stroke="#0066cc" stroke-width="1.5" rx="2"/>
+                <text x="50" y="17" text-anchor="middle" font-size="8" font-weight="bold" fill="#0066cc">Cloud Channel</text>
+            </g>
+            <path d="M130,567 L155,567" stroke="#0066cc" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-blue)"/>
+
+            <g transform="translate(160, 555)">
+                <rect width="110" height="25" fill="#fff" stroke="#0066cc" stroke-width="1.5" rx="2"/>
+                <text x="55" y="17" text-anchor="middle" font-size="8" font-weight="bold" fill="#0066cc">LiveU Matrix</text>
+            </g>
+            <path d="M270,567 L295,567" stroke="#0066cc" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-blue)"/>
+
+            <g transform="translate(300, 555)">
+                <rect width="110" height="25" fill="#f0f0f0" stroke="#333" stroke-width="1" rx="2"/>
+                <text x="55" y="17" text-anchor="middle" font-size="8" font-weight="bold">Output Protocols</text>
+            </g>
+
+            <!-- Features Box -->
+            <g transform="translate(430, 545)">
+                <rect width="500" height="40" fill="#f5f5f5" stroke="#999" stroke-width="1" rx="2"/>
+                <text x="10" y="14" font-size="7" fill="#333">• Receives 4-10x player cam streams per table</text>
+                <text x="10" y="26" font-size="7" fill="#333">• Cloud recording integrated</text>
+                <text x="10" y="38" font-size="7" fill="#333">• Output: LRT™, SRT, RTMP, HLS, NDI, MPEG-TS</text>
+                <text x="320" y="14" font-size="7" fill="#333">• Global directory</text>
+                <text x="320" y="26" font-size="7" fill="#333">• Remote monitoring</text>
+                <text x="320" y="38" font-size="7" fill="#333">• Drag-and-drop routing</text>
+            </g>
+        </g>
+
+        <!-- Arrow: LiveU Cloud -> C (Seoul) -->
+        <path d="M180,590 L180,620" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="190" y="608" font-size="7" fill="#333">SRT</text>
+
+        <!-- ===== SECTION C: GG PRODUCTION (SIMPLIFIED) ===== -->
+        <g id="section-c">
+            <rect x="10" y="625" width="450" height="70" fill="#fafafa" stroke="#333" stroke-width="1.5"/>
+            <text x="20" y="643" font-size="11" font-weight="bold">SECTION C: GG PRODUCTION (Seoul)</text>
+            <text x="20" y="657" font-size="8" fill="#666">Hand Split → Rating → Selection → Graphics → 1hr Render → 1-2hr Delay → Broadcast</text>
+
+            <!-- Simplified flow box -->
+            <g transform="translate(30, 668)">
+                <rect width="410" height="20" fill="#fff" stroke="#333" stroke-width="1" rx="2"/>
+                <text x="205" y="14" text-anchor="middle" font-size="7" fill="#333">Broadcast-Optimized Workflow (No Ingest/MAM, Direct hand-based production)</text>
+            </g>
+        </g>
+
+        <!-- Arrows to E-1 and E-2 -->
+        <path d="M235,695 L235,730" stroke="#333" stroke-width="1.5" fill="none"/>
+        <path d="M235,730 L130,730" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="160" y="742" font-size="7" fill="#333">RTMP to YouTube</text>
+
+        <path d="M235,730 L680,730" stroke="#c62828" stroke-width="2" fill="none" marker-end="url(#arrowhead-red)"/>
+        <text x="430" y="742" font-size="8" font-weight="bold" fill="#c62828">HLS/CDN to OTT Platform</text>
+
+        <!-- ===== SECTION E-1: YOUTUBE PATH (EXISTING) ===== -->
+        <g id="section-e1">
+            <rect x="10" y="715" width="300" height="90" fill="#fafafa" stroke="#333" stroke-width="1.5"/>
+            <text x="20" y="733" font-size="11" font-weight="bold">E-1: YOUTUBE PATH (Existing)</text>
+            <text x="20" y="747" font-size="8" fill="#666">Free/Teaser - Single PGM</text>
+
+            <g transform="translate(30, 760)">
+                <rect width="260" height="35" fill="#fff" stroke="#333" stroke-width="1" rx="2"/>
+                <text x="130" y="14" text-anchor="middle" font-size="8" font-weight="bold">YT RTMP → YT Live → Viewer (FREE)</text>
+                <text x="10" y="28" font-size="6" fill="#666">DVR: OFF | Post-Live: Private | No Multi-view</text>
+            </g>
+        </g>
+
+        <!-- ===== SECTION E-2: WSOPTV PREMIUM PATH (DEFINED) ===== -->
+        <g id="section-e2">
+            <rect x="330" y="715" width="610" height="90" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+            <text x="340" y="733" font-size="11" font-weight="bold" fill="#2e7d32">E-2: WSOPTV PREMIUM PATH (DEFINED)</text>
+            <text x="340" y="747" font-size="8" fill="#666">Multi-view 4-up + Player Cam Selection + Timeshift + Permanent Archive</text>
+
+            <!-- DEFINED Badge -->
+            <rect x="850" y="720" width="80" height="24" fill="#2e7d32" stroke="none" rx="3"/>
+            <text x="890" y="737" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">DEFINED</text>
+
+            <!-- Flow -->
+            <g transform="translate(345, 760)">
+                <rect width="80" height="28" fill="#fff" stroke="#2e7d32" stroke-width="1.5" rx="2"/>
+                <text x="40" y="18" text-anchor="middle" font-size="8" font-weight="bold">HLS/CDN</text>
+            </g>
+            <path d="M425,774 L445,774" stroke="#2e7d32" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(450, 760)">
+                <rect width="95" height="28" fill="#fff" stroke="#2e7d32" stroke-width="1.5" rx="2"/>
+                <text x="47" y="18" text-anchor="middle" font-size="8" font-weight="bold">OTT Platform</text>
+            </g>
+            <path d="M545,774 L565,774" stroke="#2e7d32" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+            <g transform="translate(570, 758)">
+                <rect width="110" height="32" fill="#fff" stroke="#2e7d32" stroke-width="2" rx="3"/>
+                <text x="55" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#2e7d32">Premium Viewer</text>
+                <text x="55" y="28" text-anchor="middle" font-size="7" fill="#666">(END - Paid)</text>
+            </g>
+
+            <!-- Features -->
+            <g transform="translate(700, 755)">
+                <rect width="220" height="42" fill="#f0f0f0" stroke="#2e7d32" stroke-width="1" rx="2"/>
+                <text x="110" y="13" text-anchor="middle" font-size="8" font-weight="bold" fill="#2e7d32">Premium Features</text>
+                <text x="10" y="27" font-size="6" fill="#333">• Multi-view 4-up (PGM + 3x Player Cams)</text>
+                <text x="10" y="37" font-size="6" fill="#333">• Player Cam selection (8-10 cams available)</text>
+                <text x="130" y="27" font-size="6" fill="#333">• Timeshift/DVR (during live)</text>
+                <text x="130" y="37" font-size="6" fill="#333">• Permanent archive access</text>
+            </g>
+        </g>
+
+        <!-- ===== COST SUMMARY BOX (BOTTOM) ===== -->
+        <g id="cost-summary">
+            <rect x="10" y="820" width="930" height="70" fill="#fff3e0" stroke="#ef6c00" stroke-width="2.5" rx="3"/>
+            <text x="465" y="840" text-anchor="middle" font-size="12" font-weight="bold" fill="#ef6c00">WSOPTV Station Total Cost Estimate (3-Year TCO)</text>
+            <line x1="30" y1="847" x2="900" y2="847" stroke="#f9a825" stroke-width="1"/>
+
+            <!-- Cost Breakdown -->
+            <g transform="translate(40, 855)">
+                <text x="0" y="12" font-size="9" font-weight="bold" fill="#333">Equipment Cost:</text>
+                <text x="140" y="12" font-size="8" fill="#333">5~10억 (Player cams, SDI router, Encoders, Racks)</text>
+
+                <text x="0" y="26" font-size="9" font-weight="bold" fill="#333">Network Cost:</text>
+                <text x="140" y="26" font-size="8" fill="#333">1~2억/year (10G infrastructure, fiber, switches)</text>
+
+                <text x="470" y="12" font-size="9" font-weight="bold" fill="#333">Personnel Cost:</text>
+                <text x="600" y="12" font-size="8" fill="#333">2~3억/event (Operators, engineers)</text>
+
+                <text x="470" y="26" font-size="9" font-weight="bold" fill="#333">TEMPLE Coordination:</text>
+                <text x="600" y="26" font-size="8" fill="#333">Critical dependency (venue negotiation)</text>
+            </g>
+
+            <line x1="30" y1="877" x2="900" y2="877" stroke="#f9a825" stroke-width="1"/>
+            <text x="465" y="893" text-anchor="middle" font-size="11" font-weight="bold" fill="#c62828">TOTAL: +20~30억 (3-Year Total Cost of Ownership)</text>
+        </g>
+    </svg>
+</body>
+</html>

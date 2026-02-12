@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>WSOPTV Bandwidth Estimation</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    width: 210mm; height: 297mm;
+    padding: 16mm 20mm 14mm 20mm;
+    color: #222;
+    background: #fff;
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 18px; }
+  .header h1 { font-size: 19pt; color: #0d47a1; font-weight: 800; margin-bottom: 2px; }
+  .header .sub { font-size: 8.5pt; color: #999; }
+
+  /* Step indicator */
+  .step {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px; margin-top: 16px;
+  }
+  .step .badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #0d47a1; color: #fff; font-size: 11pt; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .step .title { font-size: 12pt; font-weight: 700; color: #0d47a1; }
+  .step .desc { font-size: 8pt; color: #888; margin-left: 4px; }
+
+  /* Arrow between sections */
+  .flow-arrow {
+    text-align: center; color: #0d47a1; font-size: 16pt;
+    margin: 10px 0 2px 0; line-height: 1;
+  }
+
+  /* YouTube Data Table */
+  .yt-table { width: 100%; border-collapse: collapse; }
+  .yt-table th {
+    font-size: 7.5pt; color: #999; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 4px 8px; border-bottom: 2px solid #e0e0e0;
+    text-align: left;
+  }
+  .yt-table th.r { text-align: right; }
+  .yt-table td {
+    padding: 5px 8px; border-bottom: 1px solid #f0f0f0;
+    font-size: 8.5pt;
+  }
+  .yt-table td.r { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .yt-table tr.total td {
+    border-top: 2px solid #0d47a1; border-bottom: none;
+    font-weight: 800; font-size: 9.5pt; background: #f5f7ff;
+    padding: 6px 8px;
+  }
+  .est { color: #bbb; font-style: italic; font-weight: 400; }
+  .yt-table .rank {
+    display: inline-block; width: 16px; height: 16px;
+    border-radius: 50%; text-align: center; line-height: 16px;
+    font-size: 7pt; font-weight: 700; color: #fff; margin-right: 5px;
+  }
+  .r1 { background: #0d47a1; }
+  .r2 { background: #42a5f5; }
+  .r3 { background: #90caf9; }
+  .r4 { background: #ccc; }
+
+  /* Conversion Pipeline */
+  .pipeline {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin: 6px 0;
+  }
+  .pipe-step {
+    text-align: center; padding: 8px 10px;
+    border-radius: 8px; position: relative;
+  }
+  .pipe-data { background: #e3f2fd; border: 1.5px solid #90caf9; min-width: 90px; }
+  .pipe-op { background: #fff3e0; border: 1.5px solid #ffcc80; min-width: 90px; }
+  .pipe-result { background: #e8f5e9; border: 2px solid #66bb6a; min-width: 100px; }
+  .pipe-step .val { font-size: 11pt; font-weight: 800; color: #0d47a1; }
+  .pipe-data .val { color: #1565c0; }
+  .pipe-op .val { color: #e65100; font-size: 10pt; }
+  .pipe-result .val { color: #2e7d32; font-size: 13pt; }
+  .pipe-step .lbl { font-size: 6.5pt; color: #888; margin-top: 1px; }
+  .pipe-arrow { font-size: 14pt; color: #0d47a1; font-weight: 700; padding: 0 3px; }
+
+  /* Scenario Table */
+  .scenario-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .scenario-table th {
+    font-size: 7.5pt; color: #999; font-weight: 600;
+    text-transform: uppercase; padding: 4px 8px;
+    border-bottom: 2px solid #e0e0e0; text-align: center;
+  }
+  .scenario-table th:first-child { text-align: left; }
+  .scenario-table td {
+    padding: 6px 8px; border-bottom: 1px solid #f0f0f0;
+    font-size: 8.5pt; text-align: center;
+  }
+  .scenario-table td:first-child { text-align: left; font-weight: 600; }
+  .scenario-table .highlight { background: #e3f2fd; }
+  .scenario-table .result-row td {
+    border-top: 2px solid #0d47a1; font-weight: 800;
+    font-size: 10pt; padding: 8px 8px; background: #f5f7ff;
+  }
+
+  /* CDN Cards */
+  .cdn-row { display: flex; gap: 12px; margin-top: 10px; }
+  .cdn-card {
+    flex: 1; border-radius: 10px; padding: 12px 14px; text-align: center;
+  }
+  .cdn-con { background: #f1f8e9; border: 1.5px solid #c5e1a5; }
+  .cdn-base { background: #e3f2fd; border: 2.5px solid #42a5f5; position: relative; }
+  .cdn-opt { background: #fff8e1; border: 1.5px solid #ffe082; }
+  .cdn-card .pct { font-size: 9pt; font-weight: 700; }
+  .cdn-con .pct { color: #558b2f; }
+  .cdn-base .pct { color: #1565c0; }
+  .cdn-opt .pct { color: #ef6c00; }
+  .cdn-card .pb { font-size: 30pt; font-weight: 900; line-height: 1.05; }
+  .cdn-con .pb { color: #558b2f; }
+  .cdn-base .pb { color: #1565c0; }
+  .cdn-opt .pb { color: #ef6c00; }
+  .cdn-card .unit { font-size: 12pt; font-weight: 400; }
+  .cdn-base .tag {
+    position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+    background: #1565c0; color: #fff; font-size: 6.5pt;
+    padding: 2px 10px; border-radius: 10px; font-weight: 700;
+  }
+
+
+  /* ABR Note */
+  .abr-note {
+    margin-top: 14px; padding: 8px 12px;
+    background: #f9f9f9; border-left: 3px solid #90caf9;
+    font-size: 7.5pt; color: #666; line-height: 1.5;
+  }
+  .abr-note b { color: #444; }
+
+  /* Footer */
+  .footer {
+    position: absolute; bottom: 10mm; left: 20mm; right: 20mm;
+    display: flex; justify-content: space-between;
+    font-size: 6.5pt; color: #ccc;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>WSOPTV Streaming Bandwidth</h1>
+  <div class="sub">YouTube 시청 데이터 &rarr; OTT 전환율 적용 &rarr; CDN 대역폭 산출 &nbsp;|&nbsp; v2.3.0 &nbsp;|&nbsp; 2026-02-12</div>
+</div>
+
+<!-- ===================== STEP 1: YouTube Data ===================== -->
+<div class="step">
+  <span class="badge">1</span>
+  <span class="title">YouTube 시청 데이터</span>
+  <span class="desc">&mdash; WSOP + PokerGO YouTube 채널 1년간 누적 Watch Hours</span>
+</div>
+
+<table class="yt-table">
+  <tr>
+    <th>Event</th>
+    <th class="r">Views</th>
+    <th class="r">Watch Hours</th>
+    <th class="r">기간</th>
+    <th>소스</th>
+  </tr>
+  <tr>
+    <td><span class="rank r1">1</span><b>WSOP VEGAS</b></td>
+    <td class="r">21,945,872</td>
+    <td class="r">~10,000,000</td>
+    <td class="r">51일</td>
+    <td>PokerGO YT</td>
+  </tr>
+  <tr>
+    <td><span class="rank r2">2</span>WSOP Bahamas</td>
+    <td class="r">1,817,794</td>
+    <td class="r">1,057,927</td>
+    <td class="r">6일</td>
+    <td>WSOP YT</td>
+  </tr>
+  <tr>
+    <td><span class="rank r3">3</span>WSOP SC Cyprus</td>
+    <td class="r">361,970</td>
+    <td class="r">167,369</td>
+    <td class="r">6일</td>
+    <td>WSOP YT</td>
+  </tr>
+  <tr>
+    <td><span class="rank r3">4</span>WSOPE</td>
+    <td class="r">302,169</td>
+    <td class="r">126,053</td>
+    <td class="r">6일</td>
+    <td>WSOP YT</td>
+  </tr>
+  <tr>
+    <td><span class="rank r4">5</span><span class="est">SC Canada / Asia</span></td>
+    <td class="r est">&mdash;</td>
+    <td class="r est">~200,000</td>
+    <td class="r est">10일</td>
+    <td class="est">Cyprus 추정</td>
+  </tr>
+  <tr class="total">
+    <td>Annual Total</td>
+    <td class="r">~24,400,000</td>
+    <td class="r">~11,550,000</td>
+    <td class="r">79일</td>
+    <td></td>
+  </tr>
+</table>
+
+<!-- Arrow -->
+<div class="flow-arrow">&darr;</div>
+
+<!-- ===================== STEP 2: Conversion ===================== -->
+<div class="step">
+  <span class="badge">2</span>
+  <span class="title">OTT 대역폭 변환</span>
+  <span class="desc">&mdash; OTT 전환율 + 1080p Bitrate + ABR 보정으로 CDN 산출</span>
+</div>
+
+<!-- Pipeline Visual (Baseline example) -->
+<div style="background:#fafafa;border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+  <div style="font-size:7.5pt;color:#888;margin-bottom:6px;text-align:center;">Baseline 계산 예시</div>
+  <div class="pipeline">
+    <div class="pipe-step pipe-data">
+      <div class="val">11.6M</div>
+      <div class="lbl">YouTube WH</div>
+    </div>
+    <div class="pipe-arrow">&times;</div>
+    <div class="pipe-step pipe-op">
+      <div class="val">10%</div>
+      <div class="lbl">OTT 전환율</div>
+    </div>
+    <div class="pipe-arrow">=</div>
+    <div class="pipe-step pipe-data">
+      <div class="val">1.16M</div>
+      <div class="lbl">OTT WH</div>
+    </div>
+    <div class="pipe-arrow">&times;</div>
+    <div class="pipe-step pipe-op">
+      <div class="val">2.2 GB/hr</div>
+      <div class="lbl">1080p Bitrate</div>
+    </div>
+    <div class="pipe-arrow">&times;</div>
+    <div class="pipe-step pipe-op">
+      <div class="val">1.15x</div>
+      <div class="lbl">ABR 보정</div>
+    </div>
+    <div class="pipe-arrow">=</div>
+    <div class="pipe-step pipe-result">
+      <div class="val">2.8 PB</div>
+      <div class="lbl">연간 CDN</div>
+    </div>
+  </div>
+</div>
+
+<!-- Scenario breakdown table -->
+<table class="scenario-table">
+  <tr>
+    <th style="width:28%">변환 변수</th>
+    <th style="width:24%">Conservative</th>
+    <th class="highlight" style="width:24%">Baseline</th>
+    <th style="width:24%">Optimistic</th>
+  </tr>
+  <tr>
+    <td>OTT 전환율</td>
+    <td>5%</td>
+    <td class="highlight"><b>10%</b></td>
+    <td>15%</td>
+  </tr>
+  <tr>
+    <td>1080p Bitrate</td>
+    <td>2.2 GB/hr</td>
+    <td class="highlight">2.2 GB/hr</td>
+    <td>2.2 GB/hr</td>
+  </tr>
+  <tr>
+    <td>ABR 보정</td>
+    <td>&times;1.15</td>
+    <td class="highlight">&times;1.15</td>
+    <td>&times;1.15</td>
+  </tr>
+  <tr class="result-row">
+    <td>연간 CDN 대역폭</td>
+    <td style="color:#558b2f;">1.4 PB</td>
+    <td class="highlight" style="color:#1565c0;">2.8 PB</td>
+    <td style="color:#ef6c00;">4.2 PB</td>
+  </tr>
+</table>
+
+<!-- Arrow -->
+<div class="flow-arrow">&darr;</div>
+
+<!-- ===================== STEP 3: Result ===================== -->
+<div class="step">
+  <span class="badge">3</span>
+  <span class="title">시나리오별 CDN 필요량</span>
+</div>
+
+<div class="cdn-row">
+  <div class="cdn-card cdn-con">
+    <div class="pct">Conservative</div>
+    <div class="pb">1.4<span class="unit"> PB</span></div>
+  </div>
+  <div class="cdn-card cdn-base">
+    <div class="tag">BASELINE</div>
+    <div class="pct">Baseline</div>
+    <div class="pb">2.8<span class="unit"> PB</span></div>
+  </div>
+  <div class="cdn-card cdn-opt">
+    <div class="pct">Optimistic</div>
+    <div class="pb">4.2<span class="unit"> PB</span></div>
+  </div>
+</div>
+
+<!-- ABR Note -->
+<div class="abr-note">
+  <b>ABR 보정 &times;1.15</b> &mdash; HLS/DASH Adaptive Bitrate Streaming 프로토콜 오버헤드.
+  Segment Prefetch, Rendition Switching, Manifest 갱신, TCP/TLS 핸드셰이크 등으로
+  순수 Bitrate 대비 10~15% 추가 트래픽 발생. Live 비중이 높은 WSOPTV 특성을 반영하여 15% 적용.
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <span>WSOPTV OTT &middot; Phase 0</span>
+  <span>Source: WSOP YouTube + PokerGO YouTube &middot; Confidential</span>
+</div>
+
+</body>
+</html>

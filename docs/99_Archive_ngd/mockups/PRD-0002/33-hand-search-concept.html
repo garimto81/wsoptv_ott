@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <title>WSOP TV - Hand Search Concept</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, system-ui, sans-serif;
+            background: #fafafa;
+            padding: 40px;
+            width: 1200px;
+            height: 800px;
+            color: #1a1a1a;
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .search-section {
+            background: white;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-input,
+        .filter-select {
+            padding: 10px 12px;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 13px;
+            background: white;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            outline: none;
+            border-color: #1a1a2e;
+        }
+
+        .tag-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 20px;
+            font-size: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            border-color: #1a1a2e;
+            background: #f5f5f5;
+        }
+
+        .tag.active {
+            background: #1a1a2e;
+            color: white;
+            border-color: #1a1a2e;
+        }
+
+        .search-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2a2a3e;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #666;
+            border: 1.5px solid #d0d0d0;
+            margin-right: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #1a1a2e;
+            color: #1a1a2e;
+        }
+
+        .results-section {
+            display: flex;
+            gap: 20px;
+        }
+
+        .results-list {
+            flex: 1;
+            background: white;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .results-header {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-bottom: 1.5px solid #d0d0d0;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .results-content {
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        .hand-result {
+            padding: 16px;
+            border-bottom: 1px solid #e8e8e8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .hand-result:hover {
+            background: #f8f8f8;
+        }
+
+        .hand-result.active {
+            background: #f0f0f0;
+            border-left: 3px solid #1a1a2e;
+        }
+
+        .hand-result:last-child {
+            border-bottom: none;
+        }
+
+        .hand-number {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hand-description {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .hand-players {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .hand-details {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #888;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .play-btn {
+            width: 24px;
+            height: 24px;
+            background: #1a1a2e;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+        }
+
+        .play-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 8px solid white;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            margin-left: 2px;
+        }
+
+        .preview-panel {
+            width: 420px;
+            background: white;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-bottom: 1.5px solid #d0d0d0;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .video-preview {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 100%);
+            border-bottom: 1.5px solid #d0d0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .video-preview::before {
+            content: '';
+            width: 64px;
+            height: 64px;
+            border: 2px solid #b0b0b0;
+            border-radius: 50%;
+        }
+
+        .video-preview::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid #b0b0b0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 6px;
+        }
+
+        .preview-info {
+            padding: 16px;
+            flex: 1;
+        }
+
+        .preview-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .info-label {
+            color: #888;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .hand-breakdown {
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .breakdown-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .breakdown-item {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .breakdown-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #999;
+        }
+
+        .wireframe-label {
+            position: fixed;
+            bottom: 20px;
+            right: 40px;
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Hand Search</div>
+        <div class="subtitle">Search and replay memorable hands from WSOP history</div>
+    </div>
+
+    <div class="search-section">
+        <div class="filter-grid">
+            <div class="filter-item">
+                <label class="filter-label">Player</label>
+                <input type="text" class="filter-input" placeholder="Search player name...">
+            </div>
+            <div class="filter-item">
+                <label class="filter-label">Event</label>
+                <select class="filter-select">
+                    <option>All Events</option>
+                    <option>Main Event 2025</option>
+                    <option>High Roller Championship</option>
+                    <option>$10K NLH</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label class="filter-label">Date Range</label>
+                <select class="filter-select">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>2025 Season</option>
+                    <option>All Time</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <label class="filter-label">Hand Type</label>
+            <div class="tag-group">
+                <div class="tag active">All Hands</div>
+                <div class="tag">All-in</div>
+                <div class="tag">Big Pot (100K+)</div>
+                <div class="tag">Bad Beat</div>
+                <div class="tag">Hero Call</div>
+                <div class="tag">Big Bluff</div>
+                <div class="tag">Final Hand</div>
+            </div>
+        </div>
+
+        <div class="search-actions">
+            <div class="result-count">247 hands found</div>
+            <div>
+                <button class="btn btn-secondary">Reset Filters</button>
+                <button class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <div class="results-list">
+            <div class="results-header">Search Results (247)</div>
+            <div class="results-content">
+                <div class="hand-result active">
+                    <div class="hand-number">Hand #2458 · Main Event Day 3</div>
+                    <div class="hand-description">AA vs KK All-in Pre-flop</div>
+                    <div class="hand-players">Phil Hellmuth vs Daniel Negreanu</div>
+                    <div class="hand-details">
+                        <div class="detail-item">
+                            <span>Pot:</span>
+                            <span class="detail-value">$847K</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Duration:</span>
+                            <span class="detail-value">4:32</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Jun 15, 2025</span>
+                        </div>
+                        <div class="play-btn"></div>
+                    </div>
+                </div>
+
+                <div class="hand-result">
+                    <div class="hand-number">Hand #2401 · Main Event Day 3</div>
+                    <div class="hand-description">Royal Flush vs Quad Aces</div>
+                    <div class="hand-players">Maria Ho vs Scott Seiver</div>
+                    <div class="hand-details">
+                        <div class="detail-item">
+                            <span>Pot:</span>
+                            <span class="detail-value">$1.2M</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Duration:</span>
+                            <span class="detail-value">8:15</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Jun 15, 2025</span>
+                        </div>
+                        <div class="play-btn"></div>
+                    </div>
+                </div>
+
+                <div class="hand-result">
+                    <div class="hand-number">Hand #2385 · Main Event Day 3</div>
+                    <div class="hand-description">Hero Call with King High</div>
+                    <div class="hand-players">Vanessa Selbst vs Justin Bonomo</div>
+                    <div class="hand-details">
+                        <div class="detail-item">
+                            <span>Pot:</span>
+                            <span class="detail-value">$425K</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Duration:</span>
+                            <span class="detail-value">12:48</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Jun 15, 2025</span>
+                        </div>
+                        <div class="play-btn"></div>
+                    </div>
+                </div>
+
+                <div class="hand-result">
+                    <div class="hand-number">Hand #2301 · Main Event Day 2</div>
+                    <div class="hand-description">Triple Barrel Bluff Success</div>
+                    <div class="hand-players">Shaun Deeb vs Chris Moneymaker</div>
+                    <div class="hand-details">
+                        <div class="detail-item">
+                            <span>Pot:</span>
+                            <span class="detail-value">$320K</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Duration:</span>
+                            <span class="detail-value">6:22</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Jun 14, 2025</span>
+                        </div>
+                        <div class="play-btn"></div>
+                    </div>
+                </div>
+
+                <div class="hand-result">
+                    <div class="hand-number">Hand #2248 · Main Event Day 2</div>
+                    <div class="hand-description">Set over Set over Set</div>
+                    <div class="hand-players">3-way All-in</div>
+                    <div class="hand-details">
+                        <div class="detail-item">
+                            <span>Pot:</span>
+                            <span class="detail-value">$1.8M</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Duration:</span>
+                            <span class="detail-value">5:45</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Jun 14, 2025</span>
+                        </div>
+                        <div class="play-btn"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-panel">
+            <div class="preview-header">Hand Preview</div>
+            <div class="video-preview"></div>
+            <div class="preview-info">
+                <div class="preview-title">AA vs KK All-in Pre-flop</div>
+
+                <div class="info-row">
+                    <span class="info-label">Event</span>
+                    <span class="info-value">Main Event Day 3</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Players</span>
+                    <span class="info-value">Phil Hellmuth vs Daniel Negreanu</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Pot Size</span>
+                    <span class="info-value">$847,000</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date</span>
+                    <span class="info-value">June 15, 2025</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Duration</span>
+                    <span class="info-value">4:32</span>
+                </div>
+
+                <div class="hand-breakdown">
+                    <div class="breakdown-title">Hand Breakdown</div>
+                    <div class="breakdown-item">Pre-flop: Hellmuth raises 3BB with A♠A♥</div>
+                    <div class="breakdown-item">Negreanu 3-bets with K♦K♣</div>
+                    <div class="breakdown-item">Hellmuth 4-bet all-in ($423K)</div>
+                    <div class="breakdown-item">Negreanu calls after 2min tank</div>
+                    <div class="breakdown-item">Board runs out: 9♣ 7♥ 2♠ Q♦ 8♠</div>
+                    <div class="breakdown-item">Hellmuth wins $847K pot</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wireframe-label">Executive Wireframe · PRD-0002</div>
+</body>
+</html>

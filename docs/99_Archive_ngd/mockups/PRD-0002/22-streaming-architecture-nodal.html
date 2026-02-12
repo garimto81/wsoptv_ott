@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV - Video Streaming Architecture (Node-by-Node)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #000;
+        }
+
+        /* Section Header */
+        .section-header {
+            background: #000;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 0;
+        }
+        .section-header:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Node Card */
+        .node {
+            border: 2px solid #000;
+            margin-bottom: 0;
+            background: #fff;
+        }
+        .node-header {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #000;
+            gap: 10px;
+        }
+        .node-number {
+            font-size: 10px;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            padding: 2px 6px;
+            white-space: nowrap;
+        }
+        .node-name {
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .node-body {
+            padding: 8px 10px;
+        }
+        .node-row {
+            display: flex;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        .node-row:last-child {
+            margin-bottom: 0;
+        }
+        .node-row .label {
+            min-width: 60px;
+            font-weight: bold;
+            color: #555;
+            font-size: 10px;
+        }
+        .node-row .value {
+            flex: 1;
+            color: #000;
+        }
+        .node-row.next {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed #ccc;
+        }
+        .node-row.next .label {
+            color: #000;
+        }
+        .node-row.next .value {
+            font-weight: bold;
+        }
+
+        /* Arrow */
+        .arrow {
+            text-align: center;
+            padding: 6px 0;
+            background: #fafafa;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
+        }
+        .arrow-line {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .arrow-info {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+        .arrow-info span {
+            color: #666;
+        }
+        .arrow-info .protocol {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* End Node */
+        .end-node {
+            border: 2px solid #000;
+            background: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            margin-top: 0;
+        }
+        .end-node .label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .end-node .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 10px;
+        }
+        .end-node .stat {
+            text-align: center;
+        }
+        .end-node .stat .num {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .end-node .stat .desc {
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Video Streaming Architecture</div>
+        <div class="subtitle">Node-by-Node Data Flow | Camera → Viewer (19 Nodes)</div>
+
+        <!-- ===== SECTION A: On-Site Production ===== -->
+        <div class="section-header">SECTION A: On-Site Production (현장 프로덕션)</div>
+
+        <!-- NODE 1 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 1</span>
+                <span class="node-name">Broadcast Cameras</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">HD/4K 방송용 카메라 (Main PGM, Player Cam, Table Cam, Audience Cam)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">현장 장면을 SDI 비압축 영상 신호로 캡처</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">현장 장면 (테이블, 플레이어, 관중, 해설자)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">SDI 1080p60 비압축 영상 신호 (1.5Gbps per camera)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Sony PXW-Z280, Canon XF705, Blackmagic URSA</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Production Switcher</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">SDI (SMPTE 292M)</span>
+                <span>1080p60, 비압축</span>
+                <span>1.5 Gbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 2 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 2</span>
+                <span class="node-name">Production Switcher</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">영상 믹서/스위처 (Video Mixer)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">여러 카메라 소스를 선택/전환하여 최종 PGM 출력 생성</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">여러 카메라의 SDI 신호 (4-16 inputs)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">최종 Program(PGM) SDI 신호 + Clean Feed</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">NewTek Tricaster TC1, Blackmagic ATEM Constellation 8K</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">GFX Generator</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">SDI (SMPTE 292M)</span>
+                <span>1080p60, 비압축</span>
+                <span>1.5 Gbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 3 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 3</span>
+                <span class="node-name">GFX Generator</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">그래픽 오버레이 생성기 (Character Generator)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">POT, BOARD, 홀카드, 플레이어 정보 등 그래픽 오버레이 생성 및 합성</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">PGM 영상 + 게임 데이터 (RFID, 딜러 입력, Tournament Clock)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">GFX 오버레이가 합성된 최종 영상</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Vizrt, Ross Video XPression, NewBlue Titler Pro</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">On-Site Encoder</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">SDI (SMPTE 292M)</span>
+                <span>1080p60, GFX 합성됨</span>
+                <span>1.5 Gbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 4 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 4</span>
+                <span class="node-name">On-Site Encoder</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">현장 인코더 (Live Encoder)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">SDI 비압축 신호를 H.264/H.265로 압축하여 IP 전송 가능한 스트림 생성</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">SDI 1080p60 비압축 영상 (1.5 Gbps)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">RTMP/SRT 스트림 (H.264, 8-15 Mbps CBR)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">AWS Elemental Live, Teradek Prism, Haivision KB</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Production Partner Ingest</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">RTMP / SRT</span>
+                <span>H.264, 1080p60</span>
+                <span>8-15 Mbps</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION B: Production Partners ===== -->
+        <div class="section-header">SECTION B: Production Partners (프로덕션 파트너)</div>
+
+        <!-- NODE 5 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 5</span>
+                <span class="node-name">Production Partner Ingest</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">프로덕션 파트너 수신 인프라 (ESPN, PokerGO, Triton, PokerCaster)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">현장에서 전송된 스트림을 수신하여 자체 방송 및 아카이브 저장</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">RTMP/SRT 스트림 (현장 인코더 출력)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">파트너 자체 방송 + 아카이브 저장 (계약 조건에 따라 GG로 이관)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">ESPN: Fiber/Satellite | PokerGO: IP | Triton/PokerCaster: SRT/RTMP</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Partner Contribution Feed</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Internal / SRT</span>
+                <span>원본 또는 트랜스코딩</span>
+                <span>Variable</span>
+            </div>
+        </div>
+
+        <!-- NODE 6 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 6</span>
+                <span class="node-name">Partner Contribution Feed</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">파트너 → GG Production 피드 전송 시스템</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">파트너가 보유한 소스 영상을 GG Production 종편 센터로 전달</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">파트너 아카이브 (ProRes, DNxHD) 또는 라이브 피드</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">GG Production Ingest로 전송되는 소스 (파일 또는 라이브)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Aspera FASP, Signiant, AWS S3 Transfer, SRT Live</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">GG Production Ingest</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Aspera / S3 / SRT</span>
+                <span>ProRes, DNxHD, H.264</span>
+                <span>50-200 Mbps</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION C: GG Production ===== -->
+        <div class="section-header">SECTION C: GG Production (종편 센터, Seoul)</div>
+
+        <!-- NODE 7 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 7</span>
+                <span class="node-name">GG Production Ingest</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">GG Production 종편 센터 수신점</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">파트너로부터 전송된 소스 영상 수신, 무결성 검증, MAM 시스템 등록</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">파트너 Contribution Feed (파일 또는 라이브)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">MAM (Media Asset Management) 시스템에 등록된 소스 + 프록시</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">AWS MediaStore, Telestream Vantage Ingest, Aspera on Cloud</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Quality Control</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Internal Storage</span>
+                <span>원본 유지</span>
+                <span>N/A (스토리지)</span>
+            </div>
+        </div>
+
+        <!-- NODE 8 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 8</span>
+                <span class="node-name">Quality Control</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">품질 검수 스테이션 (QC Station)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">영상/오디오 품질 검증 (해상도, 프레임, 오디오 레벨, A/V 동기화, 결함)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">MAM 등록된 원본 소스</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">QC PASS된 소스 (또는 FAIL 시 재요청)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Telestream Aurora, Interra Baton, Venera Pulsar</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Subtitle/Localization</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Workflow</span>
+                <span>QC PASS 승인</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 9 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 9</span>
+                <span class="node-name">Subtitle / Localization</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">다국어 자막 및 현지화 작업 스테이션</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">20개국 언어 자막 생성, 포커 용어 현지화, 플레이어 이름 표기 변환</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">QC 승인된 영상 + 트랜스크립트 (대화/해설)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">자막 파일 (SRT/WebVTT/TTML) - 20개 언어</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">AI: OpenAI Whisper, DeepL | Manual: 전문 번역팀</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Graphics Overlay (Post)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">File</span>
+                <span>영상 + SRT/VTT/TTML</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 10 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 10</span>
+                <span class="node-name">Graphics Overlay (Post)</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">후반 그래픽 오버레이 작업 (Post-Production GFX)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">HUD 스탯(VPIP, PFR), Equity 그래프, 리플레이, 인트로/아웃트로 합성</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">자막 완료된 영상 + 스탯 데이터 (PokerTracker DB)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">최종 마스터 영상 (GFX 완성, 1080p ProRes 422 HQ)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Adobe After Effects, DaVinci Resolve, Vizrt Viz Engine</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Transcoder Input</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">File / Watch Folder</span>
+                <span>ProRes 422 HQ</span>
+                <span>~200 Mbps</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION D: Cloud Transcoding ===== -->
+        <div class="section-header">SECTION D: Cloud Transcoding (AWS Cloud)</div>
+
+        <!-- NODE 11 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 11</span>
+                <span class="node-name">Transcoder Input</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">트랜스코더 입력 처리 (Job Queue)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">마스터 영상 업로드 감지, 무결성 검증, 트랜스코딩 Job 생성</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">종편 완료된 마스터 영상 (ProRes/H.264 Mezzanine)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">트랜스코딩 Job (Input S3 path, Output settings)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">AWS S3 Watch Folder, AWS MediaConvert Job Queue, Lambda</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">ABR Transcoding</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">AWS API</span>
+                <span>Job Queue</span>
+                <span>N/A</span>
+            </div>
+        </div>
+
+        <!-- NODE 12 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 12</span>
+                <span class="node-name">ABR Transcoding</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Adaptive Bitrate (ABR) 트랜스코더</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">단일 마스터를 다중 해상도/비트레이트로 변환 (1080p~240p, 8~0.3Mbps)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">마스터 영상 (Mezzanine, 1080p)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">ABR Ladder: HLS/DASH 세그먼트 (Clear, 비암호화)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">VOD: AWS MediaConvert | Live: AWS Elemental MediaLive</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">DRM Packaging</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Internal Pipeline</span>
+                <span>HLS/DASH (Clear)</span>
+                <span>0.3-8 Mbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 13 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 13</span>
+                <span class="node-name">DRM Packaging</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">DRM 암호화 패키징 시스템</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">콘텐츠를 DRM(Widevine/FairPlay/PlayReady)으로 암호화, 라이선스 키 발급 연동</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Clear (비암호화) HLS/DASH 세그먼트</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">CENC/SAMPLE-AES 암호화된 HLS/DASH 세그먼트 + DRM Manifest</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">AWS MediaPackage, BuyDRM KeyOS, PallyCon</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Origin Server</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">S3 PUT</span>
+                <span>Encrypted fMP4 + Manifest</span>
+                <span>Variable</span>
+            </div>
+        </div>
+
+        <!-- NODE 14 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 14</span>
+                <span class="node-name">Origin Server</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">Origin 스토리지 서버 (S3 + Origin Shield)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">암호화된 콘텐츠 저장, CDN 요청에 원본 응답 제공, 티어별 스토리지 관리</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">DRM 패키징된 HLS/DASH 콘텐츠</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">CDN Origin Pull 요청에 대한 응답 (m3u8, mpd, m4s 세그먼트)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">AWS S3 (Standard/IA/Glacier) + CloudFront Origin Shield</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">CDN Ingest</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">HTTPS (Origin Pull)</span>
+                <span>HLS/DASH</span>
+                <span>On-demand</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION E: CDN Delivery ===== -->
+        <div class="section-header">SECTION E: CDN Delivery (Global Distribution)</div>
+
+        <!-- NODE 15 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 15</span>
+                <span class="node-name">CDN Ingest</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">CDN 수신점 (CDN Origin Ingest)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">Origin에서 콘텐츠를 Pull하여 CDN 백본 네트워크로 배포, Multi-CDN 페일오버</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">Origin Server의 HLS/DASH 콘텐츠</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">CDN 내부 배포 네트워크 (Global POP Replication)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Primary: Akamai Media Delivery | Backup: AWS CloudFront</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Edge Cache</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">CDN Internal</span>
+                <span>HLS/DASH (Cached)</span>
+                <span>Multi-Tbps</span>
+            </div>
+        </div>
+
+        <!-- NODE 16 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 16</span>
+                <span class="node-name">Edge Cache</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">CDN Edge 캐시 서버 (Global POP)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">시청자 가까이에서 콘텐츠 캐싱 및 전송 (US, EU, APAC, LATAM)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">CDN Ingest로부터 복제된 콘텐츠</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">HTTPS로 시청자에게 전송되는 스트리밍 데이터</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Akamai POP (150+ locations), CloudFront Edge Location</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Client Player</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">HTTPS (TLS 1.3)</span>
+                <span>HLS/DASH (Encrypted)</span>
+                <span>0.3-8 Mbps (ABR)</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION F: Client Playback ===== -->
+        <div class="section-header">SECTION F: Client Playback (시청자 재생)</div>
+
+        <!-- NODE 17 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 17</span>
+                <span class="node-name">Client Player</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">클라이언트 비디오 플레이어 (Web, iOS, Android, Samsung TV, LG TV)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">HLS/DASH 스트림 수신, Manifest 파싱, ABR 품질 선택, DRM 처리 요청</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">CDN Edge로부터 전송된 암호화 스트림 (HLS/DASH)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">DRM 복호화 요청 (License Challenge) + 암호화된 세그먼트</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Web: Video.js+hls.js | iOS: AVKit | Android: ExoPlayer | TV: Native API</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">DRM Decryption</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Platform API</span>
+                <span>Encrypted Media</span>
+                <span>N/A (Local)</span>
+            </div>
+        </div>
+
+        <!-- NODE 18 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 18</span>
+                <span class="node-name">DRM Decryption</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">DRM 복호화 모듈 (CDM: Content Decryption Module)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">라이선스 서버에서 키 획득, 암호화된 콘텐츠 복호화 (Secure Video Path)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">암호화된 미디어 샘플 + License Response (Content Key)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">복호화된 미디어 샘플 (Clear H.264/H.265 frames)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Widevine (Chrome/Android) | FairPlay (Safari/iOS) | PlayReady (Edge/TV)</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">Video Rendering</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow">
+            <div class="arrow-line">↓</div>
+            <div class="arrow-info">
+                <span class="protocol">Media Pipeline</span>
+                <span>Decrypted H.264/H.265</span>
+                <span>N/A (Local)</span>
+            </div>
+        </div>
+
+        <!-- NODE 19 -->
+        <div class="node">
+            <div class="node-header">
+                <span class="node-number">NODE 19</span>
+                <span class="node-name">Video Rendering</span>
+            </div>
+            <div class="node-body">
+                <div class="node-row">
+                    <span class="label">WHAT</span>
+                    <span class="value">비디오 렌더링 엔진 (Hardware Decoder + Display)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">ROLE</span>
+                    <span class="value">복호화된 프레임 디코딩(H.264→YUV→RGB), 자막/UI 합성, 화면 렌더링</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">INPUT</span>
+                    <span class="value">복호화된 미디어 샘플 (H.264/H.265 compressed frames)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">OUTPUT</span>
+                    <span class="value">시청자 화면에 표시되는 영상 (1080p, 60fps)</span>
+                </div>
+                <div class="node-row">
+                    <span class="label">TECH</span>
+                    <span class="value">Windows: DXVA2 | macOS/iOS: VideoToolbox | Android: MediaCodec</span>
+                </div>
+                <div class="node-row next">
+                    <span class="label">→ NEXT</span>
+                    <span class="value">👁️ VIEWER (End)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- END -->
+        <div class="end-node">
+            <div class="label">👁️ END: Viewer Experience</div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">19</div>
+                    <div class="desc">Total Nodes</div>
+                </div>
+                <div class="stat">
+                    <div class="num">6</div>
+                    <div class="desc">Sections</div>
+                </div>
+                <div class="stat">
+                    <div class="num">15-30s</div>
+                    <div class="desc">Live Latency</div>
+                </div>
+                <div class="stat">
+                    <div class="num">&lt;1s</div>
+                    <div class="desc">VOD Latency</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

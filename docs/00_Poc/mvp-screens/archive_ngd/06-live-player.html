@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - Live Player - NBA TV OTT Style B&W Wireframe</title>
+    <style>
+        /* === NBA TV OTT Style === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1.4;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Score Ticker */
+        .score-ticker {
+            background: #111;
+            border-bottom: 1px solid #333;
+            padding: 5px 10px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+        }
+        .score-item {
+            border: 1px solid #444;
+            padding: 4px 8px;
+            min-width: 80px;
+            background: #1a1a1a;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .score-item:hover { border-color: #fff; }
+        .score-item.live { border-color: #fff; }
+        .score-item.active { background: #333; border-left: 2px solid #fff; }
+        .score-badge {
+            font-size: 6px;
+            padding: 1px 2px;
+            border: 1px solid #666;
+            display: inline-block;
+            margin-bottom: 1px;
+        }
+        .score-badge.live { background: #fff; color: #000; border-color: #fff; }
+        .score-teams .team { font-weight: bold; font-size: 8px; }
+        .score-action { font-size: 6px; margin-top: 2px; padding-top: 2px; border-top: 1px solid #333; color: #888; }
+
+        /* Live Video Player */
+        .video-player {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: #000;
+        }
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .live-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #fff;
+            color: #000;
+            padding: 4px 10px;
+            font-weight: bold;
+            font-size: 8px;
+        }
+        .viewer-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 10px;
+            font-size: 8px;
+        }
+        .live-overlay {
+            text-align: center;
+            max-width: 500px;
+            padding: 15px;
+        }
+        .live-overlay .tournament {
+            font-size: 9px;
+            color: #888;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .live-overlay .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .live-overlay .status {
+            font-size: 10px;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+        .live-overlay .blinds {
+            font-size: 9px;
+            color: #777;
+        }
+
+        /* Video Controls */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 15px 12px 8px;
+        }
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 10px;
+            padding: 3px;
+        }
+        .live-indicator {
+            background: #fff;
+            color: #000;
+            padding: 3px 6px;
+            font-size: 7px;
+            font-weight: bold;
+        }
+
+        /* Live Info Bar */
+        .live-info-bar {
+            padding: 10px 12px;
+            background: #111;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+        }
+        .live-title { font-size: 11px; font-weight: bold; margin-bottom: 2px; }
+        .live-meta { font-size: 8px; color: #888; }
+        .live-actions { display: flex; gap: 6px; }
+        .live-action {
+            padding: 5px 10px;
+            border: 1px solid #444;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .live-action:hover { border-color: #fff; }
+
+        /* Chip Counts */
+        .chip-section {
+            padding: 12px;
+            background: #0a0a0a;
+        }
+        .chip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 9px;
+        }
+        .chip-header span:last-child {
+            color: #666;
+            font-weight: normal;
+            font-size: 7px;
+        }
+        .chip-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+        }
+        .chip-card {
+            border: 1px solid #333;
+            padding: 6px 4px;
+            text-align: center;
+            cursor: pointer;
+            background: #111;
+        }
+        .chip-card:hover { border-color: #fff; }
+        .chip-card.leader { border-color: #fff; background: #1a1a1a; }
+        .chip-avatar {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #444;
+            margin: 0 auto 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+            background: #222;
+        }
+        .chip-card.leader .chip-avatar { border-color: #fff; }
+        .chip-name { font-weight: bold; font-size: 7px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chip-amount { font-size: 8px; color: #ccc; font-weight: bold; }
+        .chip-bb { font-size: 6px; color: #666; margin-top: 1px; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            padding: 10px;
+            font-size: 7px;
+            color: #666;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+    <!-- Score Ticker -->
+    <div class="score-ticker">
+        <div class="score-item live active">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">Main Event FT</span></div>
+            <div class="score-action">► Watching</div>
+        </div>
+        <div class="score-item live">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">$100K HR</span></div>
+            <div class="score-action">► Switch</div>
+        </div>
+        <div class="score-item">
+            <span class="score-badge">VOD</span>
+            <div class="score-teams"><span class="team">ME Day 6</span></div>
+            <div class="score-action">► Watch</div>
+        </div>
+    </div>
+
+    <!-- Live Video Player -->
+    <div class="video-player">
+        <div class="video-placeholder">
+            <span class="live-badge">● LIVE</span>
+            <span class="viewer-count">👁 12,450 watching</span>
+            <div class="live-overlay">
+                <div class="tournament">WSOP 2026 · Event #76</div>
+                <div class="title">MAIN EVENT - FINAL TABLE</div>
+                <div class="status">6 Players Remaining · $12.1M First Place</div>
+                <div class="blinds">Blinds: 100K/200K/200K ante</div>
+            </div>
+        </div>
+        <div class="video-controls">
+            <div class="controls-row">
+                <div class="controls-left">
+                    <span class="live-indicator">● LIVE</span>
+                    <button class="control-btn">⏮ -30s</button>
+                </div>
+                <div class="controls-right">
+                    <button class="control-btn">🔊</button>
+                    <button class="control-btn">CC</button>
+                    <button class="control-btn">⚙</button>
+                    <button class="control-btn">⛶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Info Bar -->
+    <div class="live-info-bar">
+        <div class="live-title-area">
+            <h1 class="live-title">WSOP Main Event - Final Table</h1>
+            <div class="live-meta">Horseshoe & Paris Las Vegas · Started 2:00 PM PT</div>
+        </div>
+        <div class="live-actions">
+            <button class="live-action">📊 Stats</button>
+            <button class="live-action">🎬 Highlights</button>
+            <button class="live-action">📋 Results</button>
+        </div>
+    </div>
+
+    <!-- Chip Counts -->
+    <div class="chip-section">
+        <div class="chip-header">
+            <span>💰 CHIP COUNTS</span>
+            <span>Updated: 2 min ago</span>
+        </div>
+        <div class="chip-grid">
+            <div class="chip-card leader">
+                <div class="chip-avatar">DN</div>
+                <div class="chip-name">D. Negreanu</div>
+                <div class="chip-amount">45.2M</div>
+                <div class="chip-bb">226 BB</div>
+            </div>
+            <div class="chip-card">
+                <div class="chip-avatar">PH</div>
+                <div class="chip-name">P. Hellmuth</div>
+                <div class="chip-amount">38.5M</div>
+                <div class="chip-bb">193 BB</div>
+            </div>
+            <div class="chip-card">
+                <div class="chip-avatar">DP</div>
+                <div class="chip-name">D. Polk</div>
+                <div class="chip-amount">35.1M</div>
+                <div class="chip-bb">176 BB</div>
+            </div>
+            <div class="chip-card">
+                <div class="chip-avatar">PI</div>
+                <div class="chip-name">P. Ivey</div>
+                <div class="chip-amount">32.8M</div>
+                <div class="chip-bb">164 BB</div>
+            </div>
+            <div class="chip-card">
+                <div class="chip-avatar">TD</div>
+                <div class="chip-name">T. Dwan</div>
+                <div class="chip-amount">28.2M</div>
+                <div class="chip-bb">141 BB</div>
+            </div>
+            <div class="chip-card">
+                <div class="chip-avatar">FH</div>
+                <div class="chip-name">F. Holz</div>
+                <div class="chip-amount">28.2M</div>
+                <div class="chip-bb">141 BB</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Wireframe · Live Player (NBA TV OTT Style) · B&W Wireframe<br>
+        ✅ Ticker 축소 · ✅ Full-screen Live · ✅ Chip Counts 하단<br>
+        NBA Ref: Live Game Player
+    </div>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - Event Detail - NBA TV OTT Style B&W Wireframe</title>
+    <style>
+        /* === NBA TV OTT Style === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1.4;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Score Ticker */
+        .score-ticker {
+            background: #111;
+            border-bottom: 1px solid #333;
+            padding: 5px 10px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+        }
+        .score-item {
+            border: 1px solid #444;
+            padding: 4px 8px;
+            min-width: 80px;
+            background: #1a1a1a;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .score-item:hover { border-color: #fff; }
+        .score-item.live { border-color: #fff; }
+        .score-item.active { background: #333; border-left: 2px solid #fff; }
+        .score-badge {
+            font-size: 6px;
+            padding: 1px 2px;
+            border: 1px solid #666;
+            display: inline-block;
+            margin-bottom: 1px;
+        }
+        .score-badge.live { background: #fff; color: #000; border-color: #fff; }
+        .score-teams .team { font-weight: bold; font-size: 8px; }
+        .score-action { font-size: 6px; margin-top: 2px; padding-top: 2px; border-top: 1px solid #333; color: #888; }
+
+        /* Hero (Event Detail) */
+        .hero {
+            background: #111;
+            display: flex;
+            flex-direction: column;
+        }
+        .hero-main {
+            display: flex;
+            min-height: 200px;
+        }
+        .hero-video {
+            flex: 2;
+            position: relative;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 3px 8px;
+            font-size: 8px;
+            font-weight: bold;
+            background: #fff;
+            color: #000;
+        }
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .play-btn .arrow {
+            width: 0;
+            height: 0;
+            border-left: 16px solid #fff;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 5px;
+        }
+        .video-options {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .video-option {
+            padding: 6px 12px;
+            border: 1px solid #fff;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .video-option.primary { background: #fff; color: #000; font-weight: bold; }
+
+        .hero-sidebar {
+            flex: 1;
+            padding: 12px;
+            background: #0a0a0a;
+            border-left: 1px solid #333;
+            min-width: 180px;
+        }
+        .hero-event-name { font-size: 8px; color: #888; margin-bottom: 5px; letter-spacing: 1px; }
+        .hero-pot { font-size: 20px; font-weight: bold; margin-bottom: 2px; }
+        .hero-pot-label { font-size: 7px; color: #888; margin-bottom: 12px; text-transform: uppercase; }
+        .hero-details { border-top: 1px solid #333; padding-top: 8px; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #222;
+            font-size: 8px;
+        }
+        .detail-label { color: #888; }
+        .detail-value { font-weight: bold; text-align: right; }
+
+        .hero-title-area {
+            padding: 10px 15px;
+            background: #111;
+            border-top: 1px solid #333;
+        }
+        .hero-date { font-size: 8px; color: #888; margin-bottom: 3px; }
+        .hero-title { font-size: 12px; font-weight: bold; margin-bottom: 3px; }
+        .hero-venue { font-size: 8px; color: #888; }
+        .hero-actions { display: flex; gap: 6px; margin-top: 8px; }
+        .hero-action {
+            padding: 5px 10px;
+            border: 1px solid #444;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .hero-action:hover { border-color: #fff; }
+
+        /* Key Hands Section */
+        .highlights-section {
+            padding: 12px;
+            background: #0a0a0a;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .section-header a { color: #888; font-size: 8px; text-decoration: none; }
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .highlight-card {
+            border: 1px solid #333;
+            cursor: pointer;
+            background: #111;
+        }
+        .highlight-card:hover { border-color: #fff; }
+        .highlight-thumb {
+            height: 50px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 8px;
+            color: #555;
+        }
+        .highlight-thumb .duration {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background: #000;
+            padding: 1px 4px;
+            font-size: 6px;
+        }
+        .highlight-info { padding: 5px; }
+        .highlight-title { font-size: 8px; font-weight: bold; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            padding: 10px;
+            font-size: 7px;
+            color: #666;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+    <!-- Score Ticker -->
+    <div class="score-ticker">
+        <div class="score-item live active">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">Main Event FT</span></div>
+            <div class="score-action">► Watching</div>
+        </div>
+        <div class="score-item live">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">$100K HR</span></div>
+            <div class="score-action">► Watch</div>
+        </div>
+        <div class="score-item">
+            <span class="score-badge">VOD</span>
+            <div class="score-teams"><span class="team">ME Day 6</span></div>
+            <div class="score-action">► Watch</div>
+        </div>
+    </div>
+
+    <!-- Hero (Event Detail) -->
+    <div class="hero">
+        <div class="hero-main">
+            <div class="hero-video">
+                <span class="hero-badge">● LIVE</span>
+                <div class="play-btn">
+                    <div class="arrow"></div>
+                </div>
+                <div class="video-options">
+                    <button class="video-option primary">► Resume</button>
+                    <button class="video-option">Start from Beginning</button>
+                </div>
+            </div>
+            <div class="hero-sidebar">
+                <div class="hero-event-name">WSOP 2026 · EVENT #76</div>
+                <div class="hero-pot">$12,100,000</div>
+                <div class="hero-pot-label">1st Place Prize</div>
+                <div class="hero-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">Final Table · 6 Players</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Blinds</span>
+                        <span class="detail-value">100K/200K/200K</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Chip Leader</span>
+                        <span class="detail-value">D. Negreanu (45.2M)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Avg Stack</span>
+                        <span class="detail-value">34,700,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-title-area">
+            <div class="hero-date">Wednesday, July 16th, 2026</div>
+            <div class="hero-title">WSOP MAIN EVENT - FINAL TABLE</div>
+            <div class="hero-venue">Horseshoe & Paris Las Vegas</div>
+            <div class="hero-actions">
+                <button class="hero-action">Watch Recap</button>
+                <button class="hero-action">Condensed</button>
+                <button class="hero-action">Full Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Hands -->
+    <div class="highlights-section">
+        <div class="section-header">
+            <span>🔥 KEY HANDS</span>
+            <a href="#">See All →</a>
+        </div>
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <div class="highlight-thumb">
+                    [CLIP]
+                    <span class="duration">4:32</span>
+                </div>
+                <div class="highlight-info">
+                    <div class="highlight-title">$2.4M Pot - Negreanu vs Polk</div>
+                </div>
+            </div>
+            <div class="highlight-card">
+                <div class="highlight-thumb">
+                    [CLIP]
+                    <span class="duration">3:15</span>
+                </div>
+                <div class="highlight-info">
+                    <div class="highlight-title">Hellmuth's Soul Read</div>
+                </div>
+            </div>
+            <div class="highlight-card">
+                <div class="highlight-thumb">
+                    [CLIP]
+                    <span class="duration">2:58</span>
+                </div>
+                <div class="highlight-info">
+                    <div class="highlight-title">AA Cracked by Runner</div>
+                </div>
+            </div>
+            <div class="highlight-card">
+                <div class="highlight-thumb">
+                    [CLIP]
+                    <span class="duration">5:21</span>
+                </div>
+                <div class="highlight-info">
+                    <div class="highlight-title">Ivey's 4-Bet Bluff</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Wireframe · Event Detail (NBA TV OTT Style) · B&W Wireframe<br>
+        ✅ Ticker 유지 · ✅ 비디오 + 사이드바 레이아웃 · ✅ Key Hands 그리드<br>
+        NBA Ref: Game Detail Page
+    </div>
+</body>
+</html>

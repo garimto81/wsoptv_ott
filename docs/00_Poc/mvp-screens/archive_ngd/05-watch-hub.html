@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - VOD Player - NBA TV OTT Style B&W Wireframe</title>
+    <style>
+        /* === NBA TV OTT Style === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1.4;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Score Ticker */
+        .score-ticker {
+            background: #111;
+            border-bottom: 1px solid #333;
+            padding: 5px 10px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+        }
+        .score-item {
+            border: 1px solid #444;
+            padding: 4px 8px;
+            min-width: 80px;
+            background: #1a1a1a;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .score-item:hover { border-color: #fff; }
+        .score-item.live { border-color: #fff; }
+        .score-item.active { background: #333; border-left: 2px solid #fff; }
+        .score-badge {
+            font-size: 6px;
+            padding: 1px 2px;
+            border: 1px solid #666;
+            display: inline-block;
+            margin-bottom: 1px;
+        }
+        .score-badge.live { background: #fff; color: #000; border-color: #fff; }
+        .score-teams .team { font-weight: bold; font-size: 8px; }
+        .score-action { font-size: 6px; margin-top: 2px; padding-top: 2px; border-top: 1px solid #333; color: #888; }
+
+        /* Video Player */
+        .video-player {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: #000;
+        }
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .play-btn {
+            width: 55px;
+            height: 55px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .play-btn .arrow {
+            width: 0;
+            height: 0;
+            border-left: 18px solid #fff;
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+            margin-left: 5px;
+        }
+        .video-label { font-size: 10px; color: #888; }
+
+        /* Video Controls */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 20px 12px 10px;
+        }
+        .progress-bar {
+            height: 3px;
+            background: #333;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 35%;
+            background: #fff;
+        }
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 10px;
+            padding: 3px;
+        }
+        .time-display { font-size: 8px; color: #aaa; }
+
+        /* Video Info */
+        .video-info {
+            padding: 12px;
+            background: #111;
+        }
+        .video-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .video-title { font-size: 12px; font-weight: bold; margin-bottom: 3px; }
+        .video-meta { font-size: 8px; color: #888; }
+        .video-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .video-action {
+            padding: 5px 10px;
+            border: 1px solid #444;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 8px;
+        }
+        .video-action:hover { border-color: #fff; }
+
+        /* Up Next */
+        .upnext-section {
+            padding: 12px;
+            background: #0a0a0a;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .upnext-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+        .upnext-card {
+            border: 1px solid #333;
+            cursor: pointer;
+            background: #111;
+        }
+        .upnext-card:hover { border-color: #fff; }
+        .upnext-thumb {
+            height: 50px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 8px;
+            color: #555;
+        }
+        .upnext-thumb .duration {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 4px;
+            font-size: 6px;
+        }
+        .upnext-info { padding: 6px; }
+        .upnext-title { font-weight: bold; font-size: 8px; margin-bottom: 2px; }
+        .upnext-meta { font-size: 7px; color: #666; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            padding: 10px;
+            font-size: 7px;
+            color: #666;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+    <!-- Score Ticker -->
+    <div class="score-ticker">
+        <div class="score-item live">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">ME FT</span></div>
+            <div class="score-action">► Switch</div>
+        </div>
+        <div class="score-item live">
+            <span class="score-badge live">● LIVE</span>
+            <div class="score-teams"><span class="team">$100K</span></div>
+            <div class="score-action">► Switch</div>
+        </div>
+        <div class="score-item active">
+            <span class="score-badge">VOD</span>
+            <div class="score-teams"><span class="team">ME Day 6</span></div>
+            <div class="score-action">► Playing</div>
+        </div>
+        <div class="score-item">
+            <span class="score-badge">FINAL</span>
+            <div class="score-teams"><span class="team">Seniors</span></div>
+            <div class="score-action">► Replay</div>
+        </div>
+    </div>
+
+    <!-- Video Player -->
+    <div class="video-player">
+        <div class="video-placeholder">
+            <div class="play-btn">
+                <div class="arrow"></div>
+            </div>
+            <div class="video-label">WSOP Main Event Day 6 · Full Replay</div>
+        </div>
+        <div class="video-controls">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="controls-row">
+                <div class="controls-left">
+                    <button class="control-btn">⏮</button>
+                    <button class="control-btn">⏸</button>
+                    <button class="control-btn">⏭</button>
+                    <span class="time-display">2:45:30 / 8:45:30</span>
+                </div>
+                <div class="controls-right">
+                    <button class="control-btn">🔊</button>
+                    <button class="control-btn">CC</button>
+                    <button class="control-btn">⚙</button>
+                    <button class="control-btn">⛶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Info -->
+    <div class="video-info">
+        <div class="video-info-header">
+            <div>
+                <h1 class="video-title">WSOP Main Event Day 6 - Full Replay</h1>
+                <div class="video-meta">July 15, 2026 · 8h 45m · From 27 to Final 9 · 18 Eliminations</div>
+            </div>
+            <div class="video-actions">
+                <button class="video-action">Watch Condensed</button>
+                <button class="video-action">Key Hands</button>
+                <button class="video-action">Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Up Next -->
+    <div class="upnext-section">
+        <div class="section-header">
+            <span>▶ UP NEXT</span>
+        </div>
+        <div class="upnext-grid">
+            <div class="upnext-card">
+                <div class="upnext-thumb">
+                    [VOD]
+                    <span class="duration">6:32:15</span>
+                </div>
+                <div class="upnext-info">
+                    <div class="upnext-title">Main Event Day 5</div>
+                    <div class="upnext-meta">From 81 to 27</div>
+                </div>
+            </div>
+            <div class="upnext-card">
+                <div class="upnext-thumb">
+                    [VOD]
+                    <span class="duration">5:15:45</span>
+                </div>
+                <div class="upnext-info">
+                    <div class="upnext-title">$100K HR Day 2</div>
+                    <div class="upnext-meta">Final 12 to 6</div>
+                </div>
+            </div>
+            <div class="upnext-card">
+                <div class="upnext-thumb">
+                    [CLIP]
+                    <span class="duration">4:32</span>
+                </div>
+                <div class="upnext-info">
+                    <div class="upnext-title">$2.4M Pot Highlight</div>
+                    <div class="upnext-meta">Negreanu vs Polk</div>
+                </div>
+            </div>
+            <div class="upnext-card">
+                <div class="upnext-thumb">
+                    [VOD]
+                    <span class="duration">4:30:00</span>
+                </div>
+                <div class="upnext-info">
+                    <div class="upnext-title">Seniors Championship</div>
+                    <div class="upnext-meta">Final Table</div>
+                </div>
+            </div>
+            <div class="upnext-card">
+                <div class="upnext-thumb">
+                    [RECAP]
+                    <span class="duration">30:00</span>
+                </div>
+                <div class="upnext-info">
+                    <div class="upnext-title">Day 6 Recap Show</div>
+                    <div class="upnext-meta">Highlights + Analysis</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        WSOPTV Phase 1 Wireframe · VOD Player (NBA TV OTT Style) · B&W Wireframe<br>
+        ✅ Ticker 축소 표시 · ✅ Full-screen Video · ✅ Up Next 그리드<br>
+        NBA Ref: Game Replay Player
+    </div>
+</body>
+</html>

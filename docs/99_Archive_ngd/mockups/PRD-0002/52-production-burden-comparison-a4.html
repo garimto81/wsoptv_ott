@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Cam은 왜 별도 협의가 필요한가? (A4 Optimized)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #ffffff;
+            color: #000000;
+            padding: 40px;
+            line-height: 1.8;
+        }
+
+        .container {
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: -0.5px;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 20px;
+        }
+
+        /* Base Layer - Existing Production */
+        .existing-production {
+            border: 3px solid #000000;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 10px;
+        }
+
+        .flow-diagram {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f9f9f9;
+            border: 2px solid #cccccc;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .flow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-box {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #000000;
+            background: #ffffff;
+            flex: 1;
+        }
+
+        .flow-box-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .flow-box-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .flow-arrow {
+            font-size: 32px;
+            color: #000000;
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .philosophy-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .pill {
+            padding: 18px 24px;
+            border: 2px solid #000000;
+            background: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Separator */
+        .separator {
+            height: 3px;
+            background: #cccccc;
+            margin: 50px 0;
+        }
+
+        /* Conflict Overlay */
+        .conflict-overlay {
+            border: 4px dashed #ff0000;
+            padding: 30px;
+            margin: 50px 0;
+            background: #fff5f5;
+        }
+
+        .conflict-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .conflict-icon {
+            font-size: 56px;
+            color: #ff0000;
+            margin-bottom: 15px;
+        }
+
+        .conflict-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .conflict-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .conflict-item {
+            border: 3px solid #ff0000;
+            padding: 25px;
+            background: #ffffff;
+        }
+
+        .conflict-item-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 12px;
+        }
+
+        .conflict-comparison {
+            font-size: 14px;
+            line-height: 2;
+        }
+
+        .existing-approach {
+            color: #000000;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-left: 4px solid #000000;
+        }
+
+        .playercam-approach {
+            color: #ff0000;
+            font-weight: bold;
+            padding: 15px;
+            background: #fff5f5;
+            border-left: 4px solid #ff0000;
+        }
+
+        .vs-divider {
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #666666;
+            font-size: 16px;
+        }
+
+        /* Conclusion */
+        .conclusion-box {
+            border: 4px solid #000000;
+            padding: 35px;
+            text-align: center;
+            margin-top: 50px;
+            background: #f0f0f0;
+        }
+
+        .conclusion-title {
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 15px;
+        }
+
+        .conclusion-text {
+            font-size: 15px;
+            line-height: 2;
+            margin-bottom: 25px;
+        }
+
+        .conclusion-highlight {
+            font-weight: bold;
+            font-size: 17px;
+            padding: 20px;
+            border: 3px solid #000000;
+            background: #ffffff;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid #cccccc;
+            background: #f9f9f9;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border: 2px solid;
+            flex-shrink: 0;
+        }
+
+        .legend-box.existing {
+            border-color: #000000;
+            background: #ffffff;
+        }
+
+        .legend-box.conflict {
+            border-color: #ff0000;
+            background: #fff5f5;
+            border-style: dashed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Player Cam은 왜 별도 협의가 필요한가?</h1>
+
+        <!-- Base Layer: Existing Production Structure -->
+        <div class="existing-production">
+            <div class="section-title">기존 GG Production 워크플로우</div>
+
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-box">
+                        <div class="flow-box-label">Input</div>
+                        <div class="flow-box-value">16 Cameras</div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-box">
+                        <div class="flow-box-label">Processing</div>
+                        <div class="flow-box-value">4 Switchers</div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-box">
+                        <div class="flow-box-label">Output</div>
+                        <div class="flow-box-value">4 PGM</div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-box">
+                        <div class="flow-box-label">Distribution</div>
+                        <div class="flow-box-value">Seoul Studio → YouTube</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="philosophy-pills">
+                <div class="pill">그룹 매칭 (여러 카메라 → 1개 스위처)</div>
+                <div class="pill">선별 송출 (PD가 선택한 장면만)</div>
+                <div class="pill">하이라이트 위주 (재미있는 순간만)</div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Conflict Overlay: Player Cam Requirements -->
+        <div class="conflict-overlay">
+            <div class="conflict-header">
+                <div class="conflict-icon">⚠</div>
+                <div class="conflict-title">Philosophy Conflict</div>
+            </div>
+
+            <div class="conflict-list">
+                <!-- Conflict 1 -->
+                <div class="conflict-item">
+                    <div class="conflict-item-title">[충돌 1] 카메라 할당 방식</div>
+                    <div class="conflict-comparison">
+                        <div class="existing-approach">
+                            <strong>기존:</strong><br>
+                            4 Cameras → 1 Switcher<br>
+                            (그룹 매칭 방식)
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="playercam-approach">
+                            <strong>신규:</strong><br>
+                            1 Camera → 1 Player<br>
+                            (1:1 개별 매칭 + 추적)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conflict 2 -->
+                <div class="conflict-item">
+                    <div class="conflict-item-title">[충돌 2] 송출 결정권</div>
+                    <div class="conflict-comparison">
+                        <div class="existing-approach">
+                            <strong>기존:</strong><br>
+                            PD 선택<br>
+                            (선별 송출)
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="playercam-approach">
+                            <strong>신규:</strong><br>
+                            모든 플레이어 동시 송출<br>
+                            (전원 상시 송출)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conflict 3 -->
+                <div class="conflict-item">
+                    <div class="conflict-item-title">[충돌 3] 기록 철학</div>
+                    <div class="conflict-comparison">
+                        <div class="existing-approach">
+                            <strong>기존:</strong><br>
+                            재미있는 순간만<br>
+                            (하이라이트 방식)
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="playercam-approach">
+                            <strong>신규:</strong><br>
+                            모든 순간 기록<br>
+                            (CCTV 전수 기록)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="conclusion-box">
+            <div class="conclusion-title">결론</div>
+            <div class="conclusion-text">
+                Player Cam은 단순한 장비 추가가 아니라<br>
+                <strong>Production 팀의 철학과 워크플로우 자체를 변경</strong>해야 하는 작업입니다.
+            </div>
+            <div class="conclusion-highlight">
+                Production 팀 워크플로우 변경 필요<br>
+                → 별도 협의 필수
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box existing"></div>
+                <span>기존 Production 구조</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box conflict"></div>
+                <span>충돌 지점 (별도 협의 필요)</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

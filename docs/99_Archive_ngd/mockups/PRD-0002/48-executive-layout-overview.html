@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV Layout Overview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fff;
+            padding: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #1a1a1a; }
+        .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; }
+
+        .section { margin-bottom: 32px; }
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        /* View Modes Grid */
+        .view-modes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .view-card {
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .view-header {
+            background: #333;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .view-badge {
+            background: #fff;
+            color: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        .view-content {
+            padding: 12px;
+            background: #f8f8f8;
+            min-height: 140px;
+        }
+
+        /* Single Video */
+        .single-player {
+            background: #e0e0e0;
+            border: 2px solid #999;
+            border-radius: 4px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Multi View */
+        .multi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+        .multi-cell {
+            background: #e0e0e0;
+            border: 1px solid #999;
+            border-radius: 3px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #666;
+        }
+        .multi-cell.active { border: 2px solid #333; background: #d0d0d0; }
+
+        /* Player Cam */
+        .playercam-layout {
+            display: flex;
+            gap: 6px;
+        }
+        .playercam-main {
+            flex: 2;
+            background: #e0e0e0;
+            border: 2px solid #999;
+            border-radius: 4px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #666;
+        }
+        .playercam-sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .playercam-thumb {
+            background: #e0e0e0;
+            border: 1px solid #999;
+            border-radius: 3px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #666;
+        }
+
+        .view-desc {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Layout Structure */
+        .layout-diagram {
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .layout-layer {
+            border-bottom: 2px solid #333;
+            display: flex;
+        }
+        .layout-layer:last-child { border-bottom: none; }
+        .layout-label {
+            width: 80px;
+            background: #333;
+            color: #fff;
+            padding: 12px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .layout-content {
+            flex: 1;
+            padding: 12px;
+            background: #f8f8f8;
+        }
+
+        /* Ticker Preview */
+        .ticker-preview {
+            display: flex;
+            gap: 8px;
+            overflow: hidden;
+        }
+        .ticker-card {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 9px;
+        }
+        .ticker-card.live { border-left: 3px solid #e53935; }
+        .ticker-card.streaming { border-left: 3px solid #43a047; }
+        .ticker-card.break { border-left: 3px solid #fb8c00; }
+        .ticker-event { font-weight: 600; color: #333; }
+        .ticker-status { font-size: 8px; color: #666; margin-top: 2px; }
+        .ticker-player { font-size: 8px; color: #888; margin-top: 2px; }
+
+        /* Player Preview */
+        .player-preview {
+            background: #e0e0e0;
+            border: 2px solid #999;
+            border-radius: 4px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .player-label { font-size: 12px; color: #666; }
+        .player-controls {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .ctrl-btn {
+            background: #333;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 8px;
+        }
+
+        /* Info Tabs Preview */
+        .info-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .info-tab {
+            padding: 4px 10px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            font-size: 9px;
+            color: #666;
+        }
+        .info-tab.active { background: #333; color: #fff; }
+        .info-content {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 9px;
+            color: #666;
+        }
+
+        /* Purpose Table */
+        .purpose-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-top: 16px;
+        }
+        .purpose-table th, .purpose-table td {
+            border: 1px solid #ccc;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        .purpose-table th {
+            background: #333;
+            color: #fff;
+            font-weight: 600;
+        }
+        .purpose-table td:first-child { font-weight: 600; width: 100px; }
+
+        .note {
+            margin-top: 16px;
+            padding: 10px 12px;
+            background: #f5f5f5;
+            border-left: 3px solid #333;
+            font-size: 11px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>WSOP TV: Layout Overview (POC 확정)</h1>
+    <p class="subtitle">Executive Summary - 3가지 시청 모드 및 3계층 레이아웃 구조 | 기본 레이아웃: <a href="../../poc/poc-layout-wireframe.png">POC Wireframe</a></p>
+
+    <!-- Section 1: View Modes -->
+    <div class="section">
+        <div class="section-title">1. 시청 모드 (View Modes)</div>
+        <div class="view-modes">
+            <!-- Single Video -->
+            <div class="view-card">
+                <div class="view-header">
+                    Single Video
+                    <span class="view-badge">MVP</span>
+                </div>
+                <div class="view-content">
+                    <div class="single-player">
+                        16:9 Video Player<br>
+                        (1 Table)
+                    </div>
+                    <div class="view-desc">
+                        <strong>1개 테이블 전체 화면</strong><br>
+                        Timeshift + 영구 아카이브
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi View -->
+            <div class="view-card">
+                <div class="view-header">
+                    Multi-view
+                    <span class="view-badge">Phase 2</span>
+                </div>
+                <div class="view-content">
+                    <div class="multi-grid">
+                        <div class="multi-cell active">Table 1 🔊</div>
+                        <div class="multi-cell">Table 2</div>
+                        <div class="multi-cell">Table 3</div>
+                        <div class="multi-cell">Table 4</div>
+                    </div>
+                    <div class="view-desc">
+                        <strong>최대 4개 테이블 동시 시청</strong><br>
+                        클릭으로 오디오 전환
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Cam -->
+            <div class="view-card">
+                <div class="view-header">
+                    Player Cam
+                    <span class="view-badge">Phase 4</span>
+                </div>
+                <div class="view-content">
+                    <div class="playercam-layout">
+                        <div class="playercam-main">Main Table</div>
+                        <div class="playercam-sidebar">
+                            <div class="playercam-thumb">DN</div>
+                            <div class="playercam-thumb">PI</div>
+                            <div class="playercam-thumb">PH</div>
+                        </div>
+                    </div>
+                    <div class="view-desc">
+                        <strong>아이돌 직캠 방식</strong><br>
+                        특정 플레이어 클로즈업
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Layout Structure -->
+    <div class="section">
+        <div class="section-title">2. 3계층 레이아웃 구조</div>
+        <div class="layout-diagram">
+            <!-- Layer 1: Tournament Ticker -->
+            <div class="layout-layer">
+                <div class="layout-label">① 상단<br>Ticker</div>
+                <div class="layout-content">
+                    <div class="ticker-preview">
+                        <div class="ticker-card live">
+                            <div class="ticker-event">TABLE 442 • MAIN EVENT</div>
+                            <div class="ticker-status">🔴 LIVE</div>
+                            <div class="ticker-player">D. Negreanu • 1.2M</div>
+                        </div>
+                        <div class="ticker-card streaming">
+                            <div class="ticker-event">TABLE 102 • PLO HIGH</div>
+                            <div class="ticker-status">STREAMING</div>
+                            <div class="ticker-player">P. Hellmuth • 845K</div>
+                        </div>
+                        <div class="ticker-card break">
+                            <div class="ticker-event">TABLE 215 • HIGH ROLLER</div>
+                            <div class="ticker-status">BREAK 04:22</div>
+                            <div class="ticker-player">A. Mateos • 2.4M</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 2: Video Player -->
+            <div class="layout-layer">
+                <div class="layout-label">② 중앙<br>Player</div>
+                <div class="layout-content">
+                    <div class="player-preview">
+                        <span class="player-label">Video Player (16:9) + Timeshift</span>
+                        <div class="player-controls">
+                            <span class="ctrl-btn">Streams</span>
+                            <span class="ctrl-btn">MultiView ⊞</span>
+                            <span class="ctrl-btn">🔥 Key Plays</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 3: Info Tabs -->
+            <div class="layout-layer">
+                <div class="layout-label">③ 하단<br>Info</div>
+                <div class="layout-content">
+                    <div class="info-tabs">
+                        <span class="info-tab active">Highlights</span>
+                        <span class="info-tab">Categories</span>
+                        <span class="info-tab">Related Videos</span>
+                    </div>
+                    <div class="info-content">
+                        Thumbnail Grid: Best Hands, Bluff of the Week, Player Interviews | Duration + Views
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Purpose -->
+    <div class="section">
+        <div class="section-title">3. 설계 목적</div>
+        <table class="purpose-table">
+            <tr>
+                <th>계층</th>
+                <th>목적</th>
+                <th>NBA League Pass 매핑</th>
+            </tr>
+            <tr>
+                <td>① Ticker</td>
+                <td>진행 중인 모든 테이블을 한눈에 파악, <strong>즉시 시청 진입</strong></td>
+                <td>Scoreboard Ticker</td>
+            </tr>
+            <tr>
+                <td>② Player</td>
+                <td>핵심 시청 경험, <strong>Timeshift + Multi-view</strong> 지원</td>
+                <td>Video Player Area</td>
+            </tr>
+            <tr>
+                <td>③ Info</td>
+                <td>시청 방해 없이 상세 통계 제공, <strong>스크롤 시 표시</strong></td>
+                <td>Info Tabs (Box Score 등)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="note">
+        <strong>NBA League Pass 1:1 매핑</strong>: 동일한 3계층 구조로 사용자 학습 비용 최소화.<br>
+        Ticker 클릭 → 즉시 시청 시작 → MultiView 버튼으로 확장 (점진적 UX)<br><br>
+        <strong>POC 기본 레이아웃 확정 (2026-02-06)</strong>: <a href="../../poc/poc-layout-wireframe.png">poc-layout-wireframe.png</a> 기준.<br>
+        ① Top: Live Ticker (LIVE/VOD/Upcoming 가로 스크롤) → ② Center: 16:9 Video Player + Timeshift → ③ Bottom: Highlights/Categories/Related Videos 탭
+    </div>
+</body>
+</html>

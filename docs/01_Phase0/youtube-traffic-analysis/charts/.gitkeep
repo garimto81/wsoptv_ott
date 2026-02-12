@@ -1,0 +1,11 @@
+# Charts
+
+분석 시각화 차트 (PNG 파일)를 저장합니다.
+
+## 차트 목록
+
+- `subscriber-growth.png`: 채널별 구독자 성장 비교
+- `seasonal-traffic.png`: 시즌성 트래픽 패턴
+- `conversion-benchmark.png`: 벤치마크 전환율 비교
+- `scenario-comparison.png`: 3-시나리오 비교 차트
+- `sensitivity-tornado.png`: Sensitivity Tornado Chart

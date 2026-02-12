@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>옵션 2.2: 멀티뷰 + 인물별 직캠</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #000; padding: 10px; font-size: 13px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 8px; }
+        .header h1 { font-size: 18px; }
+        .header .sub { font-size: 12px; color: #666; }
+        .vible { background: #f5f5f5; border: 1px solid #ccc; padding: 5px 8px; font-size: 12px; font-style: italic; margin-bottom: 8px; }
+        .flow { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; padding: 8px; background: #fafafa; border: 1px solid #ddd; flex-wrap: wrap; }
+        .box { border: 1px solid #000; padding: 6px 8px; font-size: 12px; text-align: center; background: #fff; min-height: 40px; display: flex; flex-direction: column; justify-content: center; }
+        .box.src { border-style: dashed; background: #f5f5f5; }
+        .box small { font-size: 10px; color: #666; }
+        .arrow { font-size: 16px; }
+        .plus { font-size: 18px; font-weight: bold; }
+        .items { display: flex; gap: 3px; }
+        .item { border: 1px solid #999; padding: 4px 8px; font-size: 12px; background: #fff; min-height: 40px; display: flex; align-items: center; }
+        .item.player { background: #fffde7; }
+        .output { border: 2px solid #000; padding: 6px; display: flex; gap: 6px; min-height: 60px; }
+        .main { flex: 2; border: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 12px; background: #f5f5f5; }
+        .cams { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .cam { border: 1px solid #999; padding: 4px; font-size: 11px; text-align: center; background: #fffde7; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-bottom: 8px; }
+        .spec { font-size: 13px; line-height: 1.4; }
+        .spec strong { color: #666; }
+        .row { display: flex; gap: 8px; }
+        .col { flex: 1; border: 1px solid #ccc; padding: 6px; }
+        .col h4 { font-size: 13px; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+        .col ul { padding-left: 16px; margin: 0; font-size: 12px; }
+        .col li { margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>옵션 2.2: 멀티뷰 + 인물별 직캠</h1>
+        <div class="sub">스위처 컷편집 + 모든 인물 직캠 → Player Cam Mode</div>
+    </div>
+    <div class="vible">📜 VIBLE: "메인화면 중앙 + 각 유저 얼굴 화면이 옆에 (아이돌 직캠 방식)"</div>
+    <div class="flow">
+        <div class="box src">🏛️ 컷편집<small>테이블 GFX</small></div>
+        <span class="arrow">→</span>
+        <div class="items"><div class="item">T1</div><div class="item">T2</div><div class="item">T3</div><div class="item">T4</div></div>
+        <span class="plus">+</span>
+        <div class="box src">🏛️ 직캠<small>개별 카메라</small></div>
+        <span class="arrow">→</span>
+        <div class="items"><div class="item player">P1</div><div class="item player">P2</div><div class="item player">P3</div><div class="item player">P4</div><div class="item player">P5</div><div class="item player">P6</div></div>
+        <span class="arrow">→</span>
+        <div class="output">
+            <div class="main">메인 테이블</div>
+            <div class="cams"><div class="cam">P1</div><div class="cam">P2</div><div class="cam">P3</div></div>
+        </div>
+    </div>
+    <div class="specs">
+        <div class="spec"><strong>소스:</strong> 스위처 컷편집본 + 모든 인물별 직캠</div>
+        <div class="spec"><strong>처리:</strong> GG Production (직캠 추가 장비 필요)</div>
+        <div class="spec"><strong>송출:</strong> 메인 테이블 + Player Cam 사이드바</div>
+        <div class="spec"><strong>VIBLE:</strong> "아이돌 직캠 방식" 원문 구현</div>
+    </div>
+    <div class="row">
+        <div class="col"><h4>장점 (+)</h4><ul><li>VIBLE 원문 완벽 대응</li><li>개별 플레이어 집중 시청</li><li>팬 경험 극대화</li></ul></div>
+        <div class="col"><h4>단점 (-)</h4><ul><li>추가 카메라 장비 대량 필요</li><li>프로덕션 복잡도 증가</li><li>🏛️ TEMPLE 제약 확인 필요</li></ul></div>
+    </div>
+</body>
+</html>

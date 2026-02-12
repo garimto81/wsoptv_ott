@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOP TV - 콘텐츠 플로우</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0;
+            border: none;
+            padding: 20px;
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #000;
+        }
+        .flow-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 15px;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .column-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 2px solid #000;
+            margin-bottom: 15px;
+        }
+        .column-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+        .partner-box {
+            border: 2px solid #000;
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 14px;
+            background: #fff;
+        }
+        .partner-box .name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .partner-box .desc {
+            font-size: 11px;
+            color: #666;
+        }
+        .center-box {
+            border: 3px solid #000;
+            padding: 25px 20px;
+            text-align: center;
+            background: #f5f5f5;
+        }
+        .center-box .name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .center-box .desc {
+            font-size: 12px;
+            color: #666;
+        }
+        .output-box {
+            border: 2px solid #000;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            background: #fff;
+        }
+        .output-box .name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .output-box .desc {
+            font-size: 11px;
+            color: #666;
+        }
+        .output-box.primary {
+            border-width: 3px;
+            background: #f5f5f5;
+        }
+        .arrow-column {
+            flex: 0 0 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .arrow {
+            font-size: 24px;
+            color: #000;
+        }
+        .arrow-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .arrow-line {
+            width: 40px;
+            height: 2px;
+            background: #000;
+        }
+        .arrow-head {
+            font-size: 16px;
+        }
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #000;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer strong {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">콘텐츠 플로우 다이어그램</div>
+
+        <div class="flow-container">
+            <!-- 프로덕션 파트너 -->
+            <div class="column">
+                <div class="column-header">프로덕션 파트너</div>
+                <div class="column-content">
+                    <div class="partner-box">
+                        <div class="name">ESPN</div>
+                        <div class="desc">WSOP Vegas Main Event</div>
+                    </div>
+                    <div class="partner-box">
+                        <div class="name">PokerGO</div>
+                        <div class="desc">WSOP Vegas (Main Event 외)</div>
+                    </div>
+                    <div class="partner-box">
+                        <div class="name">Triton Poker</div>
+                        <div class="desc">WSOP Paradise</div>
+                    </div>
+                    <div class="partner-box">
+                        <div class="name">PokerCaster</div>
+                        <div class="desc">WSOPE (유럽)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 화살표 1 -->
+            <div class="arrow-column">
+                <div class="arrow-group">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head">→</div>
+                </div>
+            </div>
+
+            <!-- 중앙 처리 -->
+            <div class="column">
+                <div class="column-header">중앙 처리</div>
+                <div class="column-content" style="justify-content: center;">
+                    <div class="center-box">
+                        <div class="name">GG Production</div>
+                        <div class="desc">종편(Post-Production) 작업</div>
+                        <div class="desc" style="margin-top: 8px;">• 영상 편집 • 자막 삽입</div>
+                        <div class="desc">• Stats Overlay • Multi-view 구성</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 화살표 2 -->
+            <div class="arrow-column">
+                <div class="arrow-group">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head">→</div>
+                </div>
+            </div>
+
+            <!-- 배포 -->
+            <div class="column">
+                <div class="column-header">배포</div>
+                <div class="column-content" style="justify-content: center; gap: 20px;">
+                    <div class="output-box primary">
+                        <div class="name">WSOP TV</div>
+                        <div class="desc">프리미엄 구독 플랫폼</div>
+                        <div class="desc">Full Features</div>
+                    </div>
+                    <div class="output-box">
+                        <div class="name">YouTube</div>
+                        <div class="desc">무료 공개 (제한적)</div>
+                        <div class="desc">하이라이트 / 프로모션</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>GG Production</strong>: 모든 프로덕션 파트너의 소스를 받아 통합 종편 작업 수행
+        </div>
+    </div>
+</body>
+</html>

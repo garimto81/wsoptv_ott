@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSOPTV Phase 1 - Sign In - B&W Wireframe</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            font-size: 12px;
+            line-height: 1.4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: #333;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid #fff;
+            padding: 4px 10px;
+        }
+        .header-links {
+            display: flex;
+            gap: 20px;
+        }
+        .header-link {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .header-link:hover { color: #fff; }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Sign In Card */
+        .signin-card {
+            background: #fff;
+            padding: 40px;
+            max-width: 420px;
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+        .signin-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .signin-logo {
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #333;
+            display: inline-block;
+            padding: 8px 16px;
+            margin-bottom: 15px;
+        }
+        .signin-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .signin-subtitle {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #333;
+        }
+        .form-hint {
+            font-size: 10px;
+            color: #888;
+            margin-top: 4px;
+        }
+        .form-error {
+            font-size: 10px;
+            color: #c00;
+            margin-top: 4px;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+        }
+        .checkbox-group label {
+            font-size: 11px;
+        }
+
+        /* Button */
+        .signin-btn {
+            width: 100%;
+            padding: 14px;
+            background: #333;
+            color: #fff;
+            border: none;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .signin-btn:hover { background: #000; }
+        .signin-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #ccc;
+        }
+        .divider-text {
+            padding: 0 15px;
+            font-size: 11px;
+            color: #888;
+        }
+
+        /* Social Login */
+        .social-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            background: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .social-btn:hover { border-color: #333; background: #f9f9f9; }
+        .social-btn .icon {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        /* Links */
+        .links-section {
+            text-align: center;
+        }
+        .link {
+            color: #333;
+            text-decoration: underline;
+            font-size: 11px;
+        }
+        .link:hover { color: #000; }
+        .signup-link {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+        }
+        .signup-link a {
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: #888;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 10px;
+        }
+        .footer a { color: #ccc; }
+
+        /* Additional Options (NBA TV Style) */
+        .options-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .options-title {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .option-btn {
+            padding: 12px;
+            border: 1px solid #ccc;
+            background: #fff;
+            font-size: 11px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .option-btn:hover { border-color: #333; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">WSOP TV</div>
+        <div class="header-links">
+            <a href="#" class="header-link">Help</a>
+            <a href="#" class="header-link">Subscribe</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="signin-card">
+            <!-- Header -->
+            <div class="signin-header">
+                <div class="signin-logo">WSOP TV</div>
+                <h1 class="signin-title">Sign In</h1>
+                <p class="signin-subtitle">Access your WSOP Plus subscription</p>
+            </div>
+
+            <!-- Form -->
+            <form>
+                <div class="form-group">
+                    <label class="form-label">EMAIL</label>
+                    <input type="email" class="form-input" placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">PASSWORD</label>
+                    <input type="password" class="form-input" placeholder="Enter your password">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me on this device</label>
+                </div>
+
+                <button type="submit" class="signin-btn">SIGN IN</button>
+
+                <div class="links-section">
+                    <a href="#" class="link">Forgot your password?</a>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">OR</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <!-- Social Login (NBA ID Style) -->
+            <div class="social-btns">
+                <button class="social-btn">
+                    <span class="icon">GG</span>
+                    Sign in with GGPass
+                </button>
+                <button class="social-btn">
+                    <span class="icon">G</span>
+                    Sign in with Google
+                </button>
+                <button class="social-btn">
+                    <span class="icon">A</span>
+                    Sign in with Apple
+                </button>
+            </div>
+
+            <!-- Additional Options (NBA TV: TV Provider) -->
+            <div class="options-section">
+                <div class="options-title">Other sign in options</div>
+                <div class="options-grid">
+                    <button class="option-btn">📺 TV Provider</button>
+                    <button class="option-btn">🎫 Redeem Code</button>
+                </div>
+            </div>
+
+            <!-- Sign Up Link -->
+            <div class="signup-link">
+                Don't have an account? <a href="#">Subscribe to WSOP Plus</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <a href="#">Terms of Service</a> · <a href="#">Privacy Policy</a> · <a href="#">Help</a>
+        <br><br>
+        © 2026 WSOP. All Rights Reserved.
+    </footer>
+</body>
+</html>
